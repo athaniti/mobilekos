@@ -3,7 +3,7 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "gr.athaniti.comics"
+        id        = "gr.dataverse.kosmobile"
         version   = "1.0.0">
 
     <name>Comics Library</name>
@@ -12,8 +12,8 @@
         Application for handling the comic library of the user.
     </description>
 
-    <author href="http://athaniti.blogspot.com" email="athaniti@gmail.com">
-        Andreas D. Athanitis
+    <author href="http://www.dataverse.gr" email="info@dataverse.gr">
+        Dataverse Ltd
     </author>
 
     <!--
