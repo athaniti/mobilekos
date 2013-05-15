@@ -6,10 +6,10 @@
         id        = "gr.dataverse.kosmobile"
         version   = "1.0.0">
 
-    <name>Comics Library</name>
+    <name>Kos Mobile</name>
 
     <description>
-        Application for handling the comic library of the user.
+        Application for Kos Municipality.
     </description>
 
     <author href="http://www.dataverse.gr" email="info@dataverse.gr">
