@@ -1,180 +1,1208 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <pois>
-  <timestamp>1365762816</timestamp>
-  <Poi>
-    <Name>342324324</Name>
-    <Category>1</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>342324324</Name>
-    <Category>1</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>122323</Name>
-    <Category>1</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Ξενοδοχείο1</Name>
-    <Category>3</Category>
-    <Description><![CDATA[<div class="ExternalClass5A85032EAB5B4D128D5A25B675340F81"><p>​Δοκιμαστική Περιγραφή<br></p></div>]]></Description>
-    <Latitude>36879071</Latitude>
-    <Longitude>27197914</Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>ΕνοικιαζόμενοΔωμάτιο1</Name>
-    <Category>3</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90200A6FAEB071FDDB64A9F634D75357B1E09</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>ΚΥΠΡΙΩΤΗΣ ΜΑΡΙΣ ΞΕΝ/ΧΕΙΟ &amp;ΣΟΥΙΤΕΣ</Name>
-    <Category>3</Category>
-    <Description><![CDATA[<div class="ExternalClass33185B78D3484BF58DCC05CA84558169"><p>​</p></div>]]></Description>
-    <Latitude>36,88377</Latitude>
-    <Longitude>27,328416</Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>test</Name>
-    <Category>5</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90F00196AF70D33539A44A856B7E20AAFAE9A</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Πυλί</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Ζηπάρι</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Κέφαλος</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Καρδάμαινα</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Τιγκάκι</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Μαρμάρι</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Μαστιχάρι</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
-  <Poi>
-    <Name>Αντιμάχεια</Name>
-    <Category>7</Category>
-    <Description />
-    <Latitude>
-    </Latitude>
-    <Longitude>
-    </Longitude>
-    <Sucategories>
-      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
-    </Sucategories>
-  </Poi>
+<timestamp>1367399729</timestamp>
+<Poi>
+<Name>Ρωμαϊκό Ωδείο Κω</Name>
+<Category>2</Category>
+<Description />
+<Latitude>36,889633</Latitude>
+<Longitude>27,284728</Longitude>
+<Sucategories>
+<Sucategory>0x01009077160E2AD0A243893344626AFA35F9050100AA48B5CF339FA943AD3169E676FB4B30</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ξενοδοχείο1</Name>
+<Category>3</Category>
+<Description><![CDATA[<div class="ExternalClass5A85032EAB5B4D128D5A25B675340F81"><p>​Δοκιμαστική Περιγραφή<br></p></div>]]></Description>
+<Latitude>36879071</Latitude>
+<Longitude>27197914</Longitude>
+<Sucategories>
+<Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΚΥΠΡΙΩΤΗΣ ΜΑΡΙΣ ΞΕΝ/ΧΕΙΟ &amp;ΣΟΥΙΤΕΣ</Name>
+<Category>3</Category>
+<Description><![CDATA[<div class="ExternalClassB2EDB331CBBA4F25958B51BA0AA34F22">Το Kipriotis Hippocrates βρίσκεται ακριβώς απέναντι από την παραλία στην περιοχή Ψαλίδι, μόλις 3χλμ. από την πόλη της Κω. Διαθέτει ευρύχωρα δωμάτια με βεράντα, 2 πισίνες και έναν κήπο με φοινικόδεντρα.&#160;<div><br></div><div>
+Τα μοντέρνα δωμάτια του Kipriotis Hippocrates είναι κλιματιζόμενα. Καθένα από αυτά διαθέτει ψυγείο, δορυφορική τηλεόραση και μπάνιο με στεγνωτήρα μαλλιών. Απολαύστε τη θέα στο καταπράσινο τοπίο από τη μεγάλη βεράντα σας.&#160;</div><div><br></div><div>
+Το συγκρότημα προσφέρει ένα εστιατόριο που σερβίρει πρωινό, μεσημεριανό γεύμα και δείπνο. Τα 2 μπαρ διαθέτουν μεγάλες βεράντες με θέα στις πισίνες του ξενοδοχείου. Οι επισκέπτες μπορούν να απολαύσουν ένα ποτό ή κοκτέιλ στη βεράντα, σε μια ρομαντική ατμόσφαιρα.&#160;</div><div><br></div><div>Οι αθλητικές και ψυχαγωγικές εγκαταστάσεις περιλαμβάνουν 2 γήπεδα τένις και πινγκ πονγκ. Υπάρχει επίσης ένα πρόγραμμα ψυχαγωγίας κατά τη διάρκεια της ημέρας και το βράδυ. Διατίθενται δύο παιδικές πισίνες για τους μικρούς επισκέπτες.&#160;</div><div><br></div><div>Το Διεθνές Αεροδρόμιο της Κω απέχει 25 χιλιόμετρα. Η πολυσύχναστη περιοχή της Καρδάμαινας βρίσκεται στα 30 χιλιόμετρα. Το προσωπικό της 24ωρης ρεσεψιόν παρέχει υπηρεσία ενοικίασης αυτοκινήτου.</div></div>]]></Description>
+<Latitude>36,88377</Latitude>
+<Longitude>27,328416</Longitude>
+<Sucategories>
+<Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Sun Palace Hotel Resort &amp; Spa</Name>
+<Category>3</Category>
+<Description><![CDATA[<div class="ExternalClass0045072D765C4C8DB200BD30460CBB3E">Το Sun Palace Hotel Resort &amp; Spa βρίσκεται 4χλμ. μακριά από την πόλη της Κω και προσφέρει κέντρο ευεξίας και σπα, εξωτερική πισίνα, εσωτερική πισίνα, εστιατόριο και δωρεάν Wi-Fi. Τα ευρύχωρα δωμάτια παρέχουν βεράντα ή μπαλκόνι.&#160;<div><br></div><div>
+Τα μοντέρνα διακοσμημένα δωμάτια στο Sun Palace διαθέτουν κλιματισμό, θυρίδα ασφαλείας, ψυγείο, ηλεκτρικό βραστήρα και δορυφορική τηλεόραση επίπεδης οθόνης. Το κομψό μπάνιο περιλαμβάνει μπουρνούζια, παντόφλες και δωρεάν προϊόντα περιποίησης. Όλα έχουν επίσης θέα στον κήπο ή στο Αιγαίο Πέλαγος.&#160;</div><div><br></div><div>&#160;Οι επισκέπτες μπορούν να δειπνήσουν στην υπαίθρια βεράντα του κήπου, στο εστιατόριο με μπουφέ των εγκαταστάσεων. Επίσης σερβίρονται καθημερινά κοκτέιλ και δροσιστικά ποτά στο μπαρ και στο μπαρ δίπλα στην πισίνα που είναι σε βολικό σημείο.&#160;</div><div><br></div><div>​​&#160;Στην αμμώδη παραλία προσφέρονται ξαπλώστρες, ομπρέλες και υπηρεσία ποτών. Οι δραστηριότητες του ξενοδοχείου περιλαμβάνουν ακόμη γήπεδα τένις, πινγκ-πονγκ, γυμναστήριο και παιδική χαρά για τους νεότερους επισκέπτες.&#160;</div><div><br></div><div>
+​Το Sun Palace Resort Hotel &amp; Spa απέχει 4χλμ. το κέντρο της πόλης της Κω. Επίσης διατίθενται διάφορα εστιατόρια και καταστήματα σε κοντινή απόσταση με τα πόδια από το ξενοδοχείο. Το αεροδρόμιο της Κω είναι 26χλμ. μακριά.​</div></div>]]></Description>
+<Latitude>27,329666</Latitude>
+<Longitude>36,884864</Longitude>
+<Sucategories>
+<Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μαρκάκης Μανώλης &amp; Αγγελόπουλος Ιωάννης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890038</Latitude>
+<Longitude>27,271519</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Γεωργιάδου Ευαγγελία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892145</Latitude>
+<Longitude>27,290945</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΓΟΥΝΑΡΗΣ ΕΜΜΑΝΟΥΗΛ &amp; ΥΙΟΣ ΟΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891785</Latitude>
+<Longitude>27,293477</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ζαντά Αικατερίνη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892801</Latitude>
+<Longitude>27,288901</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Καβουκλής Σεβαστιανός</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891999</Latitude>
+<Longitude>27,290006</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κασσανή Σταυρούλα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,883963</Latitude>
+<Longitude>27,27023</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κιαπόκας Σταμάτιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889421</Latitude>
+<Longitude>27,296387</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κοκαλάκης Βασίλης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,742478</Latitude>
+<Longitude>26,959137</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κολιά Θεανώ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,804543</Latitude>
+<Longitude>27,096028</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Λαμπρινός Γεώργιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,876454</Latitude>
+<Longitude>27,205822</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Λουμπαρδιάς Κωνσταντίνος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,898456</Latitude>
+<Longitude>27,284222</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μαντζώνας Νικόλαος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892175</Latitude>
+<Longitude>27,287549</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μουζουράκης Ευάγγελος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,783695</Latitude>
+<Longitude>27,143423</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μπούρας Γιώργος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,876068</Latitude>
+<Longitude>27,20425</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ντουσίκος Ζαχαρίας</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,902025</Latitude>
+<Longitude>27,283085</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παναγιώτου Νικόλαος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,744743</Latitude>
+<Longitude>26,959902</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παπαδάκη Αθανασία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,893055</Latitude>
+<Longitude>27,293675</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παπαθωμάς Ζαχαρίας</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,875484</Latitude>
+<Longitude>27,202769</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παπαχρήστου Ζωή</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890639</Latitude>
+<Longitude>27,293622</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Περίδου Ιωάννα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892947</Latitude>
+<Longitude>27,289394</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σταματιάδου Κωνσταντίνα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,895929</Latitude>
+<Longitude>27,285838</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Φούρναρης Νίκος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890122</Latitude>
+<Longitude>27,289966</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζημάρκου Νίτσα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89399</Latitude>
+<Longitude>27,289089</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζηπάντσιου Ελένη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,849752</Latitude>
+<Longitude>27,160523</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζηπέτρου Ελένη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892332</Latitude>
+<Longitude>27,282657</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Καραθωμάς Κώστας</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,848921</Latitude>
+<Longitude>27,160743</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ελληνική Αστυνομία Αερολιμένα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,801279</Latitude>
+<Longitude>27,090374</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Δημοτική Αστυνομία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894874</Latitude>
+<Longitude>27,286653</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Δημαρχείο</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894372</Latitude>
+<Longitude>27,288863</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ίδρυμα Κοινωνικών Ασφαλίσεων</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,884023</Latitude>
+<Longitude>27,270764</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ελληνική Αστυνομία Κω</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894492</Latitude>
+<Longitude>27,291797</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Δικαστήρια - Εισαγγελία Πρωτοδικών Κω</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894492</Latitude>
+<Longitude>27,291797</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΚΕΠ - Κεντρο Εξυπηρέτησης Πολιτών</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,900348</Latitude>
+<Longitude>27,283006</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Γενικό Νοσοκομείο Κω</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892484</Latitude>
+<Longitude>27,291261</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Πυροσβεστική Υπηρεσία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,902737</Latitude>
+<Longitude>27,278706</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Λιμεναρχείο</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894886</Latitude>
+<Longitude>27,2866</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΔΕΥΑ Κω</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894813</Latitude>
+<Longitude>27,281734</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΔΕΗ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,897308</Latitude>
+<Longitude>27,287584</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Αεροδρόμειο Κω</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,801279</Latitude>
+<Longitude>27,09039</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ταχυδρομείο ΕΛΤΑ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892321</Latitude>
+<Longitude>27,288815</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ταχυμεταφορές ΕΛΤΑ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,888408</Latitude>
+<Longitude>27,282742</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ACS Courier</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889223</Latitude>
+<Longitude>27,275199</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Speedex Courier</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89462</Latitude>
+<Longitude>27,282346</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Γενική Ταχυδρομική</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892102</Latitude>
+<Longitude>27,278365</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τράπεζα Κύπρου</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889468</Latitude>
+<Longitude>27,278953</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τράπεζα Πειραιώς ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889661</Latitude>
+<Longitude>27,275678</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΑΛΦΑ Τράπεζα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,8919</Latitude>
+<Longitude>27,290333</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τράπεζα Eurobank Εργασίας ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890141</Latitude>
+<Longitude>27,279926</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Αγροτική Τράπεζα Ελλάδος ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892179</Latitude>
+<Longitude>27,292579</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΑΛΦΑ Τράπεζα ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,894335</Latitude>
+<Longitude>27,289322</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Εμπορική Τράπεζα Ελλάδος ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889468</Latitude>
+<Longitude>27,278553</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τράπεζα Millennium ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892462</Latitude>
+<Longitude>27,284009</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Εθνική Τράπεζα Ελλάδος ΑΕ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,893887</Latitude>
+<Longitude>27,288477</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Λαϊκή Τράπεζα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889185</Latitude>
+<Longitude>27,27873</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Συνεταιριστική Τράπεζα Δωδεκανήσου</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,895929</Latitude>
+<Longitude>27,285859</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Συνεταιριστική Τράπεζα Δωδεκανήσου</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890802</Latitude>
+<Longitude>27,291079</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΤΟΥΛΑΝΤΑ ΑΝΤΙΓΟΝΗ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,884952</Latitude>
+<Longitude>27,31655</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>EKO - Κάννης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,85531</Latitude>
+<Longitude>27,157757</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Jetoil</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,887078</Latitude>
+<Longitude>27,264316</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Shell</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890083</Latitude>
+<Longitude>27,302414</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ελιν - Καραγιαννης </Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,871047</Latitude>
+<Longitude>27,181172</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ηλιος Γεωργιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,87708</Latitude>
+<Longitude>27,190733</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κιαρης Ιωαννης Δ.</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,875121</Latitude>
+<Longitude>27,200689</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μαρινος Ηλιας</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,867843</Latitude>
+<Longitude>27,165927</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Πλαγγετη Παρασκευη Α.</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,864036</Latitude>
+<Longitude>27,157776</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>JETOIL - Ζούνη Καρολίνα &amp; Σία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,886025</Latitude>
+<Longitude>27,257458</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζημανωλη Θ. &amp; Α. Ο.Ε.</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,785285</Latitude>
+<Longitude>27,142423</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παππουλης Δημητριος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,811011</Latitude>
+<Longitude>27,096284</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>ΚΩΣΓΚΑΖ Α.Ε.</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,744434</Latitude>
+<Longitude>26,959185</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Εκο - Γρηγοριαδη Ευαγγελου Υιοι</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89568</Latitude>
+<Longitude>27,280811</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σαββίδου Αγάπη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892115</Latitude>
+<Longitude>27,290157</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Αλευροφάς Ιωάννης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890798</Latitude>
+<Longitude>27,291099</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Αναγνώστου Κωσταντίνος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892928</Latitude>
+<Longitude>27,286144</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Αργυριάδης Ευάγγελος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89248</Latitude>
+<Longitude>27,289556</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Γερούκαλης Δημήτριος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891913</Latitude>
+<Longitude>27,293134</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Βρεττός Μιχαήλ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891913</Latitude>
+<Longitude>27,293134</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Γεωργακόπουλος Γρηγόριος</Name>
+<Category>9</Category>
+<Description><![CDATA[<div class="ExternalClassB6270F9641AE40049738E71A5263B5D0"><p>​</p></div>]]></Description>
+<Latitude>36,89257</Latitude>
+<Longitude>27,290146</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Δαρκαδάκη Αικαταιρίνη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891639</Latitude>
+<Longitude>27,294175</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ιωαννίδου Μαρία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,888674</Latitude>
+<Longitude>27,293687</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Καλδέρη Θεμελίνα</Name>
+<Category>9</Category>
+<Description><![CDATA[<div class="ExternalClass85DEAF137D794AE3B326E51FC8412DD0"><p>​Αιματολόγος</p></div>]]></Description>
+<Latitude>36,890407</Latitude>
+<Longitude>27,289862</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Καλδέρη Μελπωμένη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890407</Latitude>
+<Longitude>27,289862</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κανακάκη Σοφία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891688</Latitude>
+<Longitude>27,29443</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κιάρης Χαράλαμπος</Name>
+<Category>9</Category>
+<Description><![CDATA[<div class="ExternalClass4B7736D99EB44E0AB3EC5104C5C24C3A"><p>​</p></div>]]></Description>
+<Latitude>36,891969</Latitude>
+<Longitude>27,291284</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κλεόπας Αθανάσιος</Name>
+<Category>9</Category>
+<Description><![CDATA[<div class="ExternalClassB57A5048734149478734B8E382372EF4"><p>​</p></div>]]></Description>
+<Latitude>36,894103</Latitude>
+<Longitude>27,285235</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κογιόπουλος Κωνσταντίνος</Name>
+<Category>9</Category>
+<Description><![CDATA[<div class="ExternalClass10A1059679D1494C9022851DF7A0CED8"><p>​</p></div>]]></Description>
+<Latitude>36,894103</Latitude>
+<Longitude>27,285235</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κορατζάνης Κωνσταντίνος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891943</Latitude>
+<Longitude>27,290103</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κουτούζης Γεώργιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890871</Latitude>
+<Longitude>27,288526</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Κουρκουμέλη Γεωργία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890871</Latitude>
+<Longitude>27,288526</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Μπότσα Τριανταφυλλιά</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892385</Latitude>
+<Longitude>27,289561</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Νικολαΐδης Ευάγγελος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891909</Latitude>
+<Longitude>27,293245</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Νικολή Μαρία</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892776</Latitude>
+<Longitude>27,290359</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ξενιτίδου Δήμητρα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891905</Latitude>
+<Longitude>27,293536</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ουρανός Εμμανουήλ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891935</Latitude>
+<Longitude>27,293133</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παπαβασιλείου Ιωάννης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891935</Latitude>
+<Longitude>27,293133</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Παπαχρήστου Σεβαστιανός</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890588</Latitude>
+<Longitude>27,29375</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Περίδης Αντώνιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892977</Latitude>
+<Longitude>27,289357</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Περίδου Θάλεια</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892994</Latitude>
+<Longitude>27,289335</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ραγούσας Φορτουνάτος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892055</Latitude>
+<Longitude>27,291251</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Ραμνάλης Ανέστης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891128</Latitude>
+<Longitude>27,288235</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σαββίδου Αγάπη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892081</Latitude>
+<Longitude>27,290123</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σαΐτης Ιωσήφ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889712</Latitude>
+<Longitude>27,292095</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σαρούκος Αλέξιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891694</Latitude>
+<Longitude>27,2942</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σημαντήρη Ξανθίπη</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890313</Latitude>
+<Longitude>27,283971</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σκουμάντζος Αλέξανδρος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,889172</Latitude>
+<Longitude>27,299876</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Συγγελάκης Παύλος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89027</Latitude>
+<Longitude>27,284287</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Συρεγγέλας Δημήτριος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892591</Latitude>
+<Longitude>27,287994</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Σχουλής Μιχαλήλ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,89704</Latitude>
+<Longitude>27,281315</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τάλλαρος Γεώργιος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890459</Latitude>
+<Longitude>27,289941</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τενζ Νικόλ</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892407</Latitude>
+<Longitude>27,289554</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τρίγκας Χαράλαμπος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890244</Latitude>
+<Longitude>27,284222</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Τσουφλά Μακρίνα</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,890879</Latitude>
+<Longitude>27,288664</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζηνικολάου Νικόλαος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891926</Latitude>
+<Longitude>27,293155</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζηπαναγιώτης Δημοσθένης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891544</Latitude>
+<Longitude>27,288536</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χατζηπαναγιώτης Ιωάννης</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,891669</Latitude>
+<Longitude>27,29434</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Χνουφ Νικόλαος</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892819</Latitude>
+<Longitude>27,290327</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
+<Poi>
+<Name>Medi Care</Name>
+<Category>9</Category>
+<Description />
+<Latitude>36,892055</Latitude>
+<Longitude>27,292323</Longitude>
+<Sucategories>
+<Sucategory>0x010020858B5F00431840A5FF9BA2B0E92EAE</Sucategory>
+</Sucategories>
+</Poi>
 </pois>

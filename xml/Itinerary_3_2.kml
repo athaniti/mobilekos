@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>KmlFile</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<width>1.6</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<width>1.6</width>
+		</LineStyle>
+	</Style>
+	<Placemark>
+		<name>Μία δοκιμαστική Διαδρομή</name>
+		<description>Δοκιμαστική διαδρομή!</description>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				27.16123557753116,36.84726348670871,0 27.16094702898421,36.84861570610665,0 27.1606573443806,36.84976308021881,0 27.16215219546172,36.84977939450619,0 27.16368467171971,36.84945026657264,0 27.1652154388864,36.84941865087682,0 27.16601234385519,36.84950333581329,0 27.16720770955278,36.84959085268743,0 27.16863277251014,36.84881280444224,0 27.17025011359096,36.84823825329751,0 27.17122448954856,36.84764465265538,0 27.17255274539625,36.84681081156761,0 27.17301844379867,36.84667303775218,0 27.17362643368256,36.8460644456535,0 27.1749156406601,36.84497744299593,0 27.17557684321025,36.84453453988007,0 27.17633898405376,36.84396158937986,0 27.17711704879718,36.84318200713835,0 27.18014007092766,36.84267117965552,0 27.18546535854879,36.8452968012317,0 27.1906914028611,36.84749086616524,0 27.19155342376331,36.84751535160429,0 27.19234575116886,36.84749423625802,0 27.19293280880176,36.84766930837144,0 27.19354953385283,36.84757894186539,0 27.19455590413596,36.84773311891901,0 27.19494859717205,36.84787951245901,0 27.1954479194948,36.84811031590137,0 27.1956757181205,36.84843360524841,0 27.19572743257824,36.84861256362111,0 27.19688757725826,36.84876214778571,0 27.19769281373008,36.84889276656499,0 27.19893299766529,36.84894533342695,0 27.19993220073494,36.84866800455306,0 27.20056590421321,36.84878969445423,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

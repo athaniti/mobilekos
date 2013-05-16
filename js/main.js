@@ -48,15 +48,45 @@ function onDeviceReady() {
 	document.addEventListener("online", onOnline, false);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 //		sync();
+//		moveXml();
+//		testCopy();
 	}
+	searchForDirectories();
 	generateKmlMap();
 	// generateMap(38.012394,23.749695);
 }
 
 function onBackKeyDown() {}
 
+function initFiles(){
+	xmlpathcat = 'xml/categories.en.xml';
+	copyFile();
+	xmlpathcat = 'xml/categories.gr.xml';
+	copyFile();
+	xmlpathcat = 'xml/poi.en.xml';
+	copyFile();
+	xmlpathcat = 'xml/poi.gr.xml';
+	copyFile();
+	xmlpathcat = 'xml/Itinerary 2_2.xml';
+	copyFile();
+	xmlpathcat = 'xml/Itinerary 3_3.xml';
+	copyFile();
+	xmlpathcat = 'xml/itinerary_2_1.kml';
+	copyFile();
+	xmlpathcat = 'xml/itinerary_2_2.kml';
+	copyFile();
+	xmlpathcat = 'xml/Itinerary_3_1.kml';
+	copyFile();
+	xmlpathcat = 'xml/Itinerary_3_2.kml';
+	copyFile();
+	xmlpathcat = 'xml/Itinerary_3_3.kml';
+	copyFile();
+	alert("files copied successfully!");
+}
+
+
 function sync(){
-	searchForDirectories();
+
 	downloadXmlFiles();	
 //	if (upToDate == false){
 //		compareXml();	
@@ -82,14 +112,16 @@ function searchForDirectories(){
 //					alert("found tempMapApp!");
 				}
 			}
-			if (tempFound == false){
-				createTempFolder();
+//			if (tempFound == false){
+//				createTempFolder();
 //				onFileSystemSuccess();
-			}
+//			}
 			if (mapAppFound == false){
 //				alert("MapAppFound== false");
 				upToDate = true;
 				createMapAppFolder();
+				initFiles();
+//				createXmlFilesFolder();
 			}
 		});
 	});
@@ -104,8 +136,8 @@ function createTempFolder(){
 	function onGetDirectorySuccess2(dir) { 
 	      console.log("Created dir "+dir.name);
 	}
-	function onGetDirectoryFail2(error) { 
-	     console.log("Error creating directory "+error.code); 
+	function onGetDirectoryFail2(error) {
+		console.log("Error creating directory "+error.code); 
 	}
 }
 
@@ -134,7 +166,7 @@ function resOnSuccess(entry){
 		fileSys.root.getDirectory("MapApp", {create: false, exclusive: false}, function(directory) {
 //			alert('43'+directory.name);		
 //			alert('234'+xmlFileName);
-			entry.copyTo(directory, "xmlFiles", success, resOnError);			
+			entry.copyTo(directory, "MapApp", success, resOnError);			
 		}, resOnError);
 	}, resOnError);
 }
@@ -152,8 +184,43 @@ function onSearchKeyDown()
 	alert('button search');
 }
 
+function copyFile(){
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", xmlpathcat, false);
+	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+	xmlhttp.send("");
+	xmlDoc = xmlhttp.responseText;
+//	alert(xmlDoc);
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file0: "+ xmlhttp.status);
+	}
+//	createMapAppFolder();
+	createFile();
+}
+
+function createFile(){
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+}
+
+function gotFS(fileSystem) {
+	xmlpathcat = xmlpathcat.slice(4);
+	fileSystem.root.getFile(xmlpathcat, {create: true, exclusive: false}, gotFileEntry, fail);
+}
+
+function gotFileEntry(fileEntry) {
+    fileEntry.createWriter(gotFileWriter, fail);
+}
+
+function gotFileWriter(writer) {
+    writer.onwrite = function(evt) {
+        console.log("write Success: "+xmlpathcat);
+    };
+//    alert(xmlDoc);
+    writer.write(xmlDoc);
+}
+
 function downloadXmlFiles(){
-	alert('in downloadXmlFiles');
+//	alert('in downloadXmlFiles');
 	var data;	
 	$.ajax({ 
 		url: "http://192.168.1.9:18090/api//basefile",
@@ -283,8 +350,8 @@ function compareXml(){		//Reading all entries in TempMapApp folder & their Times
 					xmlhttp.send("");
 					
 					xmlDoc = xmlhttp.responseXML;
-					if (xmlhttp.status != 200){
-//						alert("Error loading Xml file1: "+ xmlhttp.status);
+					if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+						alert("Error loading Xml file1: "+ xmlhttp.status);
 					}
 					timestamp = $(xmlDoc).find("timestamp").text();
 //					alert('timestamp1 '+timestamp);
@@ -301,8 +368,8 @@ function compareXml(){		//Reading all entries in TempMapApp folder & their Times
 					xmlhttp.setRequestHeader('Content-Type', 'text/xml');
 					xmlhttp.send("");
 					xmlDoc = xmlhttp.responseXML;
-					if (xmlhttp.status != 200){
-//						alert("Error loading Xml file2: "+ xmlhttp.status);
+					if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+						alert("Error loading Xml file2: "+ xmlhttp.status);
 					}
 					timestamp = $(xmlDoc).find("timestamp").text();
 //					alert('timestamp2 '+timestamp);
@@ -330,8 +397,8 @@ function checkXmlVersion(newTimeStamp){
 			xmlhttp.setRequestHeader('Content-Type', 'text/xml');
 			xmlhttp.send("");
 			xmlDoc = xmlhttp.responseXML;
-			if (xmlhttp.status != 200){
-//				alert("Error loading Xml file3: "+ xmlhttp.status);
+			if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+				alert("Error loading Xml file3: "+ xmlhttp.status);
 			}
 			timestamp = $(xmlDoc).find("timestamp").text();
 //			alert('newTS '+newTimeStamp+ ' '+ "timestamp"+timestamp);
@@ -347,18 +414,20 @@ function checkXmlVersion(newTimeStamp){
 function loadXmlcat()
 {
 	if (langstr == 'en'){
-		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.en.xml';
+//		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.en.xml';
+		xmlpathcat = 'file:///mnt/sdcard/categories.en.xml';
 	}
 	else {
-		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.gr.xml';
+//		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.gr.xml';
+		xmlpathcat = 'file:///mnt/sdcard/categories.gr.xml';
 	}
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("GET", xmlpathcat, false);
 	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
 	xmlhttp.send("");
 	xmlDoc = xmlhttp.responseXML;
-	if (xmlhttp.status != 200){
-//		alert("Error loading Xml file4: "+ xmlhttp.status);
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file4: "+ xmlhttp.status);
 	}
 	if (fromselectedplaces == false){
 		readXML();	
@@ -395,18 +464,20 @@ function loadXmlpoi()
 {
 	var xmlpath;
 	if (langstr == 'en'){
-		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
+//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
+		xmlpath = 'file:///mnt/sdcard/poi.en.xml';
 	}
 	else{
-		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
+//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
+		xmlpath = 'file:///mnt/sdcard/poi.gr.xml';
 	}
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET", xmlpath, false);
   xmlhttp.setRequestHeader('Content-Type', 'text/xml');
   xmlhttp.send("");
   xmlDoc = xmlhttp.responseXML;
-  if (xmlhttp.status != 200){
-//	  alert("Error loading Xml file5:"+ xmlhttp.status);
+  if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+	  alert("Error loading Xml file5:"+ xmlhttp.status);
   }
 }
 
@@ -631,13 +702,17 @@ function onClickbtnCurrent()
 function onSuccess(position) 
 {
 	currentLat = position.coords.latitude;
+	alert("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
+	alert("currentLong: "+currentLong);
 	map.panTo([currentLat,currentLong ]);
+	
 	if (marker1 !=null)
 	{
 		 map.removeLayer(marker1);
 	}
 	map.setZoom(13);
+	alert('1!');
 	var markerLocation = new L.LatLng(currentLat,currentLong);
 	var marker = new L.Marker(markerLocation).addTo(map)
 	.bindPopup(MyApp.resources.CurrentPosition)
@@ -648,7 +723,7 @@ function onSuccess(position)
 
 function onError(error) 
 {
-//	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 }
     
 function addMarker(lat, long)
@@ -1001,10 +1076,12 @@ function submitSelectedPlaces()
 function showAllPlaces(){
 	var xmlpath;
 	if (langstr == 'en'){
-		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
+//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
+		xmlpath = 'file:///mnt/sdcard/poi.en.xml';
 	}
 	else {
-		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
+//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
+		xmlpath = 'file:///mnt/sdcard/poi.gr.xml';
 	}
 
 	var xmlhttp = new XMLHttpRequest();
@@ -1012,8 +1089,8 @@ function showAllPlaces(){
 	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
 	xmlhttp.send("");
 	xmlDoc = xmlhttp.responseXML;
-	if (xmlhttp.status != 200){
-//		alert("Error loading Xml file6:"+ xmlhttp.status);
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file6:"+ xmlhttp.status);
 	}
 	var destination;
 	$.mobile.changePage($('#mainpage'), 'pop'); 
@@ -1026,7 +1103,7 @@ function showAllPlaces(){
 		if (descr.length > 140){			//slicing the description to the first 140 charactes.
 			descr = descr.slice(0,140);				
 			descr = descr + "...";
-		}  
+		}
 //		alert(xmlDoc.getElementsByTagName("Latitude").item(k).firstChild.nodeValue);
 		addGroupMarker(xmlDoc.getElementsByTagName("Latitude").item(k).firstChild.nodeValue, xmlDoc.getElementsByTagName("Longitude").item(k).firstChild.nodeValue,
 				xmlDoc.getElementsByTagName("Name").item(k).firstChild.nodeValue, 
@@ -1090,6 +1167,7 @@ function getKmlFile()
 //				if (entries[i].name && entries[i].name.match(/Itinerary_[0-9_]+\.kml/))
 				if (entries[i].name.indexOf(localtour)>-1)
 				{
+//					alert("inside if");
 					found = true;
 //					alert("9^ "+entries[i].name);
 					track = new L.KML(filepath+"/"+entries[i].name, {async: true});

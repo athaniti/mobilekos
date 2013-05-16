@@ -1,0 +1,43 @@
+body {
+	width: 100%;
+	height: 100%;
+}
+
+#mainpage {
+	width: 100%;
+	height: 100%;
+}
+
+#content {
+	text-align: center;
+	width: 100%; 
+	height : 100%;
+	margin-top: 5%;
+}
+
+#boxes {
+	text-align: center;
+}
+
+#map {
+/*  margin-left: auto;
+    margin-right: auto;
+    width: 20em;
+	float:center;
+	text-align: center;
+	float: center;
+	width: 95%;
+	height: 95%;
+margin-bottom: 5%;
+*/
+	width: 90%;
+	height: 70%;
+}
+
+#firstpageheader {
+	font-size: 115%
+}
+
+#emailheading {
+	font-size: 130%
+}
