@@ -38,12 +38,12 @@ var mapAppFound = false;
 var upToDate = false;
 //var xmlFileName;
 var track, control, info, tourXmlName, dd;
- 
+
 function onDeviceReady() {
 	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 1000000);
 	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
- 	document.addEventListener("searchbutton", onSearchKeyDown, false);
+	document.addEventListener("searchbutton", onSearchKeyDown, false);
 	document.addEventListener("offline", onOffline, false);
 	document.addEventListener("online", onOnline, false);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
@@ -53,7 +53,7 @@ function onDeviceReady() {
 	}
 	searchForDirectories();
 	generateKmlMap();
-	// generateMap(38.012394,23.749695);
+//	generateMap(38.012394,23.749695);
 }
 
 function onBackKeyDown() {}
@@ -67,23 +67,22 @@ function initFiles(){
 	copyFile();
 	xmlpathcat = 'xml/poi.gr.xml';
 	copyFile();
-	xmlpathcat = 'xml/Itinerary 2_2.xml';
+	xmlpathcat = 'xml/itinerary2_2.xml';
 	copyFile();
-	xmlpathcat = 'xml/Itinerary 3_3.xml';
+	xmlpathcat = 'xml/itinerary3_3.xml';
 	copyFile();
-	xmlpathcat = 'xml/itinerary_2_1.kml';
+	xmlpathcat = 'kml/itinerary_2_1.kml';
 	copyFile();
-	xmlpathcat = 'xml/itinerary_2_2.kml';
+	xmlpathcat = 'kml/itinerary_2_2.kml';
 	copyFile();
-	xmlpathcat = 'xml/Itinerary_3_1.kml';
+	xmlpathcat = 'kml/Itinerary_3_1.kml';
 	copyFile();
-	xmlpathcat = 'xml/Itinerary_3_2.kml';
+	xmlpathcat = 'kml/Itinerary_3_2.kml';
 	copyFile();
-	xmlpathcat = 'xml/Itinerary_3_3.kml';
+	xmlpathcat = 'kml/Itinerary_3_3.kml';
 	copyFile();
-	alert("files copied successfully!");
+//	alert("files copied successfully!");
 }
-
 
 function sync(){
 
@@ -691,6 +690,7 @@ function generateKmlMap()
 
 function onClickbtnCurrent()
 {
+	alert("insidebtnCurrent");
 	$('#abtnCurrentPosition').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 	$('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
    	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
@@ -701,6 +701,7 @@ function onClickbtnCurrent()
 
 function onSuccess(position) 
 {
+	alert("in onSuccess");
 	currentLat = position.coords.latitude;
 	alert("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
@@ -879,25 +880,23 @@ function switchToMainPage(email)
 	{
 		db.transaction(function(tx) {
 			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
-			});
+		});
 	}
-	
+
 	if (isOffline)
 	{
 		alert(MyApp.resources.NoInternetAccess);
 	}
 //	else
-//	{
-		$.mobile.changePage($('#mainpage'), 'pop');
-		setTimeout(function(){
-			map.invalidateSize();
-			},1000);
-		setLabelsForMainPage();
-		if (firstTime == true){
-			firstTime = false;
-			onClickbtnCurrent();
-		}
-//	}
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setTimeout(function(){
+		map.invalidateSize();
+	},1000);
+	setLabelsForMainPage();
+	if (firstTime == true){
+		firstTime = false;
+		onClickbtnCurrent();
+	}
 }
 
 function onOffline() 
@@ -908,7 +907,7 @@ function onOffline()
 function onOnline() {
 	isOffline = false;
 }
-     
+
 function switchToFirstPage()
 {
 	db.transaction(function(tx) {
@@ -916,13 +915,13 @@ function switchToFirstPage()
 		});
 	$.mobile.changePage($('#firstpage'), 'pop');
 }
-    
+
 function switchToSettingPage()
 {
 	getSelectedSettings();
 	$.mobile.changePage($('#settingspage'), 'pop'); 
 }
- 
+
 function onClickbtnPlaces()
 {
 	if (firsttime == true){
@@ -944,7 +943,7 @@ function onClickbtnTour()
     $('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
     $('#abtnCurrentPosition').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 }    
-     
+
 function getSelectedSettings()
 {
 	db.transaction(function (tx) {
@@ -967,7 +966,7 @@ function getSelectedSettings()
 		}, errorCB);
 		});
 }
-    
+
 function showKeyEmail()
 {
 	if(window.event.keyCode == 13)
@@ -975,7 +974,7 @@ function showKeyEmail()
 		switchToMainPage($('#emailaccount').val());
 	}
 }
-      
+
 function onClickbtnFilterPlaces()
 {
 	var hasChilds = document.getElementById('placesContent').hasChildNodes();
@@ -1125,7 +1124,7 @@ function checkForLanguage()
 	}
 }
 
-function getKmlFile()
+function showKmlFile()
 {
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO ITINERARIES(id, title, isActive, completed) VALUES (?,?,?,?)',[itId,itTitle,itActive,itCompleted], successCB, errorCB);
@@ -1133,7 +1132,8 @@ function getKmlFile()
 	if (track != null)
 	{
 		map.removeLayer(track);
-		control.removeFrom(map);
+//		control.removeFrom(map);
+		map.removeControl(control);
 	}
 	if (currentMarkers != null)
 	{
@@ -1144,16 +1144,16 @@ function getKmlFile()
 		currentMarkers = new Array();
 	}
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		var localtour;
-//		alert("3# "+tourXmlName);
+		var localtour;		
 //		localtour = tourXmlName.split("_")[0];
-		localtour = tourXmlName.substring(10).replace("x","k");
+		localtour = tourXmlName.substring(9).replace("x","k");
+//		alert("3# "+tourXmlName);
 		var indexToReplace = localtour.indexOf("_")+1;
 		var startString = localtour.substr(0, indexToReplace);
 		var endString = localtour.substring(indexToReplace+1);
 		var stringToPutIn= dd;
 		localtour = startString+stringToPutIn+endString;
-//		alert("2@ "+localtour);
+		localtour = "_"+localtour;
 		filepath = fs.root.fullPath;
 //		filepath += "/MapApp/kmlFiles/";
 		var i=0;
@@ -1167,12 +1167,21 @@ function getKmlFile()
 //				if (entries[i].name && entries[i].name.match(/Itinerary_[0-9_]+\.kml/))
 				if (entries[i].name.indexOf(localtour)>-1)
 				{
-//					alert("inside if");
 					found = true;
 //					alert("9^ "+entries[i].name);
+//					var map = new L.Map('map', {center: new L.LatLng(58.4, 43.0), zoom: 11});
+//					var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+//					var track = new L.KML("KML_Samples.kml", {async: true});
+//					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
+//					map.addLayer(track);
+//					map.addLayer(osm);
+//					map.addControl(new L.Control.Layers({}, {'Track':track}));
+					alert("9* "+filepath+"/"+entries[i].name);
 					track = new L.KML(filepath+"/"+entries[i].name, {async: true});
-					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
+					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds());
+					alert("ok");});
 					map.addLayer(track);
+//					map.addLayer(osm);
 					control = new L.Control.Layers({}, {'Track':track});
 //					map.addControl(new L.Control.Layers({}, {'Track':track}));
 					map.addControl(control);
@@ -1207,7 +1216,6 @@ function loadItinerariesfromPortal()
 	{
 		$('#emailaccountitinerary').val(currentEmail);
 	}
-	
 	document.getElementById('portalItineraries').innerHTML='';
 	$.mobile.changePage($('#itineraryportalpage'), 'pop'); 
 }
@@ -1225,7 +1233,8 @@ function loadItineraries()
 			var j=0;
 			for (var i=0; i<entries.length; i++)
 			{
-				if (entries[i].name && entries[i].name.match(/Itinerary [0-9_]+\.xml/))
+//				alert(entries[i].name);
+				if (entries[i].name.match(/itinerary[0-9_]+\.xml/))
 				{
 					itineraryFilename[j] = entries[i].name;
 //					alert("filename: "+itineraryFilename[j]+" "+j);
