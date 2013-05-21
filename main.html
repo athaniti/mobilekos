@@ -7,8 +7,10 @@
 <link href="jquery.mobile/jquery.mobile-1.1.0.min.css" rel="stylesheet" type="text/css"/>
 <script src="jquery.mobile/jquery-1.7.2.min"></script>
 <script src="jquery.mobile/jquery.mobile-1.1.0.min.js"></script>
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
-<script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+<!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>-->
+<script src="dist/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/leaflet.css">
 <script src="js/cordova-2.5.0.js"></script>
 <script src="js/main.js"></script>
 <script src="js/KML.js"></script>
@@ -25,8 +27,9 @@
  document.addEventListener("deviceready", onDeviceReady, false);
 // ]]></script>
  
-  
+
 </head>
+<!--<body onload="onDeviceReady()">-->
 <body>
 <form action="#" method="get">
 
@@ -43,9 +46,9 @@
 		<h2 id="emailheading">  </h2>
 		<input  style="margin-top: 5%; width : 60%;" placeholder="email account" type="text" id="emailaccount" onKeyPress="showKeyEmail();"/>
  		<div  data-role="controlgroup" data-type="horizontal" data-mini="true" data-inline="true"  style="margin-top: 10%; margin-bottom:10%">
-	 		<a data-icon="check" href="#"  data-role="button" data-mini="true" onClick = "switchToMainPage($('#emailaccount').val());">
+	 		<a data-icon="check" href="#"  data-role="button" data-mini="true" onClick = "firstSwitchToMainPage($('#emailaccount').val());">
  			<span id="btnOkEmail"></span></a>
-			<a data-icon="arrow-r" href="#"  data-role="button" data-mini="true" onClick = "switchToMainPage();">
+			<a data-icon="arrow-r" href="#"  data-role="button" data-mini="true" onClick = "firstSwitchToMainPage();">
  			<span id="btnSkipEmail"></span></a>
  			<a data-icon="arrow-l" href="#"  data-role="button" data-mini="true" data-theme="b" onClick = "switchToFirstPage();">
   			<span id="btnBackEmail"></span></a>
@@ -139,10 +142,10 @@
   				<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "loadItineraries();">
  				<span id="btnEachItineraryBack"> </span></a>
  			</div>
- 			<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
+ <!--			<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
   				<a  href="#"   data-icon="check" data-role="button"  data-theme="b" data-inline="true" onClick = "testdb();">
- 				<span id="btntestdb"> </span></a>
- 			</div>
+ 				<span id="btntestdb"> </span></a> 
+ 			</div>-->
 	</div>
 </div>
 

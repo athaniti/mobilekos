@@ -44,15 +44,16 @@ function onDeviceReady() {
 	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
-	document.addEventListener("offline", onOffline, false);
-	document.addEventListener("online", onOnline, false);
+	document.addEventListener("offline", function() {isOffline = true;}, false);
+	document.addEventListener("online", function() {isOffline = false;}, false);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
+		isOffline = false;
 //		sync();
 //		moveXml();
 //		testCopy();
 	}
 	searchForDirectories();
-	generateKmlMap();
+	
 //	generateMap(38.012394,23.749695);
 }
 
@@ -85,7 +86,6 @@ function initFiles(){
 }
 
 function sync(){
-
 	downloadXmlFiles();	
 //	if (upToDate == false){
 //		compareXml();	
@@ -658,22 +658,22 @@ function generateMap(lat, long)
     document.getElementById('map').style.display = 'block';
     map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 }
-     
+
 function generateKmlMap()
 {
-	if (!isOffline){
-	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13});
-	var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-	map.addLayer(osm);
-	document.getElementById('map').style.display = 'block';
-	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+	if (isOffline == false){
+		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13});
+		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+		map.addLayer(osm);
+		document.getElementById('map').style.display = 'block';
+		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 	}
-	else{
-	map = new L.Map('map', {center: new L.LatLng(36.7968,27.1263), zoom: 13});
-	var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
-	map.addLayer(osm);
-	document.getElementById('map').style.display = 'block';
-	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+	if (isOffline == true){
+		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13});
+		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+		map.addLayer(osm);
+		document.getElementById('map').style.display = 'block';
+		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 	}
 }
 
@@ -690,22 +690,22 @@ function generateKmlMap()
 
 function onClickbtnCurrent()
 {
-	alert("insidebtnCurrent");
+//	alert("insidebtnCurrent");
 	$('#abtnCurrentPosition').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 	$('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
    	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
- 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+ 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout:8000,enableHighAccuracy:true});
 }
 
 function onSuccess(position) 
 {
-	alert("in onSuccess");
+//	alert("in onSuccess");
 	currentLat = position.coords.latitude;
-	alert("currentLat: "+currentLat);
+//	alert("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
-	alert("currentLong: "+currentLong);
+//	alert("currentLong: "+currentLong);
 	map.panTo([currentLat,currentLong ]);
 	
 	if (marker1 !=null)
@@ -780,7 +780,6 @@ function ClearAll(){
 	$("#placespage input[type=checkbox]").checkboxradio("refresh");
 }
 
-
 function switchToEmailPage(langid)
 {
 	language = langid;
@@ -839,7 +838,7 @@ function backToMainPage()
     langstr = newlangstr.toLowerCase();
    // alert(langstr);
 	fromselectedplaces = false;
-    if (language != newLanguage )
+    if (language != newLanguage)
     {
     	language = newLanguage;
     	langchanged = true;
@@ -873,21 +872,19 @@ function backToMainPage()
     checkForLanguage();
     switchToMainPage();
 }
-     
-function switchToMainPage(email)
-{
+
+function firstSwitchToMainPage(email){
+	generateKmlMap();
 	if (email !=null && email !='')
 	{
 		db.transaction(function(tx) {
 			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
 		});
 	}
-
-	if (isOffline)
+	if (isOffline == true)
 	{
 		alert(MyApp.resources.NoInternetAccess);
 	}
-//	else
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
 		map.invalidateSize();
@@ -899,14 +896,35 @@ function switchToMainPage(email)
 	}
 }
 
-function onOffline() 
+function switchToMainPage(email)
 {
-	isOffline = true;
+	if (email !=null && email !='')
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
+		});
+	}
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setTimeout(function(){
+		map.invalidateSize();
+	},1000);
+	setLabelsForMainPage();
+	if (firstTime == true){
+		firstTime = false;
+		onClickbtnCurrent();
+	}
 }
-     
-function onOnline() {
-	isOffline = false;
-}
+
+//function onOffline() 
+//{
+//	isOffline = true;
+//	alert("offline!");
+//}
+//     
+//function onOnline() {
+//	isOffline = false;
+//	alert("online!");
+//}
 
 function switchToFirstPage()
 {
@@ -1178,8 +1196,7 @@ function showKmlFile()
 //					map.addControl(new L.Control.Layers({}, {'Track':track}));
 					alert("9* "+filepath+"/"+entries[i].name);
 					track = new L.KML(filepath+"/"+entries[i].name, {async: true});
-					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds());
-					alert("ok");});
+					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds());});
 					map.addLayer(track);
 //					map.addLayer(osm);
 					control = new L.Control.Layers({}, {'Track':track});

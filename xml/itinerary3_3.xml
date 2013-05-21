@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Itinerary id="3">
+<It_Title>Περιήγηση Kos</It_Title>
+<User>ada@dataverse.gr</User>
+<Created>25/04/2012</Created>
+<Routes>
+	<Route Name="Day 1" Kml="1">
+		<Duration>1:60:00</Duration>
+		<Points>
+			<Point Code="Ck">City of Kos</Point>
+			<Point Code="Bk">Beach Kalamki</Point>
+		</Points>
+	</Route>
+	<Route Name="Day 2" Kml="2">
+		<Duration>0:23:00</Duration>
+		<Points>
+			<Point Code="CS">City of Someplace</Point>
+			<Point Code="BS">Beach SomeBeach</Point>
+		</Points>
+	</Route>
+	<Route Name="Day 3" Kml="3">
+		<Duration>0:53:00</Duration>
+		<Points>
+			<Point Code="CM">City of Mastichari</Point>
+			<Point Code="BM">Beach Miaouli</Point>
+		</Points>
+	</Route>
+</Routes>
+</Itinerary>
