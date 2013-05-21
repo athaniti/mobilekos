@@ -1,4 +1,4 @@
-var baseapiurl='192.168.1.9:18090/api/';
+var baseapiurl='ath.dataverse.gr:18090/api/';
 var basepoifolder = 'xml/';
 var baselat = 38.00411;
 var baselong = 23.720673;
@@ -52,7 +52,8 @@ function onDeviceReady() {
 //		moveXml();
 //		testCopy();
 	}
-	searchForDirectories();
+//	searchForDirectories();
+	initFiles();
 	
 //	generateMap(38.012394,23.749695);
 }
@@ -222,7 +223,7 @@ function downloadXmlFiles(){
 //	alert('in downloadXmlFiles');
 	var data;	
 	$.ajax({ 
-		url: "http://192.168.1.9:18090/api//basefile",
+		url:  baseapiurl+"/basefile",
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
 		type: "GET",
@@ -696,12 +697,11 @@ function onClickbtnCurrent()
    	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
- 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout:8000,enableHighAccuracy:true});
+ 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy:true});
 }
 
 function onSuccess(position) 
 {
-//	alert("in onSuccess");
 	currentLat = position.coords.latitude;
 //	alert("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
@@ -713,7 +713,6 @@ function onSuccess(position)
 		 map.removeLayer(marker1);
 	}
 	map.setZoom(13);
-	alert('1!');
 	var markerLocation = new L.LatLng(currentLat,currentLong);
 	var marker = new L.Marker(markerLocation).addTo(map)
 	.bindPopup(MyApp.resources.CurrentPosition)
@@ -726,7 +725,7 @@ function onError(error)
 {
 	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 }
-    
+
 function addMarker(lat, long)
 {
 	if (marker2 !=null)
@@ -754,13 +753,13 @@ function addGroupMarker(x, y, name, descr)
     map.addLayer(marker);
     currentMarkers.push(marker);
 }
-    
+
 function addMarkerToList(name)
 {
 	$('#yourList').removeClass('ui-disabled');
 	appendOptionListLast(name,0);
 }
-     
+
 function calculate()
 {
 	var linePts =[[currentLat, currentLong],[baselat,baselong]];
@@ -782,6 +781,16 @@ function ClearAll(){
 
 function switchToEmailPage(langid)
 {
+//    window.plugins.AccountList.get({
+//    	type: 'account type' 	// if not specified get all accounts
+//    							// google account example: 'com.google'
+//            },function (result) {
+//                alert("2@ "+result.length);
+//                for (i in res)
+//        			alert("4@ "+result[i]);
+//            }, function (error) {
+//            	alert("6@ "+error);
+//    });
 	language = langid;
 	langstr = langid.toLowerCase();
     db.transaction(function(tx) {
