@@ -9,15 +9,21 @@ var AccountList = function(gap) {
 	};
 
 	gap.addConstructor(function () {
-		if (gap.addPlugin) {
-	            gap.addPlugin("AccountList", new AccountList());
-	        } else {
-	            if (!window.plugins) {
-	                window.plugins = {};
-	            }
+//		if (gap.addPlugin) {
+//		gap.addPlugin("AccountList", new AccountList());
+//		} else {
+//		if (!window.plugins) {
+//		window.plugins = {};
+//		}
 
-	            window.plugins.AccountList = new AccountList();
-	        }
+//		window.plugins.AccountList = new AccountList();
+//		}
+		if(!window.plugins) {
+			window.plugins = {};
+		}
+		if (!window.plugins.accountList) {
+			window.plugins.accountList = new AccountList();
+		}
 	});
 
 })(window.cordova || window.Cordova || window.PhoneGap);

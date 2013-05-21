@@ -19,7 +19,7 @@ var language;
 var langstr = 'en';
 var currentEmail;
 var filepath;
-var firsttime=true;
+var firstTime=true;
 var langchanged = false;
 var xmlpathcat;
 var fromselectedplaces = false;
@@ -36,6 +36,7 @@ var fileNameToBeMoved;
 var tempFound = false;
 var mapAppFound = false;
 var upToDate = false;
+var fromMainPage = false;
 //var xmlFileName;
 var track, control, info, tourXmlName, dd;
 
@@ -58,7 +59,19 @@ function onDeviceReady() {
 //	generateMap(38.012394,23.749695);
 }
 
-function onBackKeyDown() {}
+function onBackKeyDown(e) {
+	if ($.mobile.activePage.is('#firstpage')) {
+		e.preventDefault();
+		navigator.app.exitApp();
+	}
+	else if ($.mobile.activePage.is('#mainpage')){	
+		fromMainPage = true;
+		navigator.app.backHistory();
+	}
+	else {
+		navigator.app.backHistory();
+	}
+}
 
 function initFiles(){
 	xmlpathcat = 'xml/categories.en.xml';
@@ -69,20 +82,20 @@ function initFiles(){
 	copyFile();
 	xmlpathcat = 'xml/poi.gr.xml';
 	copyFile();
-	xmlpathcat = 'xml/itinerary2_2.xml';
-	copyFile();
-	xmlpathcat = 'xml/itinerary3_3.xml';
-	copyFile();
-	xmlpathcat = 'kml/itinerary_2_1.kml';
-	copyFile();
-	xmlpathcat = 'kml/itinerary_2_2.kml';
-	copyFile();
-	xmlpathcat = 'kml/Itinerary_3_1.kml';
-	copyFile();
-	xmlpathcat = 'kml/Itinerary_3_2.kml';
-	copyFile();
-	xmlpathcat = 'kml/Itinerary_3_3.kml';
-	copyFile();
+//	xmlpathcat = 'xml/itinerary2_2.xml';
+//	copyFile();
+//	xmlpathcat = 'xml/itinerary3_3.xml';
+//	copyFile();
+//	xmlpathcat = 'kml/itinerary_2_1.kml';
+//	copyFile();
+//	xmlpathcat = 'kml/itinerary_2_2.kml';
+//	copyFile();
+//	xmlpathcat = 'kml/Itinerary_3_1.kml';
+//	copyFile();
+//	xmlpathcat = 'kml/Itinerary_3_2.kml';
+//	copyFile();
+//	xmlpathcat = 'kml/Itinerary_3_3.kml';
+//	copyFile();
 //	alert("files copied successfully!");
 }
 
@@ -204,7 +217,7 @@ function createFile(){
 
 function gotFS(fileSystem) {
 	xmlpathcat = xmlpathcat.slice(4);
-	alert(xmlpathcat +" file created in SDCard");
+//	alert(xmlpathcat +" file created in SDCard");
 	fileSystem.root.getFile(xmlpathcat, {create: true, exclusive: false}, gotFileEntry, fail);
 }
 
@@ -218,7 +231,7 @@ function gotFileWriter(writer) {
     };
 //    alert(xmlDoc);
     writer.write(xmlDoc);
-    alert("Copy Completed");
+//    alert("Copy Completed");
 }
 
 function downloadXmlFiles(){
@@ -798,7 +811,9 @@ function switchToEmailPage(langid)
 	language = langid;
 	langstr = langid.toLowerCase();
     db.transaction(function(tx) {
-    	tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[1,langid], successCB, errorCB);
+//    	tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[1,langid], successCB, errorCB);
+//    	tx.executeSql('UPDATE SETTINGS SET id = ? data = ? WHERE (?,?)',[1,langid], successCB, errorCB);
+    	tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[langid,1],successCB, errorCB);
     	});
     
     checkForLanguage();
@@ -887,7 +902,9 @@ function backToMainPage()
 }
 
 function firstSwitchToMainPage(email){
-	generateKmlMap();
+	if (fromMainPage == false){
+		generateKmlMap();
+	}
 	if (email !=null && email !='')
 	{
 		db.transaction(function(tx) {
@@ -955,8 +972,8 @@ function switchToSettingPage()
 
 function onClickbtnPlaces()
 {
-	if (firsttime == true){
-		firsttime = false;
+	if (firstTime == true){
+		firstTime = false;
 		showAllPlaces();
 	}
 	$("#abtnFilterPlaces").show();
