@@ -190,7 +190,7 @@ function copyFile(){
 	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
 	xmlhttp.send("");
 	xmlDoc = xmlhttp.responseText;
-//	alert(xmlDoc);
+//	alert(xmlpathcat +" fetched successfully");
 	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
 		alert("Error loading Xml file0: "+ xmlhttp.status);
 	}
@@ -204,6 +204,7 @@ function createFile(){
 
 function gotFS(fileSystem) {
 	xmlpathcat = xmlpathcat.slice(4);
+	alert(xmlpathcat +" file created in SDCard");
 	fileSystem.root.getFile(xmlpathcat, {create: true, exclusive: false}, gotFileEntry, fail);
 }
 
@@ -217,6 +218,7 @@ function gotFileWriter(writer) {
     };
 //    alert(xmlDoc);
     writer.write(xmlDoc);
+    alert("Copy Completed");
 }
 
 function downloadXmlFiles(){
@@ -697,7 +699,8 @@ function onClickbtnCurrent()
    	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
- 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy:true});
+ 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, 
+ 											 timeout: 10000, enableHighAccuracy:true});
 }
 
 function onSuccess(position) 
@@ -723,7 +726,8 @@ function onSuccess(position)
 
 function onError(error) 
 {
-	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+//	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+	alert("Could not get your location");
 }
 
 function addMarker(lat, long)
