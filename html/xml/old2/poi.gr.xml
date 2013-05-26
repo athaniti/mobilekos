@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pois>
+  <timestamp>1365762816</timestamp>
+  <Poi>
+    <Name>342324324</Name>
+    <Category>1</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>342324324</Name>
+    <Category>1</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>122323</Name>
+    <Category>1</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F906004968D1A8F6BCB547B77576CFF790FDBB</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Ξενοδοχείο1</Name>
+    <Category>3</Category>
+    <Description><![CDATA[<div class="ExternalClass5A85032EAB5B4D128D5A25B675340F81"><p>​Δοκιμαστική Περιγραφή<br></p></div>]]></Description>
+    <Latitude>36879071</Latitude>
+    <Longitude>27197914</Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>ΕνοικιαζόμενοΔωμάτιο1</Name>
+    <Category>3</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90200A6FAEB071FDDB64A9F634D75357B1E09</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>ΚΥΠΡΙΩΤΗΣ ΜΑΡΙΣ ΞΕΝ/ΧΕΙΟ &amp;ΣΟΥΙΤΕΣ</Name>
+    <Category>3</Category>
+    <Description><![CDATA[<div class="ExternalClass33185B78D3484BF58DCC05CA84558169"><p>​</p></div>]]></Description>
+    <Latitude>36,88377</Latitude>
+    <Longitude>27,328416</Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90100FB353FB42A018049A4988DAE7EBE5421</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>test</Name>
+    <Category>5</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x01009077160E2AD0A243893344626AFA35F90F00196AF70D33539A44A856B7E20AAFAE9A</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Πυλί</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Ζηπάρι</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Κέφαλος</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Καρδάμαινα</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Τιγκάκι</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Μαρμάρι</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Μαστιχάρι</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+  <Poi>
+    <Name>Αντιμάχεια</Name>
+    <Category>7</Category>
+    <Description />
+    <Latitude>
+    </Latitude>
+    <Longitude>
+    </Longitude>
+    <Sucategories>
+      <Sucategory>0x010043E0C6427A88F547B069EF3C265F983C</Sucategory>
+    </Sucategories>
+  </Poi>
+</pois>

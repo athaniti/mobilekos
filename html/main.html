@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-7">
+<title>LeafLet</title>
+
+<link href="jquery.mobile/jquery.mobile-1.1.0.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery.mobile/jquery-1.7.2.min"></script>
+<script src="jquery.mobile/jquery.mobile-1.1.0.min.js"></script>
+<!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>-->
+<script src="dist/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/leaflet.css">
+<script src="js/cordova-2.5.0.js"></script>
+<script src="js/main.js"></script>
+<script src="js/KML.js"></script>
+<script src="js/resources.default.js"> </script> 
+<script src="js/resources.gr.js"> </script> 
+<script src="js/resources.en.js"> </script>
+<script type="text/css">
+	html {width:95%, height:100%}
+	body {width:95%, height:100%}
+</script>
+<script type="text/javascript">
+
+// <![CDATA[
+ document.addEventListener("deviceready", onDeviceReady, false);
+// ]]></script>
+ 
+
+</head>
+<!--<body onload="onDeviceReady()">-->
+<body>
+<form action="#" method="get">
+
+<!--div data-role="page" id="firstpage" align="center" >
+	<div align="center" style="margin-top: 15% ; max-width:80%;" >
+		<h2  style="margin-bottom: 5%" id="firstpageheader"> Select Language \ Επιλογή Γλώσσας </h2>
+		<a style="float:left; width:47% ; padding-right:8px; " onClick="switchToEmailPage('GR')"> <img style="width:100% "src="images/greekFlag.jpg" />  </a>
+		<a style="float:right; width:47% "  onClick="switchToEmailPage('EN')"> <img style="width:100% " src="images/britishFlag.jpg" /> </a>
+	</div>
+</div-->
+
+<div data-role="page" id="secondpage" >
+	<div class="page_header">
+		header
+	</div>
+	<div align="center" >
+		<div class="banner">
+			<h2 id="emailheading">Καταχωρήστε το email σας.</h2>
+			<input placeholder="email account" type="text" id="emailaccount" onKeyPress="showKeyEmail();"/>
+		</div>
+ 		<div  data-role="controlgroup" data-type="horizontal" data-mini="true" data-inline="true">
+	 		<a href="#"  data-role="button" data-mini="true" data-theme="f" onClick = "firstSwitchToMainPage($('#emailaccount').val());">
+ 			<span id="btnOkEmail"></span>OK</a>
+			<a href="#"  data-role="button" data-mini="true" data-theme="f" onClick = "firstSwitchToMainPage();">
+ 			<span id="btnSkipEmail"></span>SKIP</a>
+ 			<a href="#"  data-role="button" data-mini="true" data-theme="f" onClick = "switchToFirstPage();">
+  			<span id="btnBackEmail"></span>BACK</a>
+		</div>
+		<div id="divimportantEmail">Some Comments</div>
+	</div>
+</div>
+<div data-role="page" id="mainpage">
+	<div data-role="content" id="content" >
+		<div  id="boxes" data-role="controlgroup" data-type="horizontal" data-mini="true" data-inline="true"  >
+ 			<a href="#" data-theme="c" class="ui-btn-up-c" data-role="button" class="ui-btn-pressed" id="abtnCurrentPosition" onClick = "onClickbtnCurrent();">
+ 			<span id="btnCurrentPosition"></span></a>
+  			<a  href="#"  data-theme="c" data-role="button" id="abtnPlaces" onClick = "onClickbtnPlaces();">
+ 			<span id="btnPlaces"></span></a>
+ 			<a  href="#" data-theme="c"class="ui-btn-up-c"  data-role="button" id="abtnTour" onClick = "onClickbtnTour();">
+ 			<span id="btnTour"></span></a>
+ 			<a  href="#" data-theme="c" data-role="button"  onClick = "switchToSettingPage();">
+  			<span id="btnSettings"></span></a>
+     		<a  href="#" data-icon="delete" data-theme="c" data-role="button"  onClick = " navigator.app.exitApp();">
+			<span id="btnExit"></span></a>
+    	</div>
+	<!--	<div id="map" style="width:100% ; height:350px;"></div>-->
+		<div id="map"></div>
+		<a data-role="button"  id="abtnFilterPlaces" href="#" onClick ="onClickbtnFilterPlaces()"><span  id="btnFilterPlaces"></span></a>
+		<a data-role="button"  id="abtnFilterTour" href="#" onClick="loadItineraries()"><span  id="btnFilterTour"></span></a>
+	</div>
+</div>
+<div data-role="page" id="settingspage">
+	<div data-role="content">
+	    <div id="settings" style="margin-left:5% ;margin-top: 6%" >
+	    	<h3 id="settingsheading"></h3>
+    		<div>
+				<div data-role="fieldcontain">
+  					<label for="language_select" id="lbllanguageselect"></label>
+					<select name="language_select" id="language_select">
+	     				<option value="GR">Ελληνικά</option>
+   						<option value="EN">English</option>
+ 					</select>
+				</div>
+				<div data-role="fieldcontain" >
+					<label for="emailaccount" id="lblemailaccount"></label>
+					<input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" />
+				</div>
+				<div align="center"  data-role="controlgroup" data-type="horizontal"  data-inline="true"  style=" margin-top: 5%">
+	 				<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "backToMainPage();">
+ 					<span id="btnSBack"> </span></a>
+				</div>
+    		</div>
+		</div>
+	</div>
+</div>
+<div data-role="page" id="placespage">
+	<div data-role="content">
+		<div id="placesContent"></div>
+		<div align="center"  data-role="controlgroup" data-type="horizontal"  data-inline="false"  style=" margin-top: 5%">
+  			<a  href="#"   data-icon="delete" data-role="button"  data-theme="b" data-inline="true" onClick = "ClearAll();">
+ 			<span id="btnClearAll"> </span></a>
+ 		</div>
+ 		<div align="center"  data-role="controlgroup" data-type="horizontal"  data-inline="false"  style=" margin-top: 5%">
+  			<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "submitSelectedPlaces();">
+ 			<span id="btnPBack"> </span></a>
+		</div>
+    </div>
+</div>
+<div  data-role="page" id="itinerarypage" >
+	<div data-role="header" data-theme="d" >
+		<h1 id="itinerarypageheader"></h1>
+	</div>
+	<div data-role="content" align="center">
+ 		<span id="lblnotavailablefiles"></span>
+  		<div id="availableFiles" style="width:80%; margin-bottom:20px;" ></div>
+		<a data-role="button" data-iconpos="right" data-icon="arrow-r"  id="abtnLoadfromportal" href="#" onClick="loadItinerariesfromPortal()"><span  id="btnLoadfromportal"></span></a>
+		<div align="center"  data-role="controlgroup" data-type="horizontal"  data-inline="true"  style=" margin-top: 5%">
+			<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "switchToMainPage();">
+ 			<span id="btnLocalBack"> </span></a>
+		</div>
+	</div>
+</div>
+<div  data-role="page" id="eachitinerarypage">
+	<div data-role="header" data-theme="d">
+		<h1 id="headeritinerary"></h1>
+	</div>
+	<div data-role="content" align="center" style="width:90%">
+  		<div align="center" style="margin-bottom:20px;"><fieldset id="availableDays" data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" ></fieldset></div>
+  		<div align="center" style="margin-bottom:30px; width:90%;"><fieldset id="availablePois" data-role="controlgroup" data-type="vertical" data-role="fieldcontain"></fieldset></div>
+  		<div id="divItineraryInfo"></div>
+  			<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
+ 				<a href="#" data-icon="arrow-r" data-role="button" data-inline="true" data-theme="b" data-iconpos="right" onClick = "showKmlFile();"><span id="btnLoad"> </span></a>
+			</div>  			
+  			<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
+  				<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "loadItineraries();">
+ 				<span id="btnEachItineraryBack"> </span></a>
+ 			</div>
+ <!--			<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
+  				<a  href="#"   data-icon="check" data-role="button"  data-theme="b" data-inline="true" onClick = "testdb();">
+ 				<span id="btntestdb"> </span></a> 
+ 			</div>-->
+	</div>
+</div>
+
+<div  data-role="page" id="itineraryportalpage" >
+	<div data-role="header" data-theme="d" >
+		<h1 id="itineraryportalpageheader"></h1>
+	</div>
+	<div data-role="content" align="center" >
+		<div data-role="fieldcontain" style="width:80%; margin-bottom:10px">
+			<input type="text" style=" float:left "  value="" name="emailaccountitinerary" id="emailaccountitinerary" placeholder="email account" />
+			<a data-role="button"  style=" float:right "  id="abtnLoad" href="#" onClick="loadFromPortal($('#emailaccountitinerary').val())"><span  id="btnLoadItinerary"></span></a>
+		</div>
+		<div data-role="controlgroup" style="width:80%" id="portalItineraries"></div>
+		<div data-role="fieldcontain">
+			<a data-role="button" data-iconpos="right" data-icon="arrow-r" class="ui-disabled" id="abtnLoadSelected" href="#" onClick="loadXmlFromPortal()"><span  id="btnLoadSelected"></span></a>
+		</div>
+		<div align="center"  data-role="controlgroup" data-type="horizontal"  data-inline="true"  style=" margin-top: 5%">
+			<a  href="#"   data-icon="arrow-l" data-role="button"  data-theme="b" data-inline="true" onClick = "loadItineraries();">
+			<span id="btnPortalBack"> </span></a>
+	</div>
+	</div>
+</div>
+</form>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Itinerary id="2">
+<It_Title>Περιήγηση ada</It_Title>
+<User>ada@dataverse.gr</User>
+<Created>25/03/2012</Created>
+<Routes>
+	<Route Name="Day 1" Kml="1">
+		<Duration>1:60:00</Duration>
+		<Points>
+			<Point Code="Ck">City of Kos</Point>
+			<Point Code="Bk">Beach Kalamki</Point>
+		</Points>
+	</Route>
+	<Route Name="Day 2" Kml="2">
+		<Points>
+			<Point Code="CS">City of Someplace</Point>
+			<Point Code="BS">Beach SomeBeach</Point>
+		</Points>
+	</Route>
+</Routes>
+</Itinerary>

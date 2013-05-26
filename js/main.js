@@ -6,11 +6,12 @@ var map;
 var firstTime = true;
 var basemap;
 var latlng;
+var currentTimestamp = new Array();
 var currentLat;
 var currentLong;
 var marker1;
 var marker2;
-var xmlDoc;
+var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3;
 var currentMarkers= new Array();
 var db;
 var itineraryFilename = new Array();
@@ -27,6 +28,7 @@ var itId;
 var itTitle;
 var itActive;
 var itCompleted;
+var category = new Array();
 var placesVisited = new Array();
 var ifVisited = new Array();
 var tempCategory = new Array();
@@ -37,26 +39,58 @@ var tempFound = false;
 var mapAppFound = false;
 var upToDate = false;
 var fromMainPage = false;
+var nameCat= new Array();
+var categId = new Array();
+var timestampa, timestampb, timestampc, timestampd;
 //var xmlFileName;
-var track, control, info, tourXmlName, dd;
+var track, control, info, tourXmlName, dd, sname, fillhtml, catId;
 
 function onDeviceReady() {
 	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 1000000);
-	db.transaction(populateDB, errorCB, successCB);
+//	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
 	document.addEventListener("offline", function() {isOffline = true;}, false);
 	document.addEventListener("online", function() {isOffline = false;}, false);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
-//		sync();
-//		moveXml();
-//		testCopy();
 	}
-//	searchForDirectories();
-	initFiles();
-	
-//	generateMap(38.012394,23.749695);
+	checkDb();
+}
+
+function populateDB(tx)
+{
+	tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
+	tx.executeSql('DROP TABLE IF EXISTS POINTS');
+	tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
+	tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
+	tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
+	tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
+	tx.executeSql('DROP TABLE IF EXISTS POIEN');
+	tx.executeSql('DROP TABLE IF EXISTS POIGR');
+	tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
+	tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
+	tx.executeSql('DROP TABLE IF EXISTS ROUTES');
+	tx.executeSql('DROP TABLE IF EXISTS TEMP');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id unique, name, catid)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id unique, name, catid)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (name, descr, category, subcategory, long, lat)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (name, descr, category, subcategory, long, lat)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, isActive, completed)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
+}
+
+function errorCB(err) {
+    alert("Error processing SQL: "+err.code);
+}
+
+function successCB() {
+    //alert('successCB!');
 }
 
 function onBackKeyDown(e) {
@@ -74,39 +108,298 @@ function onBackKeyDown(e) {
 }
 
 function initFiles(){
-	xmlpathcat = 'xml/categories.en.xml';
-	copyFile();
-	xmlpathcat = 'xml/categories.gr.xml';
-	copyFile();
-	xmlpathcat = 'xml/poi.en.xml';
-	copyFile();
-	xmlpathcat = 'xml/poi.gr.xml';
-	copyFile();
-//	xmlpathcat = 'xml/itinerary2_2.xml';
-//	copyFile();
-//	xmlpathcat = 'xml/itinerary3_3.xml';
-//	copyFile();
-//	xmlpathcat = 'kml/itinerary_2_1.kml';
-//	copyFile();
-//	xmlpathcat = 'kml/itinerary_2_2.kml';
-//	copyFile();
-//	xmlpathcat = 'kml/Itinerary_3_1.kml';
-//	copyFile();
-//	xmlpathcat = 'kml/Itinerary_3_2.kml';
-//	copyFile();
-//	xmlpathcat = 'kml/Itinerary_3_3.kml';
-//	copyFile();
-//	alert("files copied successfully!");
+/*\	createDb();
+|*|	loadXmlCat();
+|*|	loadXmlpoi();
+|*|	xmlpathcat = 'xml/categories.en.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'xml/categories.gr.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'xml/poi.en.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'xml/poi.gr.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'xml/itinerary2_2.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'xml/itinerary3_3.xml';
+|*|	copyFile();
+|*|	xmlpathcat = 'kml/itinerary_2_1.kml';
+|*|	copyFile();
+|*|	xmlpathcat = 'kml/itinerary_2_2.kml';
+|*|	copyFile();
+|*|	xmlpathcat = 'kml/Itinerary_3_1.kml';
+|*|	copyFile();
+|*|	xmlpathcat = 'kml/Itinerary_3_2.kml';
+|*|	copyFile();
+|*|	xmlpathcat = 'kml/Itinerary_3_3.kml';
+|*|	copyFile();
+|*|	alert("files copied successfully!");
+\*/
 }
 
 function sync(){
-	downloadXmlFiles();	
+	dbdb.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM TIMESTAMP', [], function (tx, results) {
+			var len = results.rows.length, i;
+			for (i = 0; i < len; i++){
+				currentTimestamp.push(results.rows.item(i).timestamp);
+			}
+			downloadXmlFiles();	
+		}, errorCB);
+	});
+	
 //	if (upToDate == false){
 //		compareXml();	
 //	}
 //	else{
 //	moveXml();
 //	}
+}
+
+function checkDb(){
+	var len;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
+			len = results.rows.length;
+//			alert("len_beggining: "+len);
+			if (len == null){
+				createDb();
+			}
+		}, error0CB);
+	});
+//	sync();
+}
+
+function error0CB(){
+	alert("error0CB");
+	createDb();
+}
+
+function createDb(){
+	db.transaction(populateDB, errorCB, successCB);
+	setTimeout(populateDatabases(),2000);
+}
+
+function populateDatabases(){
+	console.log("in populateDatabases");
+	loadXmlCat(1);
+//	popCategoriesEnDb();
+	popSubCategoriesEnDb();
+	loadXmlCat(2);
+//	popCategoriesGrDb();
+	popSubCategoriesGrDb();
+	loadXmlPoi(1);
+//	popPoiEnDb();
+	loadXmlPoi(2);
+//	popPoiGrDb();
+//	popTimestampDb();
+	popTimestampDb();
+//	setTimeout(function(){sync();},1000);
+}
+
+/*
+function populateDataBases(){
+	popCategoriesEnDb();
+	popCategoriesGrDb();
+	popSubCategoriesEnDb();
+	popSubCategoriesGrDb();
+	popPoiEnDb();
+	popPoiGrDb();
+	popTimestampDb();
+}
+*/
+
+function popCategoriesEnDb(){
+	db.transaction(function(tx) {
+		var cat =  xmlDoc.getElementsByTagName("Category");
+		var  guid, catName;
+//		alert(xmlDoc.documentElement);
+		timestampa = $(xmlDoc).find("timestamp").text();
+		for (var i=0; i< cat.length; i++){
+			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
+			catName = xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
+			guid = xmlDoc.getElementsByTagName("Category")[i].getAttribute('guid');
+//			alert(catId+ " "+ guid+" "+catName+" "+timestamp);
+			tx.executeSql('INSERT INTO CATEGORIESEN (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success3CB, error3CB);
+		}
+//		alert("1: "+catName);
+	});
+}
+
+function success3CB(){
+//	popSubCategoriesEnDb();
+}
+
+function popSubCategoriesEnDb(){
+	db.transaction(function(tx) {
+		var cat =  xmlDoc.getElementsByTagName("Category");
+		var sub, subId, subName;
+		for (var i=0; i< cat.length; i++){
+			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
+			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
+			for (var j=0; j<sub.length; j++){
+				subName = sub[j].getElementsByTagName("Name")[0].textContent;
+				subId = sub[j].getAttribute('id');
+//				alert(subId +" __ "+subName +" __ "+ catId);
+				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], success4CB, error4CB);
+			}			
+		}
+//		alert("3: "+subName);
+	});
+}
+
+function success4CB(){
+//	loadXmlCat(2);
+}
+
+function popCategoriesGrDb(){
+	db.transaction(function(tx) {
+		var cat =  xmlDoc1.getElementsByTagName("Category");
+		var  guid, catName;
+		var sub, subId, subName;
+//		alert(xmlDoc.documentElement);
+		timestampb = $(xmlDoc1).find("timestamp").text();
+		for (var i=0; i< cat.length; i++){
+			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
+			catName = xmlDoc1.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
+			guid = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('guid');
+//			alert(catId+ " "+ guid+" "+catName+" "+timestamp);
+			tx.executeSql('INSERT INTO CATEGORIESGR (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success5CB, error5CB);
+		}
+//		alert("2: "+catName);
+	});
+}
+
+function success5CB(){
+//	popSubCategoriesGrDb();	
+}
+
+function error5CB(){
+	alert("error5CB");
+}
+
+function popSubCategoriesGrDb(){
+	db.transaction(function(tx) {
+		var cat =  xmlDoc1.getElementsByTagName("Category");
+		var sub, subId, subName;
+		for (var i=0; i< cat.length; i++){
+			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
+			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
+			for (var j=0; j<sub.length; j++){
+				subName = sub[j].getElementsByTagName("Name")[0].textContent;
+//				alert(subName);
+				subId = sub[j].getAttribute('id');
+//				alert(subId +" __ "+subName +" __ "+ catId);
+				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], successCB, error4CB);
+			}
+		}
+//		alert("4: "+subName);
+	});
+}
+
+function popPoiEnDb(){
+	db.transaction(function(tx) {
+		var LenCat =  xmlDoc2.getElementsByTagName("Poi").length;
+//		alert('LenCat: '+LenCat);
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat, pois;
+//		pois = xmlDoc.getElementsByTagName("Pois")[0];
+		timestampc = $(xmlDoc2).find("timestamp").text();
+		for(var i = 0; i < LenCat; i++)	
+		{
+			poiName = xmlDoc2.getElementsByTagName("pois")[0].getElementsByTagName("Poi")[i].getElementsByTagName("Name")[0].textContent;
+			poiDescr = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Description")[0].textContent;
+			poiLong = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Longitude")[0].textContent;
+			poiLat = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Latitude")[0].textContent;
+			poiCat = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Category")[0].textContent;
+			poiSubCat = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Sucategories");
+			for(var x = 0; x < poiSubCat.length; x++) 		//creating list of places
+			{
+				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
+			}
+//			alert(poiName+" "+poiDescr+" "+poiLong+" "+poiLat+" "+poiCat+" "+subCatId+" time: "+timestamp);
+			tx.executeSql('INSERT INTO POIEN (name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?)'
+					,[poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], success6CB, error6CB);
+		}
+//		alert("5: "+poiName);
+	});	
+}
+
+function success6CB(){
+//	loadXmlPoi(2);
+}
+
+function error6CB(){
+	alert("error6CB");
+}
+
+function popPoiGrDb(){
+	db.transaction(function(tx) {
+		var LenCat =  xmlDoc3.getElementsByTagName("Poi").length;
+//		alert('LenCat: '+LenCat);
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois;
+//		pois = xmlDoc.getElementsByTagName("Pois")[0];
+		timestampd = $(xmlDoc3).find("timestamp").text();
+		for(var i = 0; i < LenCat; i++)	{
+			poiName = xmlDoc3.getElementsByTagName("pois")[0].getElementsByTagName("Poi")[i].getElementsByTagName("Name")[0].textContent;
+			poiDescr = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Description")[0].textContent;
+			poiLong = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Longitude")[0].textContent;
+			poiLat = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Latitude")[0].textContent;
+			poiCat = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Category")[0].textContent;
+			poiSubCat = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Sucategories");
+			for(var x = 0; x < poiSubCat.length; x++) 		//creating list of places
+			{
+				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
+			}
+//			alert(poiName+" "+poiDescr+" "+poiLong+" "+poiLat+" "+poiCat+" "+subCatId+" time: "+timestamp);
+			tx.executeSql('INSERT INTO POIGR (name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?)'
+					,[poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], successCB, error2CB);
+		}
+//		alert("6: "+poiName);
+	});	
+}
+
+function error2CB(){
+	alert('error2CB');
+}
+
+function popTimestampDb(){
+	db.transaction(function(tx) {
+//		alert(timestampa+" "+timestampb+" "+timestampc+" "+timestampd);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[1,timestampa],successCB,error7CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[2,timestampb],successCB,error7CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[3,timestampc],successCB,error7CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[4,timestampd],successCB,error7CB);
+	});
+}
+
+function error7CB(err){
+	alert("error7CB"+err.code);
+}
+
+function copyCatToDb(){
+			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
+			db.transaction(function(tx) {
+			});
+		
+	
+//	db.transaction(function (tx) {
+//		tx.executeSql('SELECT * FROM CATEGORIES', [], function (tx, results) {
+//			var len = results.rows.length, i;
+//			for (i = 0; i < len; i++){
+//				alert('categoriesDb['+i+']: '+results.rows.item(i).id+", "+results.rows.item(i).name+", "
+//						+results.rows.item(i).guid+", "+results.rows.item(i).timestamp );
+//			}
+//		}, errorCB);
+//	});
+	loadXmlpoi();
+}
+
+function error3CB(){
+	alert('error db 3');
+}
+
+function error4CB(){
+	alert('error db 4');
 }
 
 function searchForDirectories(){
@@ -146,7 +439,7 @@ function createTempFolder(){
 	        var entry=fileSystem.root;
 	        entry.getDirectory("TempMapApp", {create: true, exclusive: false}, onGetDirectorySuccess2, onGetDirectoryFail2); 
 	}
-	function onGetDirectorySuccess2(dir) { 
+	function onGetDirectorySuccess2(dir) {
 	      console.log("Created dir "+dir.name);
 	}
 	function onGetDirectoryFail2(error) {
@@ -238,29 +531,44 @@ function downloadXmlFiles(){
 //	alert('in downloadXmlFiles');
 	var data;	
 	$.ajax({ 
-		url:  baseapiurl+"/basefile",
-		contentType: "application/json; charset=utf-8",
 		dataType: "json",
+//		url:  baseapiurl+"/basefile",
+//		contentType: "application/json; charset=utf-8",
+		url: "http://ath.dataverse.gr:18090/api/basefile",
 		type: "GET",
+		async: true,
 		data: "{}",
 		success: function (data){
-			alert("got it!");
+//			alert("got it!");
+//			getTimestamps(data);
 			json2xml(data);
-			if (upToDate == false){
-				compareXml();
-			}
-			else{
-				moveXml();
-			}
+//			if (upToDate == false){
+//			compareXml();
+//			}
+//			else{
+//			moveXml();
+//			}
 		},
 		error: function (error){
-			alert('failed');
+			alert('failed to connect to server');
 		}
 	});
 }
 
+var po=0;
+function getTimestamp(data){
+	var a = data.indexOf("<timestamp>")+11;
+	var b = data.indexOf("</timestamp>");
+	var timestampf = data.slice(a,b);
+	if ( timestampf > currentTimestamp(po)){
+		alert("new Timestamp Found! " + timestampf);
+		//updateCurrentDatabase
+	}
+	po++;
+}
+
 function json2xml(o, tab){
-	alert('in json2xml');
+//	alert('in json2xml');
 	var toXml = function(v, name, ind) {
 		var xml = "";
 		if (v instanceof Array) {
@@ -296,7 +604,8 @@ function json2xml(o, tab){
 	}, xml="";
 	for (var m in o){
 		xml = toXml(o[m], m, "");
-		createXmlString(xml);
+		getTimestamp(xml);
+//		createXmlString(xml);
 	}
 //	return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 	var tab1 = tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
@@ -312,7 +621,44 @@ function createXmlString(xmlString){
 	xmlString = xmlString.substring( xmlStart, xmlEnd);
 	console.log("newXmlFileName: "+newXmlFileName); 
 //	alert(xmlString);
-	xmlFileCreate(newXmlFileName, xmlString);
+//	xmlFileCreate(newXmlFileName, xmlString);
+	compareVersions(newXmlFileName, xmlString);
+}
+
+//function createTempDb(){
+//	db.transaction(function(tx) {
+//		tx.executeSql('DROP TABLE IF EXISTS TEMP');
+//		tx.executeSql('CREATE TABLE IF NOT EXISTS TEMP (id unique, data)');
+//	});
+//}
+
+function compareVersions(newXmlFileName, xmlString){
+	var cat;
+	alert("987 "+xmlString);
+	if (newXmlFileName == "categories.en.xml"){
+		alert("newXmlFileName0: "+ newXmlFileName);
+		xmlDoc = xmlString;
+		cat =  xmlDoc.getElementsByTagName("Category");
+		alert("0 "+cat.length);
+	}
+	else if (newXmlFileName == "categories.gr.xml"){
+		alert("newXmlFileName1: "+ newXmlFileName);
+		xmlDoc1 = xmlString;
+		cat =  xmlDoc1.getElementsByTagName("Category");
+		alert("1 "+cat.length);
+	}
+	else if (newXmlFileName == "poi.en.xml"){
+		alert("newXmlFileName2: "+ newXmlFileName);
+		xmlDoc = xmlString;
+		cat =  xmlDoc.getElementsByTagName("Category");
+		alert("2 "+cat.length);
+	}
+	else if (newXmlFileName == "poi.gr.xml"){
+		alert("newXmlFileName3: "+ newXmlFileName);
+		xmlDoc = xmlString;
+		cat =  xmlDoc.getElementsByTagName("Category");
+		alert("3 "+cat.length);
+	}
 }
 
 function xmlFileCreate(fileName, xmlString){
@@ -426,27 +772,170 @@ function checkXmlVersion(newTimeStamp){
 	});
 }
 
-function loadXmlcat()
-{
-	if (langstr == 'en'){
+function loadXmlCat(x) {
+	if (x == 1){
 //		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.en.xml';
-		xmlpathcat = 'file:///mnt/sdcard/categories.en.xml';
+//		xmlpathcat = 'file:///mnt/sdcard/categories.en.xml';
+		xmlpathcat = 'xml/categories.en.xml';
+//		alert("x1= "+x);
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", xmlpathcat, false);
+		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+		xmlhttp.send("");
+		xmlDoc = xmlhttp.responseXML;
+		if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+			alert("Error loading Xml file4: "+ xmlhttp.status);
+		}
+		popCategoriesEnDb();
 	}
 	else {
 //		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.gr.xml';
-		xmlpathcat = 'file:///mnt/sdcard/categories.gr.xml';
+//		xmlpathcat = 'file:///mnt/sdcard/categories.gr.xml';
+		xmlpathcat = 'xml/categories.gr.xml';
+//		alert("x2= "+x);
+
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", xmlpathcat, false);
+		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+		xmlhttp.send("");
+		xmlDoc1 = xmlhttp.responseXML;
+		if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+			alert("Error loading Xml file4: "+ xmlhttp.status);
+		}
+		popCategoriesGrDb();
 	}
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	if (fromselectedplaces == false){
-		readXML();	
-	}
+//	if (fromselectedplaces == false){
+////	readXML();	
+//	}
+}
+
+function readCatDbEn(){
+	var divplaces = document.getElementById('placesContent');
+	fillhtml='';
+	nameCat = new Array();
+	categId = new Array();
+	var len;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
+			len = results.rows.length;
+			for (var i = 0; i < len; i++){
+				nameCat.push(results.rows.item(i).name);
+				categId.push(results.rows.item(i).id);
+			}
+			len = nameCat.length;
+			drawPlacesPageEn(len);
+		}, error9CB);
+	});
+}
+
+function error9CB(){
+	alert("error9CB");
+}
+
+function drawPlacesPageEn(len){
+	var fillhtml='';
+//	var divplaces = document.getElementById('placesContent');
+	var subLen;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {			
+			var subId;
+			for (var k=0; k<len; k++){
+//				alert("12 "+nameCat[k]);
+				fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
+				fillhtml += "<legend>" + nameCat[k] + "</legend>";
+				fillhtml += "<div data-role='controlgroup'>";
+				subLen = results.rows.length;
+//				alert("sublen: "+sublen);
+				for(var j=0; j<subLen ; j++){
+//					alert("13 "+results.rows.item(j).catid);
+					subId = results.rows.item(j).catid;
+					sname = results.rows.item(j).name;
+					if ( categId[k] == subId){
+//						alert("sname2: "+sname);
+						fillhtml += "<input type='checkbox' class='checkbox' name='"+sname+"' id='"+sname+"' />";
+						fillhtml += "<label for='"+ sname+"'>"+ sname +"</label>";
+					}
+				}
+				fillhtml += "</div>";
+				fillhtml += "</fieldset>";
+//				alert(fillhtml);
+			}
+//			divplaces.innerHTML = fillhtml;
+			$("#placesContent").html(fillhtml);
+			$('#placespage').trigger("create");
+			$.mobile.changePage($('#placespage'), 'pop');
+		});
+	});
+}
+
+function readCatDbGr(){
+//	var divplaces = document.getElementById('placesContent');
+	fillhtml='';
+	nameCat = new Array();
+	categId = new Array();
+	var len;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM CATEGORIESGR', [], function (tx, results) {
+			len = results.rows.length;
+			for (var i = 0; i < len; i++){
+				nameCat.push(results.rows.item(i).name);
+				categId.push(results.rows.item(i).id);
+			}
+			len = nameCat.length;
+			drawPlacesPageGr(len);
+		}, error9CB);
+	});
+}
+
+function drawPlacesPageGr(len){
+	var fillhtml='';
+//	var divplaces = document.getElementById('placesContent');
+	var subLen;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {			
+			var subId;
+			for (var k=0; k<len; k++){
+//				alert("12 "+nameCat[k]);
+				fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
+				fillhtml += "<legend>" + nameCat[k] + "</legend>";
+				fillhtml += "<div data-role='controlgroup'>";
+				subLen = results.rows.length;
+//				alert("sublen: "+sublen);
+				for(var j=0; j<subLen ; j++){
+//					alert("13 "+results.rows.item(j).catid);
+					subId = results.rows.item(j).catid;
+					sname = results.rows.item(j).name;
+					if ( categId[k] == subId){
+//						alert("sname2: "+sname);
+						fillhtml += "<input type='checkbox' class='checkbox' name='"+sname+"' id='"+sname+"' />";
+						fillhtml += "<label for='"+ sname+"'>"+ sname +"</label>";
+					}
+				}
+				fillhtml += "</div>";
+				fillhtml += "</fieldset>";
+//				alert(fillhtml);
+			}
+			$("#placesContent").html(fillhtml);
+			$('#placespage').trigger("create");
+			$.mobile.changePage($('#placespage'), 'pop');
+		});
+	});
+}
+
+function onClickbtnFilterPlaces()
+{
+//	var hasChilds = document.getElementById('placesContent').hasChildNodes();
+//	if(!hasChilds)
+//	{
+		if (langstr == 'en'){
+			readCatDbEn();
+		}
+		else {
+			readCatDbGr();
+		}
+//	}
+//		$('#placespage').trigger("create");
+//		$.mobile.changePage($('#placespage'), 'pop');
 }
 
 function readXML()
@@ -470,30 +959,43 @@ function readXML()
 		fillhtml += "</div>";
 		fillhtml += "</fieldset>";
 	}
-	//divplaces.innerHTML = fillhtml;
-	$("#placesContent").html(fillhtml);
-	//$.mobile.changePage($('#placespage'), 'pop');
+	divplaces.innerHTML = fillhtml;
+//	$("#placesContent").html(fillhtml);
+	$.mobile.changePage($('#placespage'), 'pop');
 }
 
-function loadXmlpoi()
+
+function loadXmlPoi(x)
 {
 	var xmlpath;
-	if (langstr == 'en'){
-//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
-		xmlpath = 'file:///mnt/sdcard/poi.en.xml';
+	if (x == 1){
+//		xmlpath = 'file:///mnt/sdcard/poi.en.xml';
+		xmlpath = 'xml/poi.en.xml';
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", xmlpath, false);
+		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+		xmlhttp.send("");
+		xmlDoc2 = xmlhttp.responseXML;
+		if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+			alert("Error loading Xml file5:"+ xmlhttp.status);
+		}
+		popPoiEnDb();
 	}
 	else{
-//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
-		xmlpath = 'file:///mnt/sdcard/poi.gr.xml';
+//		xmlpath = 'file:///mnt/sdcard/poi.gr.xml';
+		xmlpath = 'xml/poi.gr.xml';
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", xmlpath, false);
+		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+		xmlhttp.send("");
+		xmlDoc3 = xmlhttp.responseXML;
+//		alert(xmlhttp.responseXML);
+		if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+			alert("Error loading Xml file5:"+ xmlhttp.status);
+		}
+		popPoiGrDb();
 	}
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", xmlpath, false);
-  xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-  xmlhttp.send("");
-  xmlDoc = xmlhttp.responseXML;
-  if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-	  alert("Error loading Xml file5:"+ xmlhttp.status);
-  }
+//	copyPoiToDb();
 }
 
 function readXMLpoi() 
@@ -534,24 +1036,6 @@ function readXMLpoi()
 	//  	 $.mobile.changePage($('#placespage'), 'pop');
 }
 
-function populateDB(tx) 
-{
-	tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
-	tx.executeSql('DROP TABLE IF EXISTS POINTS');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, isActive, completed)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited)');
-}
-
-function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
-}
-
-function successCB() {
-    //alert('successCB!');
-}
-      
 function typeSelectChanged()
 {
 	if (currentMarkers != null)
@@ -693,27 +1177,15 @@ function generateKmlMap()
 	}
 }
 
-//add a CloudMade tile layer with style #997
-//L.tileLayer('http://{s}.tile.cloudmade.com/[API-key]/997/256/{z}/{x}/{y}.png', {
-//    attribution: 'Map data' 
-//}).addTo(map);
-//
-//Offline =
-//L.tileLayer('file://path_to_your_tiles/{z}_{x}_{y}.png', {
-//    attribution: 'Map data'
-//}).addTo(map);
-
-
 function onClickbtnCurrent()
 {
-//	alert("insidebtnCurrent");
 	$('#abtnCurrentPosition').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 	$('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
    	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
- 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, 
- 											 timeout: 10000, enableHighAccuracy:true});
+// 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, 
+// 											 timeout: 5000, enableHighAccuracy:true});
 }
 
 function onSuccess(position) 
@@ -761,7 +1233,7 @@ function addMarker(lat, long)
 
 function addGroupMarker(x, y, name, descr)
 {
-	x = x.replace(x.charAt(2), "."); 
+	x = x.replace(x.charAt(2), ".");
 	y = y.replace(y.charAt(2), ".");
 	var markerLocation = new L.LatLng(x, y);
 	var marker = new L.Marker(markerLocation).addTo(map).bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
@@ -945,17 +1417,6 @@ function switchToMainPage(email)
 	}
 }
 
-//function onOffline() 
-//{
-//	isOffline = true;
-//	alert("offline!");
-//}
-//     
-//function onOnline() {
-//	isOffline = false;
-//	alert("online!");
-//}
-
 function switchToFirstPage()
 {
 	db.transaction(function(tx) {
@@ -972,10 +1433,10 @@ function switchToSettingPage()
 
 function onClickbtnPlaces()
 {
-	if (firstTime == true){
-		firstTime = false;
+//	if (firstTime == true){
+//		firstTime = false;
 		showAllPlaces();
-	}
+//	}
 	$("#abtnFilterPlaces").show();
     $("#abtnFilterTour").hide();
     $('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
@@ -1023,33 +1484,23 @@ function showKeyEmail()
 	}
 }
 
-function onClickbtnFilterPlaces()
-{
-	var hasChilds = document.getElementById('placesContent').hasChildNodes();
+//function submitSelectedPlaces()
+//{
+//	db.transaction(function (tx) {
+//		tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+//			var len = results.rows.length, i;
+//			for (i = 0; i < len; i++){
+//				alert(results.rows.item(i).subcategory);
+//			}
+//		}, errorCB);
+//	});
+//}
 
-//	if(!hasChilds)
-//	{
-		loadXmlcat();
-//	}
-//		alert('backtoFilterPages');
-		$('#placespage').trigger("create");
-		$.mobile.changePage($('#placespage'), 'pop');
-
-}
 
 function submitSelectedPlaces()
 {
-//	var destination;
-	var checked = [];
-	var subcatid;
-//	var allitems;
-	var sub;
-	var subnew;
-	var j=0;
-	var poiid = [];
-//	var place;
-	var cat;
-	var subcategoryid = [];
+	var checked = new Array();
+	var descr;
 	if (currentMarkers != null)
 	{
 		for(var i = 0; i < currentMarkers.length; ++i){
@@ -1058,103 +1509,92 @@ function submitSelectedPlaces()
 		currentMarkers = new Array();
 	}
 	fromselectedplaces = true;
-	loadXmlcat();
 	$('#placesContent input[type=checkbox]:checked').each(function () {
 		checked.push(this.name);		//push checked items into values list
 //		alert(this.name);
 	});
-	for (j=0; j<checked.length; j++){
-	}
-	cat =  xmlDoc.getElementsByTagName("Category");
-	for (var i=0; i< cat.length; i++){
-		sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-		for (var k=0; k<sub.length ; k++){
-			subnew = $.trim(sub[k].getElementsByTagName("Name")[0].textContent);
-			for (j=0; j<checked.length; j++){
-				if (checked[j] == subnew ){
-					subcategoryid.push(sub[k].getAttribute('id'));
-				}
-			}
-		}
-	}
-	if (track != null)
-	{
-		map.removeLayer(track);
-		control.removeFrom(map);
-	}
-	$.mobile.changePage($('#mainpage'), 'pop');
-	loadXmlpoi();
-	cat = xmlDoc.getElementsByTagName("Poi");
-	for ( i=0; i< cat.length; i++){
-		sub = cat[i].getElementsByTagName("Sucategories")[0].getElementsByTagName("Sucategory");
-//		alert('sublength '+ sub.length);
-		for ( j=0; j<sub.length ; j++){
-//			alert('3');
-			subnew = sub[j];
-			for (var m=0 ; m<subcategoryid.length ; m++){
-				if (subcategoryid[m] == sub[j].textContent){
-					poiid.push(xmlDoc.getElementsByTagName("Poi")[i].getAttribute("id"));
-					var foundid = false;
-					for (var g=0; g < poiid.length-1 ; g++){
-						if (poiid[g] == xmlDoc.getElementsByTagName("Poi")[i].getAttribute("id")){ //checking if the current ID already exists
-							foundid = true;
-						}
-					}
-					if ( foundid == false ){
-//						var descr = xmlDoc.getElementsByTagName("Description").item(i).firstChild.textContent;
-						var descr = xmlDoc.getElementsByTagName("Description").item(i).textContent;
-						if (descr.length > 140){			//slicing the description to the first 140 charactes.
-							descr = descr.slice(0,140);				
-							descr = descr + "...";
-						}
-//						alert(xmlDoc.getElementsByTagName("Latitude").item(i).firstChild.nodeValue);
-//						alert(xmlDoc.getElementsByTagName("Longitude").item(i).firstChild.nodeValue);
-						addGroupMarker(xmlDoc.getElementsByTagName("Latitude").item(i).firstChild.nodeValue, xmlDoc.getElementsByTagName("Longitude").item(i).firstChild.nodeValue,xmlDoc.getElementsByTagName("Name").item(i).firstChild.nodeValue,descr);
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
+			var len = results.rows.length, subNew;
+			for (var j=0; j<checked.length; j++){
+//				alert("("+checked[j]+")");
+				for (var i = 0; i < len; i++){
+					
+					subNew = $.trim(results.rows.item(i).name);
+//					alert("_"+subNew+"_");
+					if (checked[j] == subNew){
+						checked[j] = results.rows.item(i).id;
+//						alert("#"+checked[j]);
 					}
 				}
 			}
-		}
-	}
+			db.transaction(function (tx) {
+				tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+					var len = results.rows.length;
+					for (var j=0; j<checked.length; j++){
+//						alert("@: "+checked[j]);
+						for (var i = 0; i < len; i++){
+							if (checked[j] == results.rows.item(i).subcategory){
+								descr = results.rows.item(i).descr;
+								if (descr.length > 140){			//slicing the description to the first 140 charactes.
+									descr = descr.slice(0,140);				
+									descr += "...";
+								}
+								addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+										results.rows.item(i).name, descr);
+//								alert(results.rows.item(i).name);
+							}
+						}
+					}
+					$.mobile.changePage($('#mainpage'), 'pop');
+				}, errorCB);
+			});
+		}, errorCB);
+	});
 	setTimeout(function(){
 		map.invalidateSize();
 		},1000);
 }
 
 function showAllPlaces(){
-	var xmlpath;
+	var descr;
 	if (langstr == 'en'){
-//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.en.xml';
-		xmlpath = 'file:///mnt/sdcard/poi.en.xml';
+//		alert("lang: en");
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+				var len = results.rows.length, i;
+				for (i = 0; i < len; i++){
+					descr = results.rows.item(i).descr;
+					if (descr.length > 140){			//slicing the description to the first 140 charactes.
+						descr = descr.slice(0,140);				
+						descr += "...";
+					}
+					addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+							results.rows.item(i).name, results.rows.item(i).descr);
+					descr = results.rows.item(i).descr;
+					}
+				}
+//				alert(dbtext);
+			, errorCB);
+		});
 	}
-	else {
-//		xmlpath = 'file:///mnt/sdcard/MapApp/xmlFiles/poi.gr.xml';
-		xmlpath = 'file:///mnt/sdcard/poi.gr.xml';
-	}
-
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpath, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file6:"+ xmlhttp.status);
-	}
-	var destination;
-	$.mobile.changePage($('#mainpage'), 'pop'); 
-	destination = xmlDoc.getElementsByTagName("Poi");
-//	alert(destination.length);
-	for (var k=0 ; k < destination.length ; ++k){
-//		var descr = xmlDoc.getElementsByTagName("Description").item(k).firstChild.nodeValue;
-		var descr = xmlDoc.getElementsByTagName("Poi")[k].getElementsByTagName("Description")[0].textContent;
-//		alert("Descr:" + descr);
-		if (descr.length > 140){			//slicing the description to the first 140 charactes.
-			descr = descr.slice(0,140);				
-			descr = descr + "...";
-		}
-//		alert(xmlDoc.getElementsByTagName("Latitude").item(k).firstChild.nodeValue);
-		addGroupMarker(xmlDoc.getElementsByTagName("Latitude").item(k).firstChild.nodeValue, xmlDoc.getElementsByTagName("Longitude").item(k).firstChild.nodeValue,
-				xmlDoc.getElementsByTagName("Name").item(k).firstChild.nodeValue, 
-				descr);
+	else{
+//		alert("lang: gr");
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+				var len = results.rows.length, i;
+				for (i = 0; i < len; i++){
+					descr = results.rows.item(i).descr;
+					if (descr.length > 140){			//slicing the description to the first 140 charactes.
+						descr = descr.slice(0,140);				
+						descr += "...";
+					}
+					addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+							results.rows.item(i).name, results.rows.item(i).descr);
+				}
+//				alert(dbtext);
+			}, errorCB);
+		});
 	}
 }
 
@@ -1224,7 +1664,7 @@ function showKmlFile()
 //					map.addLayer(track);
 //					map.addLayer(osm);
 //					map.addControl(new L.Control.Layers({}, {'Track':track}));
-					alert("9* "+filepath+"/"+entries[i].name);
+//					alert("9* "+filepath+"/"+entries[i].name);
 					track = new L.KML(filepath+"/"+entries[i].name, {async: true});
 					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds());});
 					map.addLayer(track);
