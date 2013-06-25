@@ -26,6 +26,6 @@ var grResources = {
                 NoInternetAccess:"Η εφαρμογή δεν έχει πρόσβαση στο Διαδίκτυο!",
                 CurrentPosition:"Βρίσκεστε εδώ.",
                 	ClearAll:"Καθαρισμός σημείων",
-                	Load:"Φόρτωση περιήγησης"
-
+                	Load:"Φόρτωση περιήγησης",
+                	SaveChanges:"Αποθήκευση"
 };

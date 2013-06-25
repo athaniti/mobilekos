@@ -413,7 +413,7 @@ L.Mixin.Events.fire = L.Mixin.Events.fireEvent;
 	    webkit = ua.indexOf('webkit') !== -1,
 	    chrome = ua.indexOf('chrome') !== -1,
 	    android = ua.indexOf('android') !== -1,
-	    android23 = ua.search('android [23]') !== -1,
+	    android23 = ua.search("android [23]") !== -1 || ua.search("android 4.1") !== -1 || ua.search("android 4.0") !== -1,
 
 	    mobile = typeof orientation !== undefined + '',
 	    msTouch = window.navigator && window.navigator.msPointerEnabled &&

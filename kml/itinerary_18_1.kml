@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Folder>
+    <Placemark>
+      <name>Διαμερίσματα Κάπτεν Παύλος </name>
+      <MultiGeometry>
+        <Point>
+          <coordinates>27.251877,36.899683,0</coordinates>
+        </Point>
+      </MultiGeometry>
+    </Placemark>
+    <Placemark>
+      <name>Route</name>
+      <styleUrl>#dir_route</styleUrl>
+      <LineString>
+        <coordinates> 27.251877,36.899683,0</coordinates>
+      </LineString>
+    </Placemark>
+  </Folder>
+</kml>

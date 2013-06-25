@@ -2,87 +2,171 @@ var baseapiurl='ath.dataverse.gr:18090/api/';
 var basepoifolder = 'xml/';
 var baselat = 38.00411;
 var baselong = 23.720673;
-var map; 
+var map;
+var defaultZoom = 4;
 var firstTime = true;
 var basemap;
 var latlng;
-var currentTimestamp = new Array();
+var screenHeight;
+var currentTimestamp = [];
+var xmlArray = [];
 var currentLat;
 var currentLong;
 var marker1;
+var watchID = null;
 var marker2;
-var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3;
-var currentMarkers= new Array();
+var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3,xmlDoc4,xmlDoc5;
+var currentMarkers = [];
 var db;
-var itineraryFilename = new Array();
+var po=0;
+var itineraryFilename = [];
 var isOffline;
 var language;
 var langstr = 'en';
 var currentEmail;
 var filepath;
-var firstTime=true;
 var langchanged = false;
 var xmlpathcat;
 var fromselectedplaces = false;
-var itId;
+var itId, dayId;
 var itTitle;
+var synchronizd =false ;
 var itActive;
 var itCompleted;
-var category = new Array();
-var placesVisited = new Array();
-var ifVisited = new Array();
-var tempCategory = new Array();
-var tempPoi = new Array();
+var category = [];
+var placesVisited = [];
+var ifVisited = [];
+var tempCategory = [];
+var tempPoi = [];
 var timestamp;
 var fileNameToBeMoved;
 var tempFound = false;
 var mapAppFound = false;
 var upToDate = false;
 var fromMainPage = false;
-var nameCat= new Array();
-var categId = new Array();
+var nameCat= [];
+var categId = [];
+var newtimestamp = false;
+var fromSettings = false;
+var ItTitle = [];
+var ItUser = [];
+var ItId = [];
+var ItDays = [];
 var timestampa, timestampb, timestampc, timestampd;
-//var xmlFileName;
 var track, control, info, tourXmlName, dd, sname, fillhtml, catId;
+var LeafIcon = L.Icon.extend({
+    options: {
+//        shadowUrl: 'marker-shadow.png',
+        iconSize:     [29, 38], // size of the icon
+//        shadowSize:   [30, 41], // size of the shadow
+        iconAnchor:   [22, 38], // point of the icon which will correspond to marker's location
+//        shadowAnchor: [4, 41],  // the same for the shadow
+        popupAnchor:  [-3, -26] // point from which the popup should open relative to the iconAnchor
+    }
+});
+var MarkerSights = new LeafIcon({iconUrl: 'dist/images/list2.png'}),
+	MarkerAccommodation = new LeafIcon({iconUrl: 'dist/images/list10.png'}),
+	MarkerActivities = new LeafIcon({iconUrl: 'dist/images/list14.png'}),
+	MarkerSea = new LeafIcon({iconUrl: 'dist/images/list3.png'}),
+	MarkerTransport = new LeafIcon({iconUrl: 'dist/images/list13.png'}),
+	MarkerEntertainment = new LeafIcon({iconUrl: 'dist/images/list11.png'}),
+	MarkerFood = new LeafIcon({iconUrl: 'dist/images/list12.png'});
+	MarkerShopping = new LeafIcon({iconUrl: 'dist/images/shopping.png'});
+/*
+var MarkerShopping = L.icon({
+    iconUrl: 'shopping.png',
+    shadowUrl: 'marker-shadow.png',
+    iconSize:      new L.Point(36, 52), // size of the icon
+    shadowSize:   [30, 41], // size of the shadow
+    iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 41],  // the same for the shadow
+    popupAnchor:  [-3, -26] // point from which the popup should open relative to the iconAnchor
+});
+
+var MarkerAccommodation = L.icon({
+    iconUrl: './dist/images/list10.png',
+    shadowUrl: './dist/images/marker-shadow.png',
+    iconSize:     [36, 52], // size of the icon
+    shadowSize:   [30, 44], // size of the shadow
+    iconAnchor:   [22, 44], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 42],  // the same for the shadow
+    popupAnchor:  [-3, -26] // point from which the popup should open relative to the iconAnchor
+});
+
+
+var myIcon = L.icon({
+    iconUrl: 'my-icon.png',
+    iconRetinaUrl: 'my-icon@2x.png',
+    iconSize: [38, 95],
+    iconAnchor: [22, 94],
+    popupAnchor: [-3, -76],
+    shadowUrl: 'my-icon-shadow.png',
+    shadowRetinaUrl: 'my-icon-shadow@2x.png',
+    shadowSize: [68, 95],
+    shadowAnchor: [22, 94]
+});
+
+	
+var MarkerSights = new L.icon({
+    iconUrl: 'leaf-green.png',
+    shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [38, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+*/
 
 function onDeviceReady() {
-	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 1000000);
+	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 1500000);
 //	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
 	document.addEventListener("offline", function() {isOffline = true;}, false);
 	document.addEventListener("online", function() {isOffline = false;}, false);
+	SetElementHeight();
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
 	}
+//	error10CB();
+//	checkItinerariesDb();
 	checkDb();
+//	if (synchronizd == false){
+//		sync();
+//		synchronizd = true;
+//	}
 }
 
 function populateDB(tx)
 {
-	tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
-	tx.executeSql('DROP TABLE IF EXISTS POINTS');
-	tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
-	tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
-	tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
-	tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
-	tx.executeSql('DROP TABLE IF EXISTS POIEN');
-	tx.executeSql('DROP TABLE IF EXISTS POIGR');
-	tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
-	tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
-	tx.executeSql('DROP TABLE IF EXISTS ROUTES');
-	tx.executeSql('DROP TABLE IF EXISTS TEMP');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id unique, name, catid)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id unique, name, catid)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (name, descr, category, subcategory, long, lat)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (name, descr, category, subcategory, long, lat)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, isActive, completed)');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
+	db.transaction(function (tx) {
+		console.log("populateDB(tx)");
+		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
+		tx.executeSql('DROP TABLE IF EXISTS POINTS');
+		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
+		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
+		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
+		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
+		tx.executeSql('DROP TABLE IF EXISTS POIEN');
+		tx.executeSql('DROP TABLE IF EXISTS POIGR');
+		tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
+		tx.executeSql('DROP TABLE IF EXISTS ROUTES');
+		tx.executeSql('DROP TABLE IF EXISTS TEMP');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id unique, name, catid)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id unique, name, catid)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (name, descr, category, subcategory, long, lat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (name, descr, category, subcategory, long, lat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
+		console.log("populateDB()2");
+		populateDatabases();
+	});
 }
 
 function errorCB(err) {
@@ -98,7 +182,7 @@ function onBackKeyDown(e) {
 		e.preventDefault();
 		navigator.app.exitApp();
 	}
-	else if ($.mobile.activePage.is('#mainpage')){	
+	else if ($.mobile.activePage.is('#mainpage')){
 		fromMainPage = true;
 		navigator.app.backHistory();
 	}
@@ -107,77 +191,80 @@ function onBackKeyDown(e) {
 	}
 }
 
-function initFiles(){
-/*\	createDb();
-|*|	loadXmlCat();
-|*|	loadXmlpoi();
-|*|	xmlpathcat = 'xml/categories.en.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'xml/categories.gr.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'xml/poi.en.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'xml/poi.gr.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'xml/itinerary2_2.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'xml/itinerary3_3.xml';
-|*|	copyFile();
-|*|	xmlpathcat = 'kml/itinerary_2_1.kml';
-|*|	copyFile();
-|*|	xmlpathcat = 'kml/itinerary_2_2.kml';
-|*|	copyFile();
-|*|	xmlpathcat = 'kml/Itinerary_3_1.kml';
-|*|	copyFile();
-|*|	xmlpathcat = 'kml/Itinerary_3_2.kml';
-|*|	copyFile();
-|*|	xmlpathcat = 'kml/Itinerary_3_3.kml';
-|*|	copyFile();
-|*|	alert("files copied successfully!");
-\*/
-}
-
 function sync(){
-	dbdb.transaction(function (tx) {
-		tx.executeSql('SELECT * FROM TIMESTAMP', [], function (tx, results) {
+	console.log("in sync");
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM TIMESTAMP', [], function (tx, results){
 			var len = results.rows.length, i;
 			for (i = 0; i < len; i++){
 				currentTimestamp.push(results.rows.item(i).timestamp);
 			}
-			downloadXmlFiles();	
+			popNewTimestampDb();
 		}, errorCB);
 	});
-	
-//	if (upToDate == false){
-//		compareXml();	
-//	}
-//	else{
-//	moveXml();
-//	}
+	console.log("in sync2");
+	downloadXmlFiles();	
 }
 
 function checkDb(){
+	console.log("in CheckDb");
 	var len;
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
 			len = results.rows.length;
-//			alert("len_beggining: "+len);
-			if (len == null){
+			if ((len == null) || (len == 0)){
 				createDb();
 			}
-		}, error0CB);
+		},success0CB, error0CB);
+		populateDB();
 	});
-//	sync();
 }
 
 function error0CB(){
-	alert("error0CB");
-	createDb();
+//	alert("error0CB");
+	populateDB();
+}
+
+function success0CB(){
+	console.log("success0CB");
+}
+
+function checkItinerariesDb(){
+	var len;
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
+			len = results.rows.length;
+			if (len == null){
+//				error10CB();
+			}
+		});
+	});
+}
+
+function createItDb(){
+//	alert("error10CB()");
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, duration, isActive, completed)');
+	});
+	loadItineraryXml(2);
+}
+
+function createItDb2(){
+//	alert("error10CB()");
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, duration, isActive, completed)');
+	});
+	loadItineraryXml(2);
 }
 
 function createDb(){
+	console.log("in createDb()");
 	db.transaction(populateDB, errorCB, successCB);
-	setTimeout(populateDatabases(),2000);
+	setTimeout(function(){
+		populateDatabases();
+	},1000);
 }
 
 function populateDatabases(){
@@ -192,24 +279,12 @@ function populateDatabases(){
 //	popPoiEnDb();
 	loadXmlPoi(2);
 //	popPoiGrDb();
-//	popTimestampDb();
 	popTimestampDb();
 //	setTimeout(function(){sync();},1000);
 }
 
-/*
-function populateDataBases(){
-	popCategoriesEnDb();
-	popCategoriesGrDb();
-	popSubCategoriesEnDb();
-	popSubCategoriesGrDb();
-	popPoiEnDb();
-	popPoiGrDb();
-	popTimestampDb();
-}
-*/
-
 function popCategoriesEnDb(){
+	console.log("in popCategoriesEnDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc.getElementsByTagName("Category");
 		var  guid, catName;
@@ -231,6 +306,7 @@ function success3CB(){
 }
 
 function popSubCategoriesEnDb(){
+	console.log("in popSubCategoriesEnDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc.getElementsByTagName("Category");
 		var sub, subId, subName;
@@ -253,11 +329,11 @@ function success4CB(){
 }
 
 function popCategoriesGrDb(){
+	console.log("in popCategoriesGrDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc1.getElementsByTagName("Category");
 		var  guid, catName;
 		var sub, subId, subName;
-//		alert(xmlDoc.documentElement);
 		timestampb = $(xmlDoc1).find("timestamp").text();
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
@@ -275,10 +351,11 @@ function success5CB(){
 }
 
 function error5CB(){
-	alert("error5CB");
+	console.log("error5CB");
 }
 
 function popSubCategoriesGrDb(){
+	console.log("in popSubCategoriesGrDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc1.getElementsByTagName("Category");
 		var sub, subId, subName;
@@ -298,6 +375,7 @@ function popSubCategoriesGrDb(){
 }
 
 function popPoiEnDb(){
+	console.log("in popPoiEnDb");
 	db.transaction(function(tx) {
 		var LenCat =  xmlDoc2.getElementsByTagName("Poi").length;
 //		alert('LenCat: '+LenCat);
@@ -329,15 +407,14 @@ function success6CB(){
 }
 
 function error6CB(){
-	alert("error6CB");
+	console.log("error6CB");
 }
 
 function popPoiGrDb(){
+	console.log("popPoiEnDb");
 	db.transaction(function(tx) {
 		var LenCat =  xmlDoc3.getElementsByTagName("Poi").length;
-//		alert('LenCat: '+LenCat);
 		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois;
-//		pois = xmlDoc.getElementsByTagName("Pois")[0];
 		timestampd = $(xmlDoc3).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	{
 			poiName = xmlDoc3.getElementsByTagName("pois")[0].getElementsByTagName("Poi")[i].getElementsByTagName("Name")[0].textContent;
@@ -359,12 +436,12 @@ function popPoiGrDb(){
 }
 
 function error2CB(){
-	alert('error2CB');
+	console.log('error2CB');
 }
 
 function popTimestampDb(){
+	console.log("in popTimestampDb");
 	db.transaction(function(tx) {
-//		alert(timestampa+" "+timestampb+" "+timestampc+" "+timestampd);
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[1,timestampa],successCB,error7CB);
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[2,timestampb],successCB,error7CB);
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[3,timestampc],successCB,error7CB);
@@ -372,164 +449,42 @@ function popTimestampDb(){
 	});
 }
 
-function error7CB(err){
-	alert("error7CB"+err.code);
-}
-
-function copyCatToDb(){
-			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-			db.transaction(function(tx) {
-			});
-		
-	
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM CATEGORIES', [], function (tx, results) {
-//			var len = results.rows.length, i;
-//			for (i = 0; i < len; i++){
-//				alert('categoriesDb['+i+']: '+results.rows.item(i).id+", "+results.rows.item(i).name+", "
-//						+results.rows.item(i).guid+", "+results.rows.item(i).timestamp );
-//			}
-//		}, errorCB);
-//	});
-	loadXmlpoi();
-}
-
-function error3CB(){
-	alert('error db 3');
-}
-
-function error4CB(){
-	alert('error db 4');
-}
-
-function searchForDirectories(){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		var directoryReader = fs.root.createReader();
-		directoryReader.readEntries(function(entries){
-			for (var i=0; i<entries.length; i++){
-//				alert(entries[i].name);
-				if (entries[i].name == "MapApp"){
-					mapAppFound = true;
-//					alert("found MapApp!");
-//					onFileSystemSuccess();
-				}
-				if (entries[i].name == "TempMapApp"){
-					tempFound = true;
-//					alert("found tempMapApp!");
-				}
-			}
-//			if (tempFound == false){
-//				createTempFolder();
-//				onFileSystemSuccess();
-//			}
-			if (mapAppFound == false){
-//				alert("MapAppFound== false");
-				upToDate = true;
-				createMapAppFolder();
-				initFiles();
-//				createXmlFilesFolder();
-			}
-		});
+function popNewTimestampDb(){
+	console.log("in popNewTimestampDb");
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[1,currentTimestamp[0]],successCB,error9CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[2,currentTimestamp[1]],successCB,error9CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[3,currentTimestamp[2]],successCB,error9CB);
+		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[4,currentTimestamp[3]],successCB,error9CB);
 	});
 }
 
-function createTempFolder(){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess2, null); 
-	function onRequestFileSystemSuccess2(fileSystem) { 
-	        var entry=fileSystem.root;
-	        entry.getDirectory("TempMapApp", {create: true, exclusive: false}, onGetDirectorySuccess2, onGetDirectoryFail2); 
-	}
-	function onGetDirectorySuccess2(dir) {
-	      console.log("Created dir "+dir.name);
-	}
-	function onGetDirectoryFail2(error) {
-		console.log("Error creating directory "+error.code); 
-	}
+function error9CB(){
+	console.log("error9CB!");
 }
 
-function createMapAppFolder(){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess3, null); 
-	function onRequestFileSystemSuccess3(fileSystem) {
-	        var entry=fileSystem.root;
-	        entry.getDirectory("MapApp", {create: true, exclusive: false}, onGetDirectorySuccess3, onGetDirectoryFail3); 
-	}
-	function onGetDirectorySuccess3(dir) {
-	      console.log("Created dir "+dir.name);
-	}
-	function onGetDirectoryFail3(error) {
-	     console.log("Error creating directory "+error.code); 
-	}
+function error7CB(err){
+	console.log("error7CB"+err.code);
 }
 
-function moveXml(){
-//	alert('inMoveXml');
-	window.resolveLocalFileSystemURI('file:///mnt/sdcard/TempMapApp', resOnSuccess, resOnError);
+function error3CB(){
+	console.log('error db 3');
 }
 
-function resOnSuccess(entry){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {
-//		alert('4!'+entry.name);
-		fileSys.root.getDirectory("MapApp", {create: false, exclusive: false}, function(directory) {
-//			alert('43'+directory.name);		
-//			alert('234'+xmlFileName);
-			entry.copyTo(directory, "MapApp", success, resOnError);			
-		}, resOnError);
-	}, resOnError);
-}
-
-function resOnError(entry){
-	alert("error code: "+entry.code);
-}
-
-function success(xmlFileName) {
-    console.log("New Path: " + xmlFileName.fullPath);
+function error4CB(){
+	console.log('error db 4');
 }
 
 function onSearchKeyDown()
 {
-	alert('button search');
-}
-
-function copyFile(){
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc = xmlhttp.responseText;
-//	alert(xmlpathcat +" fetched successfully");
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file0: "+ xmlhttp.status);
-	}
-//	createMapAppFolder();
-	createFile();
-}
-
-function createFile(){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-}
-
-function gotFS(fileSystem) {
-	xmlpathcat = xmlpathcat.slice(4);
-//	alert(xmlpathcat +" file created in SDCard");
-	fileSystem.root.getFile(xmlpathcat, {create: true, exclusive: false}, gotFileEntry, fail);
-}
-
-function gotFileEntry(fileEntry) {
-    fileEntry.createWriter(gotFileWriter, fail);
-}
-
-function gotFileWriter(writer) {
-    writer.onwrite = function(evt) {
-        console.log("write Success: "+xmlpathcat);
-    };
-//    alert(xmlDoc);
-    writer.write(xmlDoc);
-//    alert("Copy Completed");
+	console.log('button search');
 }
 
 function downloadXmlFiles(){
-//	alert('in downloadXmlFiles');
-	var data;	
+	console.log('in downloadXmlFiles');
+	var data;
 	$.ajax({ 
 		dataType: "json",
 //		url:  baseapiurl+"/basefile",
@@ -539,32 +494,166 @@ function downloadXmlFiles(){
 		async: true,
 		data: "{}",
 		success: function (data){
-//			alert("got it!");
-//			getTimestamps(data);
 			json2xml(data);
-//			if (upToDate == false){
-//			compareXml();
-//			}
-//			else{
-//			moveXml();
-//			}
 		},
 		error: function (error){
-			alert('failed to connect to server');
+//			alert('failed to connect to server');
 		}
 	});
 }
 
-var po=0;
 function getTimestamp(data){
 	var a = data.indexOf("<timestamp>")+11;
 	var b = data.indexOf("</timestamp>");
 	var timestampf = data.slice(a,b);
-	if ( timestampf > currentTimestamp(po)){
-		alert("new Timestamp Found! " + timestampf);
-		//updateCurrentDatabase
+	if ( timestampf > currentTimestamp[po] ){
+		newtimestamp = true;
+		if (po==0){
+//			popNewCategoriesEnDb(data);
+		}
+		if (po==1){
+			popNewCategoriesGrDb(data);
+		}
+		if (po==2){
+			
+		}
+		if (po==3){
+			popNewPoiGrDb(data);
+		}
 	}
+	console.log("po= "+po);
 	po++;
+}
+
+function popNewCategoriesGrDb(data)
+{
+	var guid = [];
+	var categName = [];
+	var catId = [];
+	$(data).find("Category").each(function (){
+		catId.push($(this).attr("id"));
+		guid.push($(this).attr("guid"));
+	});
+	$(data).find("category>name").each(function (){
+		categName.push($(this).text());
+	});
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
+		for (var i=0 ; i < categName.length ; i++){
+//			alert(guid[i]+" "+categName[i]+ " "+catName[i]);
+			tx.executeSql('INSERT INTO CATEGORIESGR (id, name, guid) VALUES (?,?,?)',
+					[catId[i],categName[i],guid[i]], success8CB, error8CB);
+		}
+		popNewSubCategoriesGrDb(data);
+	});
+}
+
+function success8CB(){
+//	alert("success8CB!");
+}
+
+function error8CB(){
+	console.log("error8CB!");
+}
+
+function popNewSubCategoriesGrDb(data)
+{
+	var catId = [];
+	var subId = [];
+	var subName = [];
+	$(data).find("Subcategory").each(function (){
+		subId.push($(this).attr("id"));
+	});
+	$(data).find("subcategory name").each(function (){
+		subName.push($(this).text());
+	});
+	$(data).find("subcategory name").each(function (){
+		catId.push($(this).parent().parent().parent().attr("id"));
+	});
+//	alert(catId.length +" "+subId.length+" "+subName.length);
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id unique, name, catid)');
+		for (var j=0 ; j<catId.length ; j++){
+			tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)'
+					,[subId[j],subName[j],catId[j]], success9CB, error9CB);		
+		}
+	});
+}
+
+function success9CB(){
+//	alert("success9CB!");
+}
+
+
+function error9CB(){
+	console.log("error9CB!");
+}
+//	db.transaction(function(tx) {
+//	tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], successCB, error4CB);
+//	}
+//	}
+//	});
+
+function popNewPoiGrDb(data){
+	console.log("inpopNewPoiGrDb");
+//	alert(data);
+	var namePoi = [];
+	var descrPoi = [];
+	var catPoi = [];
+	var subCatPoi = [];
+	var poiLat = [];
+	var poiLong = [];
+	$(data).find("Name").each(function (){
+		 namePoi.push($(this).text());
+	});
+	$(data).find("Description").each(function (){
+		descrPoi.push($(this).text());
+	});
+	$(data).find("Category").each(function (){
+		catPoi.push($(this).text());
+	});
+	$(data).find("Sucategory").each(function (){
+		subCatPoi.push($(this).text());
+	});
+	$(data).find("Latitude").each(function (){
+		poiLat.push($(this).text());
+	});
+	$(data).find("Longitude").each(function (){
+		poiLong.push($(this).text());
+	});
+//	alert(descrPoi.length +" "+namePoi.length+" "+catPoi.length+" "+subCatPoi.length+" "+poiLat.length
+//			+" "+poiLong.length);
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS POIGR');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (name, descr, category, subcategory, long, lat)');
+		for (var j=0 ; j<namePoi.length ; j++){	
+			tx.executeSql('INSERT INTO POIGR (name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?)'
+				,[namePoi[j], descrPoi[j], catPoi[j], subCatPoi[j], poiLong[j], poiLat[j]], successCB, error2CB);
+//			alert(poiLong[j]+" "+ poiLat[j]);
+		}
+	});	
+}
+
+function popNewCategoriesEnDb(data){
+//	alert(data);
+//	db.transaction(function(tx) {
+//		var cat =  xmlDoc.getElementsByTagName("Category");
+		var  guid, catName;
+//		$(data).find("Category").each(function (){
+//			catId = $(this).attr("id");
+//			guid = $(this).attr("guid");
+//		});
+		console.log(data);
+		$(data).find("category subcategories subcategory name").each(function (){
+			 console.log($(this).text());
+		});
+//		catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
+			catName = xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
+			guid = xmlDoc.getElementsByTagName("Category")[i].getAttribute('guid');
+			tx.executeSql('INSERT INTO CATEGORIESEN (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success3CB, error3CB);
+//	});
 }
 
 function json2xml(o, tab){
@@ -604,8 +693,7 @@ function json2xml(o, tab){
 	}, xml="";
 	for (var m in o){
 		xml = toXml(o[m], m, "");
-		getTimestamp(xml);
-//		createXmlString(xml);
+		createXmlString(xml);
 	}
 //	return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 	var tab1 = tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
@@ -620,164 +708,13 @@ function createXmlString(xmlString){
 	var xmlEnd = xmlString.length -14;
 	xmlString = xmlString.substring( xmlStart, xmlEnd);
 	console.log("newXmlFileName: "+newXmlFileName); 
-//	alert(xmlString);
-//	xmlFileCreate(newXmlFileName, xmlString);
-	compareVersions(newXmlFileName, xmlString);
+	getTimestamp(xmlString);
 }
 
-//function createTempDb(){
-//	db.transaction(function(tx) {
-//		tx.executeSql('DROP TABLE IF EXISTS TEMP');
-//		tx.executeSql('CREATE TABLE IF NOT EXISTS TEMP (id unique, data)');
-//	});
-//}
-
-function compareVersions(newXmlFileName, xmlString){
-	var cat;
-	alert("987 "+xmlString);
-	if (newXmlFileName == "categories.en.xml"){
-		alert("newXmlFileName0: "+ newXmlFileName);
-		xmlDoc = xmlString;
-		cat =  xmlDoc.getElementsByTagName("Category");
-		alert("0 "+cat.length);
-	}
-	else if (newXmlFileName == "categories.gr.xml"){
-		alert("newXmlFileName1: "+ newXmlFileName);
-		xmlDoc1 = xmlString;
-		cat =  xmlDoc1.getElementsByTagName("Category");
-		alert("1 "+cat.length);
-	}
-	else if (newXmlFileName == "poi.en.xml"){
-		alert("newXmlFileName2: "+ newXmlFileName);
-		xmlDoc = xmlString;
-		cat =  xmlDoc.getElementsByTagName("Category");
-		alert("2 "+cat.length);
-	}
-	else if (newXmlFileName == "poi.gr.xml"){
-		alert("newXmlFileName3: "+ newXmlFileName);
-		xmlDoc = xmlString;
-		cat =  xmlDoc.getElementsByTagName("Category");
-		alert("3 "+cat.length);
-	}
-}
-
-function xmlFileCreate(fileName, xmlString){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-		console.log("Root = " + fs.root.fullPath);
-		fs.root.getDirectory("TempMapApp", {create: false, exclusive: false},
-				function(dirEntry) {
-			dirEntry.getFile(fileName, {create: true,exclusive: false}, function (fileEntry) {
-					fileEntry.createWriter(win, fail);
-					console.log("File = " + fileEntry.fs.root);
-				}, function (error) {
-					alert('1'+error.code);
-				});
-// Writing into the new xmlFile	
-			function win(writer) {
-				writer.onwrite = function(evt) {
-					console.log("write success");
-				};
-				writer.write(xmlString);
-			};
-			var fail = function(evt) {
-				console.log(error.code);
-			};
-		}, function (error) {
-			alert('2'+error.code);
-		}
-		);
-	}, function (error) {
-		alert(+error.code);
-	});
-}
-
-function compareXml(){		//Reading all entries in TempMapApp folder & their Timestamp
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		var directoryReader = fs.root.createReader();
-		directoryReader.readEntries(function(entries){
-			for (var i=0; i<entries.length-3; i++)
-			{
-				var filepath = fs.root.fullPath +'/TempMapApp/';
-//				alert (filepath);
-				if (entries[i].name && entries[i].name.indexOf('categories') > -1)
-				{
-//					alert(entries[i].name);
-					tempCategory[i] = entries[i].name;
-					filepath += tempCategory[i];
-//					alert(filepath+''+tempCategory[i]);
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.open("GET", filepath, false);
-					xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-					xmlhttp.send("");
-					
-					xmlDoc = xmlhttp.responseXML;
-					if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-						alert("Error loading Xml file1: "+ xmlhttp.status);
-					}
-					timestamp = $(xmlDoc).find("timestamp").text();
-//					alert('timestamp1 '+timestamp);
-					fileNameToBeMoved = tempCategory[i];
-					checkXmlVersion(timestamp);
-				}
-				else if(entries[i].name && entries[i].name.indexOf('poi') > -1){
-					tempPoi[i] = entries[i].name;
-//					alert(tempPoi[i]);
-					filepath += tempPoi[i];
-//					alert(filepath+''+tempPoi[i]);
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.open("GET", filepath, false);
-					xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-					xmlhttp.send("");
-					xmlDoc = xmlhttp.responseXML;
-					if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-						alert("Error loading Xml file2: "+ xmlhttp.status);
-					}
-					timestamp = $(xmlDoc).find("timestamp").text();
-//					alert('timestamp2 '+timestamp);
-					fileNameToBeMoved = tempPoi[i];
-					checkXmlVersion(timestamp);
-				}
-			}
-		},function (error) {
-			alert(error.code);
-		});
-	},
-	function (error) {
-		alert(error.code);
-	});
-}
-
-function checkXmlVersion(newTimeStamp){
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		var directoryReader = fs.root.createReader();
-		directoryReader.readEntries(function(entries){
-			var moveFilePath = fs.root.fullPath +'/MapApp/xmlFiles/'+fileNameToBeMoved;
-//			alert("moveFilePath: "+moveFilePath);
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open("GET", moveFilePath, false);
-			xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-			xmlhttp.send("");
-			xmlDoc = xmlhttp.responseXML;
-			if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-				alert("Error loading Xml file3: "+ xmlhttp.status);
-			}
-			timestamp = $(xmlDoc).find("timestamp").text();
-//			alert('newTS '+newTimeStamp+ ' '+ "timestamp"+timestamp);
-			if (newTimeStamp > timestamp){
-//				alert('mfp'+ moveFilePath);
-//				moveFile(moveFilePath);
-				moveXml(moveFilePath);
-			}
-		});
-	});
-}
 
 function loadXmlCat(x) {
 	if (x == 1){
-//		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.en.xml';
-//		xmlpathcat = 'file:///mnt/sdcard/categories.en.xml';
 		xmlpathcat = 'xml/categories.en.xml';
-//		alert("x1= "+x);
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET", xmlpathcat, false);
 		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
@@ -789,11 +726,7 @@ function loadXmlCat(x) {
 		popCategoriesEnDb();
 	}
 	else {
-//		xmlpathcat = 'file:///mnt/sdcard/MapApp/xmlFiles/categories.gr.xml';
-//		xmlpathcat = 'file:///mnt/sdcard/categories.gr.xml';
 		xmlpathcat = 'xml/categories.gr.xml';
-//		alert("x2= "+x);
-
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET", xmlpathcat, false);
 		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
@@ -804,9 +737,6 @@ function loadXmlCat(x) {
 		}
 		popCategoriesGrDb();
 	}
-//	if (fromselectedplaces == false){
-////	readXML();	
-//	}
 }
 
 function readCatDbEn(){
@@ -841,7 +771,7 @@ function drawPlacesPageEn(len){
 			var subId;
 			for (var k=0; k<len; k++){
 //				alert("12 "+nameCat[k]);
-				fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
+				fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
 				fillhtml += "<legend>" + nameCat[k] + "</legend>";
 				fillhtml += "<div data-role='controlgroup'>";
 				subLen = results.rows.length;
@@ -850,6 +780,7 @@ function drawPlacesPageEn(len){
 //					alert("13 "+results.rows.item(j).catid);
 					subId = results.rows.item(j).catid;
 					sname = results.rows.item(j).name;
+					sname = $.trim(sname);
 					if ( categId[k] == subId){
 //						alert("sname2: "+sname);
 						fillhtml += "<input type='checkbox' class='checkbox' name='"+sname+"' id='"+sname+"' />";
@@ -864,8 +795,30 @@ function drawPlacesPageEn(len){
 			$("#placesContent").html(fillhtml);
 			$('#placespage').trigger("create");
 			$.mobile.changePage($('#placespage'), 'pop');
+			customHeader(2);
+		    $('#abtnTour2').removeClass("active");
+		    $('#abtnPlaces2').addClass("active");
+		    $('#abtnCurrentPosition2').removeClass("active");
+		    $('#abtnExit2').removeClass("active");
+		    $('.options').css({'display':'none'});
+		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
+//		    $("#placesContent").ready(function(){
+//		        $('#scrollbar1').tinyscrollbar();
+//		    });
+		    var div = $(document).height();
+		    var doc = $(window).height();
+		    console.log("div= "+div+" doc= "+doc);
+		    if (div > doc ) {
+		        
+		    }
 		});
 	});
+}
+
+function customHeader(x){
+	document.getElementById('btnPlaces'+x).innerText= MyApp.resources.Places;  
+	document.getElementById('btnTour'+x).innerHTML= MyApp.resources.Tour; 
+	document.getElementById('btnExit'+x).innerHTML= MyApp.resources.Exit; 
 }
 
 function readCatDbGr(){
@@ -896,7 +849,7 @@ function drawPlacesPageGr(len){
 			var subId;
 			for (var k=0; k<len; k++){
 //				alert("12 "+nameCat[k]);
-				fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
+				fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
 				fillhtml += "<legend>" + nameCat[k] + "</legend>";
 				fillhtml += "<div data-role='controlgroup'>";
 				subLen = results.rows.length;
@@ -918,6 +871,16 @@ function drawPlacesPageGr(len){
 			$("#placesContent").html(fillhtml);
 			$('#placespage').trigger("create");
 			$.mobile.changePage($('#placespage'), 'pop');
+			customHeader(2);
+		    $('#abtnTour2').removeClass("active");
+		    $('#abtnPlaces2').addClass("active");
+		    $('#abtnCurrentPosition2').removeClass("active");
+		    $('#abtnExit2').removeClass("active");
+		    $('.options').css({'display':'none'});
+		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
+//		    $(document).ready(function(){
+//		        $('#scrollbar1').tinyscrollbar();
+//		    });
 		});
 	});
 }
@@ -927,43 +890,18 @@ function onClickbtnFilterPlaces()
 //	var hasChilds = document.getElementById('placesContent').hasChildNodes();
 //	if(!hasChilds)
 //	{
-		if (langstr == 'en'){
-			readCatDbEn();
-		}
-		else {
-			readCatDbGr();
-		}
-//	}
-//		$('#placespage').trigger("create");
-//		$.mobile.changePage($('#placespage'), 'pop');
-}
-
-function readXML()
-{
-	var fillhtml='';
-	var divplaces = document.getElementById('placesContent');
-	var cat =  xmlDoc.getElementsByTagName("Category");
-	var sub;
-	var place;
-	for (var i=0; i< cat.length; i++){
-		fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
-		fillhtml += "<legend>" + xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent + "</legend>";
-		fillhtml += "<div data-role='controlgroup'>";		
-		sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-		for (var j=0; j<sub.length; j++){
-			place = sub[j].getElementsByTagName("Name")[0].textContent;
-			place=$.trim(place);
-			fillhtml += "<input type='checkbox' class='checkbox' name='"+place+"' id='"+place+"' />";
-			fillhtml += "<label for='"+place+"'>"+ place +"</label>";
-		}
-		fillhtml += "</div>";
-		fillhtml += "</fieldset>";
+	firstTime = false;
+	if (langstr == 'en'){
+		readCatDbEn();
 	}
-	divplaces.innerHTML = fillhtml;
-//	$("#placesContent").html(fillhtml);
-	$.mobile.changePage($('#placespage'), 'pop');
+	else {
+		readCatDbGr();
+	}
+//	}
+//	$('#placespage').trigger("create");
+//	$.mobile.changePage($('#placespage'), 'pop');
+		
 }
-
 
 function loadXmlPoi(x)
 {
@@ -998,44 +936,6 @@ function loadXmlPoi(x)
 //	copyPoiToDb();
 }
 
-function readXMLpoi() 
-{
-	var LenCat =  xmlDoc.getElementsByTagName("POI").length;
-	//var cat =  xmlDoc.getElementsByTagName("Category");
-	var divplaces = document.getElementById('placesContent');
-	var fillhtml='';
-	var subcatId;
-	alert('LenCat: '+LenCat);
-	for(var i = 0; i < LenCat; ++i)	{
-	//	if (langchanged == false) {
-		//	alert('langchanged: '+langchanged);
-		// appendOptionLast(xmlDoc.getElementsByTagName("Type")[i].attributes.getNamedItem("name").nodeValue, xmlDoc.getElementsByTagName("Type")[i].attributes.getNamedItem("id").nodeValue);
-		fillhtml += "<fieldset data-role='collapsible' data-theme='a' data-content-theme='d'>";
-		fillhtml += "<legend>" + xmlDoc.getElementsByTagName("POI")[i].attributes.getNamedItem("id").nodeValue + "</legend>";
-		fillhtml += "<div data-role='controlgroup'>";
-		for(var x = 0; x < xmlDoc.getElementsByTagName("Name")[i].length; ++x) //creating list of places
-		{
-			alert('in');
-			alert(xmlDoc.getElementsByTagName("POI")[i].length);
-			//subcatId = xmlDoc.getElementsByTagName("POI")[i].getElementsByTagName("Subcategory")[x].attributes.getNamedItem("id").nodeValue;
-			//alert(xmlDoc.getElementsByTagName("POI")[i].getElementsByTagName("Subcategory").length);
-			//alert(xmlDoc.getElementsByTagName("POI")[x].getElementByTagName("Name").nodeValue);
-			subcatId = xmlDoc.getElementsByTagName("POI")[i].getElementsByTagName("Name").attributes.nodeValue;
-			//alert(subcatId);
-			fillhtml += "<input type='checkbox' name='"+subcatId+"' id='"+subcatId+"' checked='checked'>";
-			fillhtml += "<label for='"+subcatId+"'>"+ xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Subcategory")[x].attributes.getNamedItem("name").nodeValue +"</label>";
-		}
-		fillhtml += "</div>";
-		fillhtml += "</fieldset>";
-//-------------....
-//addGroupMarker(xmlDoc.getElementsByTagName("Latitude").item(k).firstChild.nodeValue, xmlDoc.getElementsByTagName("Longitude").item(k).firstChild.nodeValue,
-//		xmlDoc.getElementsByTagName("Name").item(k).firstChild.nodeValue, 
-//		xmlDoc.getElementsByTagName("Description").item(k).firstChild.nodeValue);
-	}
-	divplaces.innerHTML = fillhtml;
-	//  	 $.mobile.changePage($('#placespage'), 'pop');
-}
-
 function typeSelectChanged()
 {
 	if (currentMarkers != null)
@@ -1044,14 +944,17 @@ function typeSelectChanged()
 		{
 			map.removeLayer(currentMarkers[i]);
 		}
-		currentMarkers = new Array();
+		currentMarkers = [];
 	}
 	var value = $(this).id();
 	x=xmlDoc.getElementsByTagName("Type")[value -1].getElementsByTagName("Destination");
 	for(var i = 0; i < x.length; ++i)
 	{
 		//appendOptionLast(x.length,10)
-		addGroupMarker(x[i].attributes.getNamedItem("lat").nodeValue, x[i].attributes.getNamedItem("long").nodeValue, x[i].attributes.getNamedItem("name").nodeValue, x[i].attributes.getNamedItem("descr").nodeValue);
+		addGroupMarker(x[i].attributes.getNamedItem("lat").nodeValue, 
+				x[i].attributes.getNamedItem("long").nodeValue, 
+				x[i].attributes.getNamedItem("name").nodeValue, 
+				x[i].attributes.getNamedItem("descr").nodeValue);
 	}
 }
 
@@ -1068,7 +971,7 @@ function optionSelectChanged()
 			{
 				map.removeLayer(currentMarkers[i]);
 			}
-			currentMarkers = new Array();
+			currentMarkers = [];
 			$('#type_select').val('0');
 		}
 	}
@@ -1142,31 +1045,19 @@ function removeOptionListSelected()
 	}
 }
 
-function generateMap(lat, long)
-{
-	var cloudmadeUrl =   'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png';
-	basemap = new L.TileLayer(cloudmadeUrl, {maxZoom: 12});
-	//basemap = new L.TileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 14});
-	latlng = new L.LatLng(lat,long);
-	var mapOptions = { 
-			center: latlng,
-			zoom: 12,
-			layers: [basemap],
-			boxZoom: true
-			};
-	map = new L.Map('map',mapOptions);
-    document.getElementById('map').style.display = 'block';
-    map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-}
-
 function generateKmlMap()
-{
+{ 
+//	var strictBounds = 	new L.LatLngBounds(	new L.LatLng(36.6284187, 26.7715134),
+//											new L.LatLng(36.9202150, 27.4904318)
+//											);, maxBounds: strictBounds, minZoom: 11 
 	if (isOffline == false){
 		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13});
 		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 		map.addLayer(osm);
 		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//		addCustomIcon();
+		map.addControl(geolocationControl(HelloWorldFunction));
 	}
 	if (isOffline == true){
 		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13});
@@ -1174,28 +1065,60 @@ function generateKmlMap()
 		map.addLayer(osm);
 		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//		addCustomIcon();
+		map.addControl(geolocationControl(HelloWorldFunction));
 	}
 }
+/*
+function addCustomIcon(){
+    var geolocationIcon = new L.Control.Command({});
+    map.addControl(geolocationIcon);
+}
+ 
+function MapShowCommand() {
+	  alert("debugging");
+}
+
+L.Control.Command = L.Control.extend({
+	options: {
+		position: 'topleft',
+	},
+
+	onAdd: function (map) {
+		var controlDiv = L.DomUtil.create('div', 'leaflet-control-command');
+		L.DomEvent
+		.addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+		.addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+		.addListener(controlDiv, 'click', function () { MapShowCommand(); });
+
+		var controlUI = L.DomUtil.create('div', 'leaflet-control-command-interior', controlDiv);
+		controlUI.title = 'Map Commands';
+		return controlDiv;
+	}
+});
+
+L.control.command = function (options) {
+	return new L.Control.Command(options);
+};
+*/
 
 function onClickbtnCurrent()
 {
-	$('#abtnCurrentPosition').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
-	$('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
-   	$('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
+	$('#abtnCurrentPosition').addClass("active");
+	$('#abtnPlaces').removeClass("active");
+   	$('#abtnTour').removeClass("active");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
-// 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, 
-// 											 timeout: 5000, enableHighAccuracy:true});
+// 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true});
 }
 
-function onSuccess(position) 
+function onSuccess(position)
 {
 	currentLat = position.coords.latitude;
 //	alert("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
 //	alert("currentLong: "+currentLong);
 	map.panTo([currentLat,currentLong ]);
-	
 	if (marker1 !=null)
 	{
 		 map.removeLayer(marker1);
@@ -1209,36 +1132,65 @@ function onSuccess(position)
 	marker1= marker;
 }
 
-function onError(error) 
+function onError(error)
 {
 //	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 	alert("Could not get your location");
 }
 
-function addMarker(lat, long)
-{
-	if (marker2 !=null)
-	{
-		map.removeLayer(marker2);
-	}
-	map.setZoom(12);
-	var markerLocation = new L.LatLng(lat, long);
-	var marker = new L.Marker(markerLocation).addTo(map)
-    .bindPopup('new marker')
-    .openPopup();
-	marker2= marker;
-	map.addLayer(marker);
-    map.panTo([(currentLat + lat)/2, (currentLong + long)/2]);
-}
-
-function addGroupMarker(x, y, name, descr)
+function addGroupMarker(x, y, name, descr, categ)
 {
 	x = x.replace(x.charAt(2), ".");
 	y = y.replace(y.charAt(2), ".");
+	if (x < 35){
+		var temp = x;
+		x = y;
+		y = temp;
+	}
 	var markerLocation = new L.LatLng(x, y);
-	var marker = new L.Marker(markerLocation).addTo(map).bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
- //   .openPopup();
-    map.removeLayer(marker);
+//	console.log("Categ : "+categ);
+	categ = $.trim(categ);
+	switch (categ)
+	{
+	case "1":
+		var marker = new L.Marker(markerLocation, {icon: MarkerShopping}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		console.log("Categ : "+categ);
+		break;
+	case "2":
+		var marker = new L.Marker(markerLocation, {icon: MarkerSights}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	case "3":
+		var marker = new L.Marker(markerLocation, {icon: MarkerAccommodation}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+//		console.log("Categ : "+categ);
+		break;
+	case "4":
+		var marker = new L.Marker(markerLocation, {icon: MarkerActivities}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	case "5":
+		var marker = new L.Marker(markerLocation, {icon: MarkerSea}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	case "6":
+		var marker = new L.Marker(markerLocation, {icon: MarkerTransport}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	case "8":
+		var marker = new L.Marker(markerLocation, {icon: MarkerFood}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	case "10":
+		var marker = new L.Marker(markerLocation, {icon: MarkerEntertainment}).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+		break;
+	default:
+		var marker = new L.Marker(markerLocation).addTo(map)
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+	}
+//    map.removeLayer(marker);
     map.addLayer(marker);
     currentMarkers.push(marker);
 }
@@ -1270,64 +1222,62 @@ function ClearAll(){
 
 function switchToEmailPage(langid)
 {
-//    window.plugins.AccountList.get({
-//    	type: 'account type' 	// if not specified get all accounts
-//    							// google account example: 'com.google'
-//            },function (result) {
-//                alert("2@ "+result.length);
-//                for (i in res)
-//        			alert("4@ "+result[i]);
-//            }, function (error) {
-//            	alert("6@ "+error);
-//    });
+	if ( newtimestamp == true){
+	popNewTimestampDb();
+	}
 	language = langid;
 	langstr = langid.toLowerCase();
     db.transaction(function(tx) {
-//    	tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[1,langid], successCB, errorCB);
-//    	tx.executeSql('UPDATE SETTINGS SET id = ? data = ? WHERE (?,?)',[1,langid], successCB, errorCB);
     	tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[langid,1],successCB, errorCB);
     	});
     
     checkForLanguage();
     $.mobile.changePage($('#secondpage'), 'pop');
     setLabelsForEmailPage();
+	if (isOffline == false){
+		sync();
+	}
 }
 
 function setLabelsForEmailPage(lang)
 {
 	document.getElementById('emailheading').innerHTML=  MyApp.resources.EmailHeading;
 	document.getElementById('btnOkEmail').innerText=  MyApp.resources.Ok;  
-    document.getElementById('btnSkipEmail').innerHTML= MyApp.resources.Skip;  
-    document.getElementById('btnBackEmail').innerHTML=  MyApp.resources.Back;  
-    document.getElementById('divimportantEmail').innerHTML=  MyApp.resources.ImportantEmail;  
-    document.getElementById('emailaccount').placeholder= MyApp.resources.EmailAccountPlaceholder;  
+	document.getElementById('btnSkipEmail').innerHTML= MyApp.resources.Skip;  
+//	document.getElementById('btnBackEmail').innerHTML=  MyApp.resources.Back;  
+//	document.getElementById('divimportantEmail').innerHTML=  MyApp.resources.ImportantEmail;  
+	document.getElementById('emailaccount').placeholder= MyApp.resources.EmailAccountPlaceholder;  
 }
 
 function setLabelsForMainPage()
 {
-	document.getElementById('btnCurrentPosition').innerHTML= MyApp.resources.CurrentPosition;  
-    document.getElementById('btnPlaces').innerText= MyApp.resources.Places;  
-    document.getElementById('btnTour').innerHTML= MyApp.resources.Tour;          
-    document.getElementById('btnSettings').innerHTML= MyApp.resources.Settings; 
-    document.getElementById('btnSBack').innerHTML=  MyApp.resources.Back;  
-    document.getElementById('btnPBack').innerHTML= MyApp.resources.Back;   
-    document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;  
-    document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;  
-    document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
-    document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
-    document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
-    document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;        
-    document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;  
-    document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;  
-    document.getElementById('btnLoadfromportal').innerHTML= MyApp.resources.LoadFromPortal; 
-    document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;  
-    document.getElementById('btnLoadSelected').innerHTML= MyApp.resources.LoadSelected;  
-    document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;  
-    document.getElementById('itinerarypageheader').innerHTML= MyApp.resources.LoadAvailableTour;  
-    document.getElementById('itineraryportalpageheader').innerHTML= MyApp.resources.LoadPortalTour;  
-    document.getElementById('emailaccountitinerary').placeholder= MyApp.resources.EmailAccountPlaceholder;  
-    document.getElementById('btnClearAll').innerHTML= MyApp.resources.ClearAll;
-    document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
+	setHeaderLabels();
+//	document.getElementById('btnSettings').innerHTML= MyApp.resources.Settings; 
+//	document.getElementById('btnSBack').innerHTML=  MyApp.resources.Back;  
+	document.getElementById('btnPBack').innerHTML= MyApp.resources.Back;   
+	document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;  
+	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;  
+//	document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
+	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
+	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
+	document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;        
+	document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;  
+	document.getElementById('btnLoadfromportal').innerHTML= MyApp.resources.LoadFromPortal; 
+	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;  
+	document.getElementById('btnLoadSelected').innerHTML= MyApp.resources.LoadSelected;  
+	document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;  
+//	document.getElementById('itinerarypageheader').innerHTML= MyApp.resources.LoadAvailableTour;  
+//	document.getElementById('itineraryportalpageheader').innerHTML= MyApp.resources.LoadPortalTour;  
+	document.getElementById('btnClearAll').innerHTML= MyApp.resources.ClearAll;
+	document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
+	document.getElementById('btnSaveChanges').innerHTML= MyApp.resources.SaveChanges;
+}
+
+function setHeaderLabels(){
+//	document.getElementById('btnCurrentPosition').innerHTML= MyApp.resources.CurrentPosition;  
+	document.getElementById('btnPlaces').innerText= MyApp.resources.Places;  
+	document.getElementById('btnTour').innerHTML= MyApp.resources.Tour; 
+	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;  
 }
 
 function backToMainPage()
@@ -1346,8 +1296,7 @@ function backToMainPage()
     	db.transaction(function(tx) {
     		tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
     		});
-    }
-    
+    }    
     if (currentEmail== null && newEmail !='' )
     {
     	db.transaction(function(tx) {
@@ -1370,10 +1319,107 @@ function backToMainPage()
     }
    // loadXml();
     checkForLanguage();
+    fromSettings = true;
     switchToMainPage();
 }
 
+function reloadPlacesPage(){
+	var newLanguage = $("#language_select2").val();
+	var newEmail =  $("#emailaccountchange2").val();
+	var newlangstr = $("#language_select2").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	// alert(langstr);
+	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}    
+	if (currentEmail== null && newEmail !='' )
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,newEmail]);
+		});
+		settingsChanged = true;
+	}
+	else if (currentEmail != null && newEmail =='')
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('DELETE FROM SETTINGS WHERE ID=?',[2]);
+		});
+		currentEmail = null;
+		settingsChanged = true;
+	}
+	else if (currentEmail != newEmail)
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA =? WHERE ID=?',[newEmail,2]);
+		});
+		currentEmail = newEmail;
+		settingsChanged = true;
+	}
+	checkForLanguage();
+	onClickbtnFilterPlaces();
+}
+
+function reloadItinerariesPage(){
+	var newLanguage = $("#language_select3").val();
+	var newEmail =  $("#emailaccountchange3").val();
+	var newlangstr = $("#language_select3").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	console.log(langstr);
+	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}    
+	if (currentEmail== null && newEmail !='' )
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,newEmail]);
+		});
+		settingsChanged = true;
+	}
+	else if (currentEmail != null && newEmail =='')
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('DELETE FROM SETTINGS WHERE ID=?',[2]);
+		});
+		currentEmail = null;
+		settingsChanged = true;
+	}
+	else if (currentEmail != newEmail)
+	{
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA =? WHERE ID=?',[newEmail,2]);
+		});
+		currentEmail = newEmail;
+		settingsChanged = true;
+	}
+	// loadXml();
+	checkForLanguage();
+//	switchToMainPage();
+//	if (settingsChanged == true){
+	onClickSettings();
+	loadItineraries();	    	
+//	}
+}
+
 function firstSwitchToMainPage(email){
+
 	if (fromMainPage == false){
 		generateKmlMap();
 	}
@@ -1393,28 +1439,53 @@ function firstSwitchToMainPage(email){
 	},1000);
 	setLabelsForMainPage();
 	if (firstTime == true){
-		firstTime = false;
+//		firstTime = false;
 		onClickbtnCurrent();
 	}
+//	$(".popupBasic").popup({
+//		  create: function( event, ui ) {}
+//		});
+//	$( ".popupBasic" ).popup("open");
 }
 
 function switchToMainPage(email)
 {
-	if (email !=null && email !='')
-	{
-		db.transaction(function(tx) {
-			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
-		});
-	}
+//	if (email !=null && email !='')
+//	{
+//		db.transaction(function(tx) {
+//			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
+//		});
+//	}
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
 		map.invalidateSize();
 	},1000);
 	setLabelsForMainPage();
-	if (firstTime == true){
-		firstTime = false;
-		onClickbtnCurrent();
+	if (fromSettings = true){
+		var opts = $('.options');
+		opts.slideUp();
 	}
+	setTimeout(function(){
+		$('.options').css({'display':'none'});
+	},600);
+}
+
+function switchToMainPage2(){
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setTimeout(function(){
+		map.invalidateSize();
+	},1000);
+	setLabelsForMainPage();
+	onClickbtnTour();
+}
+
+function switchToMainPage3(){
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setTimeout(function(){
+		map.invalidateSize();
+	},1000);
+	setLabelsForMainPage();
+//	onClickbtnCurrent();
 }
 
 function switchToFirstPage()
@@ -1433,24 +1504,64 @@ function switchToSettingPage()
 
 function onClickbtnPlaces()
 {
-//	if (firstTime == true){
+	if (firstTime == true){
 //		firstTime = false;
+		console.log("first time == true");
 		showAllPlaces();
-//	}
+	}
+	else{
+		console.log("currentMarkers.length "+currentMarkers.length);
+		if (currentMarkers != null)// && (firstTime == false))
+		{
+			console.log("in here!");
+			for(var i = 0; i < currentMarkers.length; ++i){
+				map.addLayer(currentMarkers[i]);
+				console.log("in here2!");
+				console.log("Current marker "+currentMarkers[i]);
+			}
+//			currentMarkers = [];
+		}
+	}
+	if (track != null)
+	{
+		console.log(track);
+		console.log("track not null!");
+		map.removeLayer(track);
+		map.removeControl(control);
+	}
 	$("#abtnFilterPlaces").show();
     $("#abtnFilterTour").hide();
-    $('#abtnTour').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
-    $('#abtnPlaces').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
-    $('#abtnCurrentPosition').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
+    $('#abtnTour').removeClass("active");
+    $('#abtnPlaces').addClass("active");
+//    $('#abtnCurrentPosition').removeClass("active");
+
 }
 
 function onClickbtnTour()
 {
 	$("#abtnFilterPlaces").hide();
     $("#abtnFilterTour").show();
-    $('#abtnTour').attr("data-theme", "b").removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
-    $('#abtnPlaces').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
-    $('#abtnCurrentPosition').attr("data-theme", "c").removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
+    $('#abtnTour').addClass("active");
+    $('#abtnPlaces').removeClass("active");
+//    $('#abtnCurrentPosition').removeClass("active");
+
+    if (track != null)
+	{
+    	map.addLayer(track);
+//    	map.addLayer(osm);
+    	control = new L.Control.Layers({}, {'Track':track});
+//    	map.addControl(new L.Control.Layers({}, {'Track':track}));
+    	map.addControl(control);
+	}
+    if (currentMarkers != null)
+	{
+		for(var i = 0; i < currentMarkers.length; ++i)
+		{
+			map.removeLayer(currentMarkers[i]);
+		}
+//		currentMarkers = [];
+	}
+    createItDb();
 }    
 
 function getSelectedSettings()
@@ -1484,37 +1595,102 @@ function showKeyEmail()
 	}
 }
 
-//function submitSelectedPlaces()
-//{
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
-//			var len = results.rows.length, i;
-//			for (i = 0; i < len; i++){
-//				alert(results.rows.item(i).subcategory);
-//			}
-//		}, errorCB);
-//	});
-//}
-
-
 function submitSelectedPlaces()
 {
-	var checked = new Array();
 	var descr;
 	if (currentMarkers != null)
 	{
 		for(var i = 0; i < currentMarkers.length; ++i){
 			map.removeLayer(currentMarkers[i]);
 		}
-		currentMarkers = new Array();
+		currentMarkers = [];
 	}
+	firstTime = false;
+	if (langstr == 'en'){
+		submitSelectedPlacesEn();
+	}
+	else {
+		submitSelectedPlacesGr();
+	}
+}
+
+function submitSelectedPlacesEn(){
+	var checked = [];
+	fromselectedplaces = true;
+	console.log("in SubmitSelected En1");
+	$('#placesContent input[type=checkbox]:checked').each(function () {
+		checked.push(this.name);		//push checked items into values list
+		console.log(this.name);
+		console.log("in here!!");
+	});
+	setTimeout(function(){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
+				var len = results.rows.length, subNew;
+				for (var j=0; j<checked.length; j++){
+	//				alert("("+checked[j]+")");
+					for (var i = 0; i < len; i++){
+//						console.log("in SubmitSelected En2");
+						subNew = $.trim(results.rows.item(i).name);
+//						console.log("_"+subNew+"_");
+						if (checked[j] == subNew){
+							checked[j] = results.rows.item(i).id;
+							console.log("!!#!!"+checked[j]);
+						}
+					}
+				}
+				db.transaction(function (tx) {
+					tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+						var len = results.rows.length;
+						var lat2;
+						console.log("in second tx.executeSql");
+						for (var j=0; j<checked.length; j++){
+	//						alert("@: "+checked[j]);
+							for (var i = 0; i < len; i++){
+//								console.log("POIEN: "+results.rows.item(i).subcategory);
+								if (checked[j] == results.rows.item(i).subcategory){
+									descr = results.rows.item(i).descr;
+									if (descr.length > 140){			//slicing the description to the first 140 charactes.
+										descr = descr.slice(0,140);				
+										descr += "...";
+									}
+									console.log("in SubmitSelected En3");
+									lat2 = results.rows.item(i).lat;
+									if ( lat2.indexOf("\n") == -1){
+										addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+												results.rows.item(i).name, descr, results.rows.item(i).category);
+										console.log(results.rows.item(i).name);
+									}
+								}
+							}
+						}
+						$.mobile.changePage($('#mainpage'), 'pop');
+	//					map.invalidateSize();
+						setTimeout(function(){
+							map.invalidateSize();
+						},1000);
+	//					setLabelsForMainPage();
+						$('.options').css({'display':'none'});
+					}, errorCB);
+				});
+			}, errorCB);
+		});
+		console.log("in SubmitSelected En4");
+	},1500);
+	
+//	setTimeout(function(){
+//		map.invalidateSize();
+//		},1000);
+}
+
+function submitSelectedPlacesGr(){
+	var checked = [];
 	fromselectedplaces = true;
 	$('#placesContent input[type=checkbox]:checked').each(function () {
 		checked.push(this.name);		//push checked items into values list
-//		alert(this.name);
 	});
 	db.transaction(function (tx) {
-		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
 			var len = results.rows.length, subNew;
 			for (var j=0; j<checked.length; j++){
 //				alert("("+checked[j]+")");
@@ -1529,7 +1705,8 @@ function submitSelectedPlaces()
 				}
 			}
 			db.transaction(function (tx) {
-				tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+				tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+					var lat2;
 					var len = results.rows.length;
 					for (var j=0; j<checked.length; j++){
 //						alert("@: "+checked[j]);
@@ -1540,24 +1717,41 @@ function submitSelectedPlaces()
 									descr = descr.slice(0,140);				
 									descr += "...";
 								}
-								addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-										results.rows.item(i).name, descr);
-//								alert(results.rows.item(i).name);
+								lat2 = results.rows.item(i).lat;
+								if ( lat2.indexOf("\n") == -1){
+									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+											results.rows.item(i).name, descr, results.rows.item(i).category);
+									console.log(results.rows.item(i).name);
+								}
 							}
 						}
 					}
 					$.mobile.changePage($('#mainpage'), 'pop');
+//					map.invalidateSize();
+					setTimeout(function(){
+						map.invalidateSize();
+					},1000);
+//					setLabelsForMainPage();
+					$('.options').css({'display':'none'});
 				}, errorCB);
 			});
 		}, errorCB);
 	});
-	setTimeout(function(){
-		map.invalidateSize();
-		},1000);
+//	setTimeout(function(){
+//		map.invalidateSize();
+//		},1000);
 }
 
 function showAllPlaces(){
+	if (currentMarkers != null){
+		for(var i = 0; i < currentMarkers.length; ++i)
+		{
+			map.removeLayer(currentMarkers[i]);
+		}
+		currentMarkers = [];
+	}
 	var descr;
+	var lat2;
 	if (langstr == 'en'){
 //		alert("lang: en");
 		db.transaction(function (tx) {
@@ -1569,9 +1763,11 @@ function showAllPlaces(){
 						descr = descr.slice(0,140);				
 						descr += "...";
 					}
-					addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-							results.rows.item(i).name, results.rows.item(i).descr);
-					descr = results.rows.item(i).descr;
+					lat2 = results.rows.item(i).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+								results.rows.item(i).name, descr, results.rows.item(i).category);
+						}
 					}
 				}
 //				alert(dbtext);
@@ -1589,8 +1785,11 @@ function showAllPlaces(){
 						descr = descr.slice(0,140);				
 						descr += "...";
 					}
-					addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-							results.rows.item(i).name, results.rows.item(i).descr);
+					lat2 = results.rows.item(i).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+										results.rows.item(i).name, descr, results.rows.item(i).category);
+					}
 				}
 //				alert(dbtext);
 			}, errorCB);
@@ -1614,13 +1813,9 @@ function checkForLanguage()
 
 function showKmlFile()
 {
-	db.transaction(function(tx) {
-		tx.executeSql('INSERT INTO ITINERARIES(id, title, isActive, completed) VALUES (?,?,?,?)',[itId,itTitle,itActive,itCompleted], successCB, errorCB);
-	});
 	if (track != null)
 	{
 		map.removeLayer(track);
-//		control.removeFrom(map);
 		map.removeControl(control);
 	}
 	if (currentMarkers != null)
@@ -1629,58 +1824,25 @@ function showKmlFile()
 		{
 			map.removeLayer(currentMarkers[i]);
 		}
-		currentMarkers = new Array();
+//		currentMarkers = [];
 	}
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		var localtour;		
-//		localtour = tourXmlName.split("_")[0];
-		localtour = tourXmlName.substring(9).replace("x","k");
-//		alert("3# "+tourXmlName);
-		var indexToReplace = localtour.indexOf("_")+1;
-		var startString = localtour.substr(0, indexToReplace);
-		var endString = localtour.substring(indexToReplace+1);
-		var stringToPutIn= dd;
-		localtour = startString+stringToPutIn+endString;
-		localtour = "_"+localtour;
-		filepath = fs.root.fullPath;
-//		filepath += "/MapApp/kmlFiles/";
-		var i=0;
-		var found=false;
-		var directoryReader = fs.root.createReader();
-		directoryReader.readEntries(function(entries){
-			while (i<entries.length && found == false)
-//			for (var i=0; i<entries.length; i++)
-			{
-//				alert("4% "+entries[i].name);
-//				if (entries[i].name && entries[i].name.match(/Itinerary_[0-9_]+\.kml/))
-				if (entries[i].name.indexOf(localtour)>-1)
-				{
-					found = true;
-//					alert("9^ "+entries[i].name);
-//					var map = new L.Map('map', {center: new L.LatLng(58.4, 43.0), zoom: 11});
-//					var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-//					var track = new L.KML("KML_Samples.kml", {async: true});
-//					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
-//					map.addLayer(track);
-//					map.addLayer(osm);
-//					map.addControl(new L.Control.Layers({}, {'Track':track}));
-//					alert("9* "+filepath+"/"+entries[i].name);
-					track = new L.KML(filepath+"/"+entries[i].name, {async: true});
-					track.on("loaded", function(e) { map.fitBounds(e.target.getBounds());});
-					map.addLayer(track);
-//					map.addLayer(osm);
-					control = new L.Control.Layers({}, {'Track':track});
-//					map.addControl(new L.Control.Layers({}, {'Track':track}));
-					map.addControl(control);
-					switchToMainPage();
-				}
-				i++;
-			}
-			if (found == false){
-				alert("No itineraries found in SdCard!");
-			}
-		});
+	var localtour;
+	var kmlPath;
+	kmlPath = 'kml/itinerary_'+itId+'_'+dd+'.kml';
+	console.log("kmlPath: "+kmlPath);
+//	var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	track = new L.KML(kmlPath, {async: true});
+	track.on("loaded", function(e) {
+		map.fitBounds(e.target.getBounds());
 	});
+	map.addLayer(track);
+//	map.addLayer(osm);
+	control = new L.Control.Layers({}, {'Track':track});
+//	map.addControl(new L.Control.Layers({}, {'Track':track}));
+	map.addControl(control);
+	setTimeout(function(){
+		switchToMainPage();
+	},500);
 }
 
 function loadItinerariesfromPortal()
@@ -1705,62 +1867,186 @@ function loadItinerariesfromPortal()
 	}
 	document.getElementById('portalItineraries').innerHTML='';
 	$.mobile.changePage($('#itineraryportalpage'), 'pop'); 
+	document.getElementById('emailaccountitinerary').placeholder= MyApp.resources.EmailAccountPlaceholder;
+	customHeader(5);
+    $('#abtnTour5').addClass("active");
+    $('#abtnPlaces5').removeClass("active");
+    $('#abtnExit5').removeClass("active");
+
+}
+
+function popItinerariesDb(xmlDoc){
+	var title;
+	var user;
+	var id;
+	var pointCode ;
+	var pointName ;
+	var duration ;
+	var day ;
+	db.transaction(function(tx){
+		title = $(xmlDoc).find("It_Title").text();
+		user = $(xmlDoc).find("User").text();
+		id = $(xmlDoc).find("Itinerary").attr("id");
+		$(xmlDoc).find("Point").each(function(){
+//			day.push($(this).parent().parent().attr("Kml"));
+			day =   $(this).parent().parent().attr("Kml");
+//			alert($(this).parent().parent().attr("Kml"));
+//			pointCode.push(($(this).attr("Code")));
+			pointCode = $(this).attr("Code");
+//			alert(($(this).parent().parent().text()).slice(2,10));
+//			pointName.push(($(this).text()));
+			pointName = $(this).text();
+//			alert(($(this).text()));
+//			duration.push(($(this).parent().parent().text()).slice(2,10));
+//			alert(($(this).attr("Code")));
+			console.log("1 "+duration);
+			duration = $(this).parent().parent().text().slice(0,10);
+			console.log("2 "+duration);
+			itActive = 0;
+			itCompleted = 0;
+//			alert("id: "+id+" title: "+title+" user: "+user+ " days: "+day +" "+pointCode+" "+pointName+" "+duration);
+			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?)'
+					,[id,title,user,day,pointCode,pointName,duration,itActive,itCompleted], successCB, error12CB);
+		});
+		loadItineraryXml2();
+	});
+	loadItineraryXml18();
+}
+
+function popItiDayDb(){
+	var itid;
+	var kml;
+	var duration;
+
+	$(xmlDoc).find("Route").each(function(){
+		duration = $(xmlDoc).find("Duration").text();
+		kml = $(xmlDoc).find("Route").attr("Kml");
+		itid = $(xmlDoc).find("Itinerary").attr("id");
+		
+	});
+}
+
+function error12CB(){
+	alert("error12CB");
+}
+
+function loadItineraryXml(x){
+	if (x == 2){
+//		alert("xml/itinerary2_2.xml");
+		xmlpathcat = 'xml/itinerary2_2.xml';
+	}
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", xmlpathcat, false);
+	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+	xmlhttp.send("");
+	xmlDoc4 = xmlhttp.responseXML;
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file4: "+ xmlhttp.status);
+	}
+	popItinerariesDb(xmlDoc4);
+}
+
+function loadItineraryXml2(){
+//	alert("xml/itinerary3_3.xml");
+	xmlpathcat = 'xml/itinerary3_3.xml';
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", xmlpathcat, false);
+	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+	xmlhttp.send("");
+	xmlDoc5 = xmlhttp.responseXML;
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file4: "+ xmlhttp.status);
+	}
+	popItinerariesDb2(xmlDoc5);
+}
+
+function loadItineraryXml18(){
+//	alert("xml/itinerary3_3.xml");
+	xmlpathcat = 'xml/itinerary_26.xml';
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", xmlpathcat, false);
+	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+	xmlhttp.send("");
+	xmlDoc4 = xmlhttp.responseXML;
+	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
+		alert("Error loading Xml file4: "+ xmlhttp.status);
+	}
+	popItinerariesDb2(xmlDoc4);
+} 
+
+function popItinerariesDb2(xmlDoc5){
+	var title;
+	var user;
+	var id;
+	var pointCode ;
+	var pointName ;
+	var duration ;
+	var day ;
+	db.transaction(function(tx){
+		title = $(xmlDoc5).find("It_Title").text();
+		user = $(xmlDoc5).find("User").text();
+		id = $(xmlDoc5).find("Itinerary").attr("id");
+		$(xmlDoc5).find("Point").each(function(){
+			day =   $(this).parent().parent().attr("Kml");
+			pointCode = $(this).attr("Code");
+			pointName = $(this).text();
+			console.log("1 "+duration);
+			duration = $(this).parent().parent().text().trim().slice(0,10);
+			console.log("2 "+duration);
+//			alert(duration);
+			itActive = 0;
+			itCompleted = 0;
+//			alert("id: "+id+" title: "+title+" user: "+user+ " days: "+day +" "+pointCode+" "+pointName+" "+duration);
+			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?)'
+					,[id,title,user,day,pointCode,pointName,duration,itActive,itCompleted], successCB, error12CB);
+		});
+	});
 }
 
 function loadItineraries()
 {
-//	checkedPoints();
-	
+//	var hasXml = false;
+	var idis=[];
+	var titles=[];
 	document.getElementById('availableFiles').innerHTML='';
-	var hasXml = false;
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-		filepath = fs.root.fullPath;
-		var directoryReader = fs.root.createReader();
-		directoryReader.readEntries(function(entries){
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {	
+			var len = results.rows.length;
+//			hasXml = true;
 			var j=0;
-			for (var i=0; i<entries.length; i++)
-			{
-//				alert(entries[i].name);
-				if (entries[i].name.match(/itinerary[0-9_]+\.xml/))
-				{
-					itineraryFilename[j] = entries[i].name;
-//					alert("filename: "+itineraryFilename[j]+" "+j);
-					hasXml = true;
-					
-					$('<a data-icon="arrow-r" id="'+j+'" data-iconpos="right"  href="#" data-role="button">'+itineraryFilename[j].split("_")[0]+'</a>')
-//					.click(function() {  })
+			for (var k=0; k<len; k++){
+				idis.push(results.rows.item(k).id);
+				titles.push(results.rows.item(k).title);
+			}
+			var x = idis.length;
+			for (var j=1 ; j < idis.length ; j++){
+				if (idis[j] != idis[j-1]){
+					$('<a id="'+idis[j-1]+'" href="#">'+titles[j-1]+'</a>')
 					.click(function() {
-						var k = $(this).attr("id");
-						findItineraryPage(k); })
-					.appendTo($('#availableFiles'));
-					j++;
+						j = $(this).attr("id");
+						loadEachItineraryPage(j); }).appendTo($('#availableFiles'));
 				}
 			}
-				},function (error) {
-					alert(error.code);
-				});
-			}, 
-			function (error) {
-				alert(error.code);
-			});
-
-	if (hasXml)
-	{
-		document.getElementById('lblnotavailablefiles').innerHTML= '';
-	}
-	else
-	{
-		document.getElementById('lblnotavailablefiles').innerHTML= MyApp.resources.NotAvailableFiles;
-	}
-	$.mobile.changePage($('#itinerarypage'), 'pop');
-	$('#itinerarypage').trigger('pagecreate');     
+			$('<a id="'+idis[x-1]+'" href="#">'+titles[x-1]+'</a>')
+			.click(function() {
+				j = $(this).attr("id");
+				loadEachItineraryPage(j); }).appendTo($('#availableFiles'));
+			$.mobile.changePage($('#itinerarypage'), 'pop');
+			$('#itinerarypage').trigger('pagecreate');     
+			customHeader(3);
+			$('#abtnTour3').addClass("active");
+			$('#abtnPlaces3').removeClass("active");
+			$('#abtnExit3').removeClass("active");
+			setTimeout(function(){
+				$('.options').css({'display':'none'});
+			},500);
+			document.getElementById('btnSaveChanges3').innerHTML= MyApp.resources.SaveChanges;
+		});
+	});
 }
 
 function findItineraryPage(j){
-//	alert("j:"+j);
 	tourXmlName = itineraryFilename[j];
-//	globalIt = k;
-//	alert("name_split: "+name);
 	loadEachItineraryPage(tourXmlName.split("_")[0], tourXmlName);
 }
 
@@ -1790,7 +2076,9 @@ function loadFromPortal(email)
 					alert('inside2');
 					for (var i in data) 
 					{
-						$('#portalItineraries').append("<label style='margin-top:10px;' for='chk_"+data[i].ItineraryId+"'>"+ data[i].ItineraryTitle +"</label><input name='"+data[i].ItineraryId+"' id='chk_"+data[i].ItineraryId+"' class='custom' type='checkbox' value='"+ data[i].ItineraryTitle +"' />" );
+						$('#portalItineraries').append("<label style='margin-top:10px;' for='chk_"+data[i].ItineraryId+"'>"
+								+ data[i].ItineraryTitle +"</label><input name='"+data[i].ItineraryId+"' id='chk_"
+								+data[i].ItineraryId+"' class='custom' type='checkbox' value='"+ data[i].ItineraryTitle +"' />" );
 					}
 					$('#abtnLoadSelected').removeClass('ui-disabled');
 					$('#itineraryportalpage').trigger('pagecreate');
@@ -1838,39 +2126,28 @@ function getFilesFromPortal(id)
 				fileWrite(filename, kmlFile);
 			}
 		},
-		error: function () {}
+		error: function () {
+			alert("Could not get files from Portal");
+		}
 	}); 
 }
 
-function fileWrite(filePath, text) 
+function loadEachItineraryPage(id)
 {
-	var onFSWin = function(fileSystem) {
-		fileSystem.root.getFile(filePath, {create: true, exclusive: false}, onGetFileWin, onFSFail);
-	};
-	
-	var onGetFileWin = function(fileEntry) {
-		fileEntry.createWriter(gotFileWriter, onFSFail);
-	};
-	
-	var gotFileWriter = function(writer) {
-		writer.write(text);
-	};
-	
-	var onFSFail = function(error) {
-		alert('error');
-	};
-	
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSWin, onFSFail);
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {	
+			var len = results.rows.length;
+			for (var k=0; k < len; k++){
+				if (results.rows.item(k).id == id) {
+					var x=k;
+				}
+			}
+			showAvailableDays(id);
+		});
+	});
 }
 
-function loadEachItineraryPage(itineraryName, fileName)
-{
-	document.getElementById('headeritinerary').innerHTML =itineraryName;
-	loadTourXml(fileName);
-	$.mobile.changePage($('#eachitinerarypage'), 'pop');
-}
-
-function loadTourXml(xmlFile)
+function loadTourXml(id)
 {
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
 		fileSystem.root.getFile(xmlFile, null,function (fileEntry){
@@ -1893,61 +2170,63 @@ function fail(evt) {
 	alert(evt.target.error.code);
 }
 
-function readTourXML(xmlTourDoc)
+function showAvailableDays(id)
 {
-	var code;
+	
+	var y=0;
 	var duration = [];
-	info = $(xmlTourDoc).find("It_Title").text();	
-	initializePoints(xmlTourDoc);
+	var day = [];
+	pointCode = [];
+	pointName = [];
+	itId = id;
 	document.getElementById('divItineraryInfo').innerHTML = '';
 	$('#availablePois').text('');
 	$('#availableDays').text('');
-	$(xmlTourDoc).find("Duration").each(function (){
-		duration.push($(this).text());
-	});
-	$(xmlTourDoc).find("Route").each(function (){
-		$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'+$(this).attr("Kml")+'" value="'+$(this).attr("Kml")+'"  /><label for="'+$(this).attr("Kml")+'">'+$(this).attr("Name")+'</label>');
-	});
-	$(".days").click(function show(){
-		dd = $(this).attr("id");
-		$('#availablePois').text('');
-		$(xmlTourDoc).find("Route[Kml='"+dd+"']").children().each(function(){
-			$(this).find('Point').each(function(){
-				$('#availablePois').append('<input type="checkbox" class="points" data-iconpos="right" name="poi-choice" id="'+$(this).attr("Code")+'" value="'+$(this).attr("Code")+'" /><label for="'+$(this).attr("Code")+'">'+$(this).text()+" | Visited"+'</label>');
-				$('#availablePois').trigger('create');
-				$(xmlTourDoc).find("Route[Kml='"+dd+"']").children().each(function(){
-					$(this).find('Point').each(function(){
-						code = $(this).attr('Code');
-						for (var t=0; t<placesVisited.length; t++){
-							if (code == placesVisited[t]){
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
+			var len = results.rows.length;
+			for (var k=0; k < len; k++){
+				if (results.rows.item(k).id == id) {
+					day.push(results.rows.item(k).day);
+					pointCode.push(results.rows.item(k).pointcode);
+					pointName.push(results.rows.item(k).pointname);
+				}
+				duration.push(results.rows.item(k).duration);
+			}
+			for (var j=1 ; j < day.length ; j++){
+				if (day[j] != day[j-1]){
+					$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'
+							+day[j-1]+'" value="'+day[j-1]+'"/><label for="'+day[j-1]+'">'+"Day "+day[j-1]+'</label>');
+				}
+			}
+			$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'+day[j-1]+
+					'" value="'+day[j-1]+'"/><label for="'+day[j-1]+'">'+"Day "+day[j-1]+'</label>');
+			$(".days").click(function show(){
+				dd = $(this).attr("id");
+				$('#availablePois').text('');
+						for (var k=0; k < len; k++){
+							if ((results.rows.item(k).day == dd) && (results.rows.item(k).id == id)){
+								$('#availablePois').append('<input type="checkbox" class="points" data-iconpos="right" name="poi-choice" id="'
+										+results.rows.item(k).pointcode+'" value="'+results.rows.item(k).pointcode+'" /><label for="'
+										+results.rows.item(k).pointcode+'">'+results.rows.item(k).pointname+" | Visited"+'</label>');
+								$('#availablePois').trigger('create');
+								var y=k;
 							}
 						}
-					});
-				});
-			});
+						document.getElementById('divItineraryInfo').innerHTML = "<p>"+ results.rows.item(y).title 
+							+" | " +"Day " + dd + "</p>" + "<p>Duration: "+ duration[y] +"</p>";
+				$('#'+$(this).attr("Code")+'').attr("checked",false).checkboxradio("refresh");
+			}).first().click();
+			$.mobile.changePage($('#eachitinerarypage'), 'pop');
+			$('#eachitinerarypage').trigger('pagecreate');
+			customHeader(4);
+		    $('#abtnTour4').addClass("active");
+		    $('#abtnPlaces4').removeClass("active");
+		    $('#abtnExit4').removeClass("active");
+			$('#availablePois').trigger('create');
+			$('#availableDays').trigger('create');
 		});
-//		checking all the boxes! ::	$(".points").each(function(){ this.checked = true; });
-		document.getElementById('divItineraryInfo').innerHTML = "<p>"+ info +" | " + "Day " + dd + "</p>" + "<p>Duration: "+ duration[dd-1] +"</p>";
-		$(".points").click(function(){
-			if ($(this).is(':checked')){
-				code = $(this).attr("id");
-//				alert("654: !"+code+"!");
-				db.transaction(function (tx){
-					tx.executeSql("UPDATE POINTS SET visited = '1' WHERE id = ?",[code]);
-				});
-			}
-			else{
-//				alert("987: "+code);
-				db.transaction(function(tx){
-					tx.executeSql("UPDATE POINTS SET visited = '2' WHERE id = ?",[code]);
-				});
-			}
-		});
-	}).first().click();
-	$('#'+$(this).attr("Code")+'').attr("checked",false).checkboxradio("refresh");
-	$('#eachitinerarypage').trigger('pagecreate');
-	$('#availablePois').trigger('create');
-	$('#availableDays').trigger('create');
+	});
 }
 
 function checkedPoints(xmlTourDoc){
@@ -1986,3 +2265,78 @@ function testdb(){
 		}, errorCB);
 	});
 }
+
+function onClickSettings(){
+//Options Settings
+	var appopts = $('.app_options');
+	var opts = $('.options');
+	//var settings = opts.next();
+	
+	if(appopts.hasClass('no_active')){
+		appopts.removeClass('no_active');
+		console.log("inactive");
+		opts.slideDown();
+		
+	} else {
+		console.log("active");
+		appopts.addClass('no_active');
+		opts.slideUp();
+	}
+}
+
+geolocationControl = function(theHelloWorldFunction) {
+    var control = new (L.Control.extend({
+    options: { position: 'topleft' },
+    onAdd: function (map) {
+        controlDiv = L.DomUtil.create('div', 'geolocation-button');
+        L.DomEvent
+            .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+            .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+            .addListener(controlDiv, 'click', this.HelloWorldFunction);
+
+        // Set CSS for the control border
+        var controlUI = L.DomUtil.create('div', 'geolocation-button', controlDiv);
+        controlUI.title = 'Click for Hello World!';
+
+        // Set CSS for the control interior
+        var controlText = L.DomUtil.create('div', 'geolocation-button', controlUI);
+        controlText.innerHTML = '<img src="images/position.png" width="36" height="36" />';
+        
+        return controlDiv;
+    }
+    }));
+    control.HelloWorldFunction = theHelloWorldFunction;
+    return control;
+};
+
+HelloWorldFunction = function () {
+	if (watchID != null) {
+		navigator.geolocation.clearWatch(watchID);
+		watchID = null;
+		console.log("geolocation terminated");    
+	}
+	else{
+		watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true
+		});
+		console.log("geolocation activated");
+	}
+};
+
+function SetElementHeight(){
+	screenHeight=$('.ui-mobile').outerHeight(true);
+	var w=$('.ui-mobile').outerWidth(true);
+//	var f=$('.ui-footer').outerHeight(true);
+	console.log("outerHeight= "+ screenHeight);
+	console.log("outerWidth= "+ w);
+//	f=f+118;
+//	h=h-f;
+	$('#map').css('height',screenHeight-85);
+	$('#map').css('width',w);
+//	$('#entities_list').css('height',h+4);
+//	$('#wrapper-3').css('height',h-4);
+//	$('#wrapper-2').css('height',h-4);
+}
+	$(window).bind('orientationchange resize', function(event,ui){
+	 SetElementHeight();
+	});
+

@@ -24,7 +24,8 @@ var enResources = {
 		EmailValidator:"You have to fill your email first!",
 		AvailableInitiaries:"No available itineraries!",
 		NoInternetAccess:"The application cannot access to the internet!",
-		CurrentPosition:"You are here.",
+		CurrentPosition:"You are here",
 		ClearAll:"Clear all",
-		Load:"Load / Continue"
+		Load:"Load / Continue",
+		SaveChanges:"Save Changes"
 };

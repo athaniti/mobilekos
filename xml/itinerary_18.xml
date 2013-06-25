@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Itinerary id="18">
+  <It_Title>New Itinerary</It_Title>
+  <User>aeg222@dataverse.gr</User>
+  <Created>5/29/2013 6:29:12 PM</Created>
+  <Routes>
+    <Route Name="Day 1" Kml="1">
+      <Duration />
+      <Points>
+        <Point Code="1">Διαμερίσματα Κάπτεν Παύλος </Point>
+      </Points>
+    </Route>
+    <Route Name="Day 2" Kml="2">
+      <Duration />
+      <Points>
+        <Point Code="1">Ξενοδοχείο1</Point>
+        <Point Code="2">Sun Palace Hotel Resort &amp; Spa</Point>
+      </Points>
+    </Route>
+    <Route Name="Day 3" Kml="3">
+      <Duration />
+      <Points>
+        <Point Code="1">Ξενοδοχείο2</Point>
+        <Point Code="2">Ξενοδοχείο3</Point>
+      </Points>
+    </Route>
+  </Routes>
+</Itinerary>

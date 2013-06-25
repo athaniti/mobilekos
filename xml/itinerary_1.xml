@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Itinerary id="1">
+  <It_Title>Δοκιμαστική Περιήγηση</It_Title>
+  <User>aeg@dataverse.gr</User>
+  <Created>23/05/2013</Created>
+  <Routes>
+    <Route Name="Day 1" Kml="1">
+      <Duration>8 : 25 : 0</Duration>
+      <Points>
+        <Point Code="1">Sun Palace Hotel Resort &amp; Spa</Point>
+        <Point Code="2">ΚΥΠΡΙΩΤΗΣ ΜΑΡΙΣ ΞΕΝ/ΧΕΙΟ &amp;ΣΟΥΙΤΕΣ</Point>
+        <Point Code="3">Ξενοδοχείο1</Point>
+        <Point Code="4">Ξενοδοχείο2</Point>
+        <Point Code="5">Sun Palace Hotel Resort &amp; Spa</Point>
+        <Point Code="6">Ξενοδοχείο2</Point>
+        <Point Code="7">Ξενοδοχείο3</Point>
+      </Points>
+    </Route>
+    <Route Name="Day 2" Kml="2">
+      <Duration>4 : 30 : 0</Duration>
+      <Points>
+        <Point Code="1">ΚΥΠΡΙΩΤΗΣ ΜΑΡΙΣ ΞΕΝ/ΧΕΙΟ &amp;ΣΟΥΙΤΕΣ</Point>
+        <Point Code="2">Sun Palace Hotel Resort &amp; Spa</Point>
+        <Point Code="3">Ξενοδοχείο2</Point>
+      </Points>
+    </Route>
+    <Route Name="Day 3" Kml="3">
+      <Duration>1 : 25 : 0</Duration>
+      <Points>
+        <Point Code="1">Ξενοδοχείο1</Point>
+        <Point Code="2">Ξενοδοχείο3</Point>
+      </Points>
+    </Route>
+    <Route Name="Day 4" Kml="4">
+      <Duration>4 : 25 : 0</Duration>
+      <Points>
+        <Point Code="1">Ξενοδοχείο1</Point>
+        <Point Code="2">Διαμερίσματα Κάπτεν Παύλος </Point>
+      </Points>
+    </Route>
+    <Route Name="Day 5" Kml="5">
+      <Duration>0 : 30 : 0</Duration>
+      <Points>
+        <Point Code="1">Sun Palace Hotel Resort &amp; Spa</Point>
+      </Points>
+    </Route>
+    <Route Name="Day 6" Kml="6">
+      <Duration>0 : 0 : 0</Duration>
+      <Points />
+    </Route>
+    <Route Name="Day 7" Kml="7">
+      <Duration>0 : 0 : 0</Duration>
+      <Points />
+    </Route>
+    <Route Name="Day 8" Kml="8">
+      <Duration>0 : 0 : 0</Duration>
+      <Points />
+    </Route>
+    <Route Name="Day 9" Kml="9">
+      <Duration>0 : 45 : 0</Duration>
+      <Points>
+        <Point Code="1">Ξενοδοχείο1</Point>
+      </Points>
+    </Route>
+  </Routes>
+</Itinerary>

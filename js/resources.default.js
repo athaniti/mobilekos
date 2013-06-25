@@ -26,5 +26,6 @@ NotAvailableFiles:"There are no available tour files in sdcard.",
     EmailValidator:"You have to fill your email first!",
         AvailableInitiaries:"No available itineraries!",
         NoInternetAccess:"The application cannot access to the internet!",
-        CurrentPosition:"You are here."
+        CurrentPosition:"You are here.",
+        SaveChanges:"Save Changes"
 };
