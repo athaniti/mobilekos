@@ -1,8 +1,10 @@
 var enResources = {
 		EmailHeading: "Fill your email:",
-		Ok: "Ok",
+		Ok: "OK",
 		Skip:"Skip",   
 		Back:"Back",
+		Apply:"Apply",
+		PBack:"Ok",
 		ImportantEmail:"some comments",
 		CurrentPosition:"Position",
 		Places:"Places",
@@ -26,6 +28,14 @@ var enResources = {
 		NoInternetAccess:"The application cannot access to the internet!",
 		CurrentPosition:"You are here",
 		ClearAll:"Clear all",
-		Load:"Load / Continue",
-		SaveChanges:"Save Changes"
+		Load:"Show itinerary on map",
+		SaveChanges:"Save Changes",
+		UserMustBeOnLine:"You must connect to the Internet to get directions",
+		GetDirections:"Get directions",
+		ShowNone:"Show none",
+		MoreInfo:"More Énformation",
+		CouldNotLoadItineraries:"Couldn't find itineraries with the specified email address",
+		Hide:"hide",
+		ShowPlaces:"Show places near you",
+		placesPageHeader:"Select the category of places you would like to show on map"
 };

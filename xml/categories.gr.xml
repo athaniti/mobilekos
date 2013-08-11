@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Categories>
-  <timestamp>1371560507</timestamp>
+  <timestamp>1375446253</timestamp>
   <Category id="1" guid="7c8dfb8f-a160-459f-965f-8fd5c209db80">
     <Name>Shopping</Name>
     <Subcategories>
@@ -114,7 +114,11 @@
   </Category>
   <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
     <Name>Χρήσιμες Πληροφορίες</Name>
-    <Subcategories />
+    <Subcategories>
+      <Subcategory id="0x01009077160E2AD0A243893344626AFA35F91600B27AE1117E863A41B636171FAE0CE4FB">
+        <Name>Χρήσιμες Πληροφορίες</Name>
+      </Subcategory>
+    </Subcategories>
   </Category>
   <Category id="10" guid="dc8e324a-aab7-4769-927b-cd98e24dde95">
     <Name>Ψυχαγωγία</Name>

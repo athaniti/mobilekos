@@ -5,20 +5,23 @@
 <title>LeafLet</title>
 <!-- script window.L_DISABLE_3D=true></script> -->
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="Control.Loading.css">
 <link href="jquery.mobile/jquery.mobile-1.1.0.min.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="jquery.mobile/custom_theme.css" />
 <script src="jquery.mobile/jquery-1.7.2.min"></script>
 <script src="jquery.mobile/jquery.mobile-1.1.0.min.js"></script>
 <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+<script src="scrollbar/js/jquery.tinyscrollbar.min.js"></script>
 <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>-->
 <script>L_DISABLE_3D = true;</script>
 <script src="dist/leaflet-src.js"></script>
-<script src="scrollbar/js/jquery.tinyscrollbar.min.js"></script>
 <link rel="stylesheet" type="text/css" href="dist/leaflet.css">
 <script src="js/cordova-2.5.0.js"></script>
 <script src="js/main.js"></script>
+<script src="js/Control.Loading.js"></script>
 <script src="js/KML.js"></script>
-<script src="js/resources.default.js"> </script> 
+<script src="js/GPX.js"></script>
+<script src="js/resources.default.js"> </script>
 <script src="js/resources.gr.js"> </script> 
 <script src="js/resources.en.js"> </script>
 <script type="text/css">
@@ -42,6 +45,28 @@
 		<div class="container">
 			<div class="icon_logo_big">
 				<img src="images/icon_logo_big.png" alt="logo">
+				<p></p>
+				<p></p>
+				<h6>Please wait...</h6>
+				
+				<!-- script>
+					window.onload = function () {
+					    console.log("it works!");
+					    setTimeout(function(){
+					    	checkLanguageSettings();
+						},1500);
+					}
+				</script -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="secondpage">
+	<div class="main_content">
+		<div class="container">
+			<div class="icon_logo_big">
+				<img src="images/icon_logo_big.png" alt="logo">
 			</div>
 			<div class="slogan">
 				<h1>Select Language</h1>
@@ -56,29 +81,6 @@
 	</div>
 </div>
 
-<div data-role="page" id="secondpage" >
-	<div class="main_content">
-		<div class="container">
-			<div class="icon_logo">
-				<img src="images/icon_logo.png" alt="logo">
-			</div>
-			<div class="slogan">
-				<h1 id="emailheading"></h1>
-				<h6></h6>
-			</div>
-			<div class="devider"></div>
-				<input  placeholder="email account" type="text" id="emailaccount" onKeyPress="showKeyEmail();"/>
-			<div class="button blue">
-				<a href="#" onClick = "firstSwitchToMainPage($('#emailaccount').val());">
- 				<span id="btnOkEmail"></span></a>
-			</div>
-			<div class="button grey">
-				<a href="#" onClick = "firstSwitchToMainPage();">
- 				<span id="btnSkipEmail"></span></a>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div data-role="page" id="mainpage">
 	<div class="header">
@@ -91,7 +93,7 @@
 					<img src="images/app_option_bg.png" alt="options">
 				</a>
 			</div>
-		</div>	
+		</div>
 	</div>
 
 	<div class="options" style="display:none; z-index:9999;">
@@ -114,14 +116,32 @@
 	</div>
    	<div class="main_menu">
 		<ul>
-			<li><a href="#" id="abtnPlaces" onClick = "onClickbtnPlaces();"><span id="btnPlaces"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition"></span></a></li>
+			<!--li><a href="#" id="abtnPlaces" onClick = "onClickbtnPlaces();"> <img src="images/position.png"><span id="btnPlaces"></span></a></li-->
 			<li><a href="#" id="abtnTour" onClick = "onClickbtnTour();"><span id="btnTour"></span></a></li>
+			<!-- <li><a href="#" id="abtnTour" onClick = "slide();"><span id="btnTour"></span></a></li-->
 			<li><a href="#" id="abtnExit" onClick = "navigator.app.exitApp();"><span id="btnExit"></span></a></li>
 		</ul>
 	</div>
 	
-	<div class="main_content">	
+	<div class="main_content">
+		<div id="loading_gif"></div>
+		<!--  div class="clickPlaces">Click on Places button to see POIs near you</div-->
 		<div id="map"></div>
+		<div id="inner" >
+			<!-- div class="markers_icons">
+				<img src="images/markers_icon.png" alt="markers">
+			</div >
+			<div class="marker_icon">
+				<img src="images/marker.png" alt="marker">
+			</div-->
+			<b>Click on Places button  </b><br><span class="description">to see Points of Interest near you!!</span>
+			<div class="close_btn">
+				<a href="#" onClick = "slideBack();"><span id="btnHide"> </span></a>
+				<!-- a href="#" onClick = "onClickbtnFilterPlaces();"><span id="btnShowPlacesPage"> </span></a> -->
+			</div>
+		</div>
+		<!--div id="inner" style="display: block;"><b>Click on Places Button to see pois near you<br>!!! @#$%@#$%@#$%@#$@#$%</b></div-->
 		<div class="button blue btn_over">
 			<a href="#" id="abtnFilterPlaces" onClick ="onClickbtnFilterPlaces()">
 			<span  id="btnFilterPlaces"></span></a>
@@ -134,12 +154,14 @@
 			<a href="#" id="abtnGeolocation" onClick ="onClickbtnFilterPlaces()"></a>
 		</div-->
 	</div>
-</div>
-
-<div data-role="page" id="settingspage">
-	<div data-role="content">
-	    
-	</div>
+	<!--div class="placesInfo" style="display:none; z-index:9999;">
+			 <div class="container2">
+				 Click on Places button to see POIs near you.
+				<div class="button small blue">
+					<a href="#" onClick = "hide();"><span id="btnHide"> </span></a>
+				</div>
+			</div>
+	</div-->
 </div>
 
 <div data-role="page" id="placespage">
@@ -175,7 +197,7 @@
 	</div>
    	<div class="main_menu">
 		<ul>
-			<li><a href="#" id="abtnPlaces2" onClick = "onClickbtnPlaces();"><span id="btnPlaces2"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition2" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition2"></span></a></li>
 			<li><a href="#" id="abtnTour2" onClick = "switchToMainPage2();"><span id="btnTour2"></span></a></li>
 			<li><a href="#" id="abtnExit2" onClick = "navigator.app.exitApp();"><span id="btnExit2"></span></a></li>
 		</ul>
@@ -184,18 +206,26 @@
     	<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
     	<div class="viewport">
         	<div class="overview">-->
-	<div class="main_content" style="padding-top:10px;">
+	<div class="main_content2" style="padding-top:10px;">
 		<div class="container">	
+			<div id="placesPageHeader" style="text-align:center"></div>
 			<div id="placesContent"></div>
-			<div class="button grey small">
-				<a href="#" onClick = "ClearAll();">
-					<span id="btnClearAll"> </span>
-				</a>
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "submitSelectedPlaces();">
-					<span id="btnPBack"> </span>
-				</a>
+			<div class="buttons" style="align:center">
+				<div class="button blue small">
+					<a href="#" data-inline="true" onClick = "submitSelectedPlaces();">
+						<span id="btnPBack"> </span>
+					</a>
+				</div>
+				<div class="button grey small">
+					<a href="#" data-inline="true" onClick = "ClearAll();">
+						<span id="btnClearAll"> </span>
+					</a>
+				</div>
+				<!-- div class="button grey small">
+					<a href="#" data-inline="true" onClick = "showNone();">
+						<span id="btnShowNone"> </span>
+					</a>
+				</div> -->
 			</div>
 		</div>
     </div>
@@ -209,7 +239,7 @@
 			</div>
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
-				<img src="images/app_option_bg2.png" alt="options">
+				<img src="images/app_option_bg.png" alt="options">
 				</a>
 			</div>
 		</div>
@@ -234,7 +264,7 @@
 	</div>
    	<div class="main_menu">
 		<ul>
-			<li><a href="#" id="abtnPlaces3" onClick = "onClickbtnFilterPlaces();"><span id="btnPlaces3"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition3" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition3"></span></a></li>
 			<li><a href="#" id="abtnTour3" onClick = "onClickbtnTour();"><span id="btnTour3"></span></a></li>
 			<li><a href="#" id="abtnExit3" onClick = "navigator.app.exitApp();"><span id="btnExit3"></span></a></li>
 		</ul>
@@ -262,14 +292,34 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<div class="app_options">
+			<div class="app_options no_active">
+				<a href="#" onClick = "onClickSettings();">
 				<img src="images/app_option_bg.png" alt="options">
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="options" style= "display:none; z-index:9999;">
+		 <div class="container">
+			<div data-role="fieldcontain">
+				<label for="language_select" id="lbllanguageselect"></label>
+				<select name="language_select" id="language_select4">
+	    			<option value="GR">Ελληνικά</option>
+	 				<option value="EN">English</option>
+				</select>
+			</div>
+			<div data-role="fieldcontain" >
+				<label for="emailaccount" id="lblemailaccount"></label>
+				<input type="text" value="" name="emailaccount" id="emailaccountchange4" placeholder="email account" />
+			</div>
+			<div class="button orange small">
+				<a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges4"> </span></a>
 			</div>
 		</div>
 	</div>
 	<div class="main_menu">
 		<ul>
-			<li><a href="#" id="abtnPlaces4" onClick = "onClickbtnFilterPlaces();"><span id="btnPlaces4"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition4" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition4"></span></a></li>
 			<li><a href="#" id="abtnTour4" onClick = "onClickbtnTour();"><span id="btnTour4"></span></a></li>
 			<li><a href="#" id="abtnExit4" onClick = "navigator.app.exitApp();"><span id="btnExit4"></span></a></li>
 		</ul>
@@ -277,7 +327,10 @@
 	<div class="main_content" style="padding-top:20px;">
 		<div class="container">
   			<div align="center" style="margin-bottom:20px;"><fieldset id="availableDays" data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" ></fieldset></div>
-  			<div align="center" style="margin-bottom:30px; width:90%;"><fieldset id="availablePois" data-role="controlgroup" data-type="vertical" data-role="fieldcontain"></fieldset></div>
+  			<!--div id="availablePois" class="button blue"></div>
+  			< >div align="center" style="margin-bottom:30px; width:80%;"><fieldset id="availablePois" data-role="controlgroup" data-type="vertical" data-role="fieldcontain"></fieldset></div>
+	  		<img src="images/travel_directions.png" id='btnCallMap'/-->
+	  		<div id="availablePois"></div>
 	  		<div id="divItineraryInfo"></div>
 				<div class="button orange">
 					<a href="#" onClick = "showKmlFile();"><span id="btnLoad"> </span></a>
@@ -299,11 +352,34 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
+		 	<div class="app_options no_active">
+				<a href="#" onClick = "onClickSettings();">
+					<img src="images/app_option_bg.png" alt="options">
+				</a>
+			</div>
+		</div>	
+	</div>
+	<div class="options" style="display:none; z-index:9999;">
+		 <div class="container">
+			<div data-role="fieldcontain">
+				<label for="language_select" id="lbllanguageselect"></label>
+				<select name="language_select" id="language_select5">
+	    			<option value="GR">Ελληνικά</option>
+	 				<option value="EN">English</option>
+				</select>
+			</div>
+			<div data-role="fieldcontain" >
+				<label for="emailaccount" id="lblemailaccount"></label>
+				<input type="text" value="" name="emailaccount" id="emailaccountchange5" placeholder="email account" />
+			</div>
+			<div class="button orange small">
+				<a href="#" onClick = "reloadItineraryPortalPage();"><span id="btnSaveChanges5"> </span></a>
+			</div>
 		</div>
 	</div>
 	<div class="main_menu">
 		<ul>
-			<li><a href="#" id="abtnPlaces5" onClick = "onClickbtnFilterPlaces();"><span id="btnPlaces5"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition5" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition5"></span></a></li>
 			<li><a href="#" id="abtnTour5" onClick = "onClickbtnTour();"><span id="btnTour5"></span></a></li>
 			<li><a href="#" id="abtnExit5" onClick = "navigator.app.exitApp();"><span id="btnExit5"></span></a></li>
 		</ul>
@@ -313,16 +389,16 @@
 	 		<span id="lblnotavailablefiles"></span>
 	 		
 	 		<div data-role="fieldcontain">
-					<input type="text" style=" float:left "  value="" name="emailaccountitinerary" id="emailaccountitinerary" placeholder="email account" />
+				<input type="text" style=" float:left "  value="" name="emailaccountitinerary" id="emailaccountitinerary" placeholder="email account" />
 			</div>
 			<div class="button orange small">
 				<a href="#" id="abtnLoad" onClick="loadFromPortal($('#emailaccountitinerary').val())"><span  id="btnLoadItinerary"></span></a>
 			</div>
 			<div data-role="controlgroup" style="width:80%" id="portalItineraries"></div>
 			
-			<div data-role="fieldcontain">
+			<!--  div data-role="fieldcontain">
 				<a data-role="button" data-iconpos="right" data-icon="arrow-r" class="ui-disabled" id="abtnLoadSelected" href="#" onClick="loadXmlFromPortal()"><span  id="btnLoadSelected"></span></a>
-			</div>
+			</div-->
 			<div class="button blue small">
 				<a href="#" onClick = "loadItineraries();">
 					<span id="btnPortalBack"> </span>
