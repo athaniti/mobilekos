@@ -1105,6 +1105,7 @@ function generateMap()
 	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
 	if (isOffline)
 	{
+		alert("Offline Mode");
 		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
 		map._layersMaxZoom=15;
 		map._layersMinZoom=12;
@@ -1112,6 +1113,7 @@ function generateMap()
 	}
 	else
 		{
+		alert("Online Mode");
 			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 		}
 	//osm = new L.TileLayer('map/{z}/{x}/{y}.png');
