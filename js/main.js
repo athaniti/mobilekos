@@ -1102,19 +1102,20 @@ function generateMap()
 //											);, maxBounds: strictBounds, minZoom: 11 
 	
 	var osm;
-//	if (isOffline)
-//	{
-//		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
-//	}
-//	else
-//		{
-//			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-//		}
 	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-	osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+	if (isOffline)
+	{
+		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+		map._layersMaxZoom=15;
+		map._layersMinZoom=12;
+
+	}
+	else
+		{
+			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+		}
+	//osm = new L.TileLayer('map/{z}/{x}/{y}.png');
 	map.addLayer(osm);
-	map._layersMaxZoom=15;
-	map._layersMinZoom=12;
 	
 	document.getElementById('map').style.display = 'block';
 	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
