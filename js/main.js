@@ -1680,7 +1680,7 @@ function submitSelectedPlacesGr(){
 								for (var i = 0; i < len; i++){
 									if (checked[j] == results.rows.item(i).subcategory){
 										descr = results.rows.item(i).descr;
-										console.log(descr);
+										//console.log(descr);
 										if (descr.length > 140){			//slicing the description to the first 140 charactes.
 											descr = descr.slice(0,140);
 											descr += "...";
@@ -2548,15 +2548,18 @@ function getDirections(x,y)
 function getMoreInfo(poiid, categid)
 {
 	var lang = 'en';
-	if (langstr=='gr') {lang='el'};
+	if (langstr=='gr') {lang='el';}
 		
 	if (isOffline){
 		alert(MyApp.resources.UserMustBeOnLine);
+		console.log("inGetMoreInfo - Offline");
+
 	}
 	else
 	{
 		var url = 'http://www.kos.gr/'+lang+'/'+categs[categid]+'/SitePages/view.aspx?nID='+poiid;
-		console.log("inGetMoreInfo");
+		loadURL(url);
+		console.log("inGetMoreInfo - Online");
 	}
 }
 
@@ -2578,3 +2581,9 @@ function clearWatch() {
         watchID = null;
     }
 }
+
+
+function loadURL(url){
+    navigator.app.loadUrl(url, { openExternal:true });
+    return false;
+} 
