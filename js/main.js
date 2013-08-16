@@ -1,22 +1,13 @@
-var baseapiurl='ath.dataverse.gr:18090/api/';
-//var cloudmadeApiUrl='http://routes.cloudmade.com/b2adb48b2e8840d1a8ee52438aa58def/api/0.3';
-//var basepoifolder = 'xml/';
-//var baselat = 38.00411;
-//var baselong = 23.720673;
 var map;
 //var defaultZoom = 4;
 var firstTime = true;
 var basemap;
-//var latlng;
 var screenHeight;
 var currentTimestamp = [];
-//var xmlArray = [];
 var currentLat;
 var currentLong;
 var marker1;
-//var inGetDirections = false;
 var watchID = null;
-//var marker2;
 var fromLoadCoords = false;
 var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3,xmlDoc4,xmlDoc5;
 var currentMarkers = [];
@@ -28,34 +19,17 @@ var isOffline = true;
 var language;
 var langstr = 'en';
 var currentEmail;
-//var filepath;
 var langchanged = false;
 var xmlpathcat;
 var fromselectedplaces = false;
 var itId;//, dayId;
-//var itTitle;
-//var synchronizd = false ;
 var itActive;
 var itCompleted;
-//var category = [];
-//var placesVisited = [];
-//var ifVisited = [];
-//var tempCategory = [];
-//var tempPoi = [];
-//var timestamp;
-//var fileNameToBeMoved;
-//var tempFound = false;
-//var mapAppFound = false;
-//var upToDate = false;
 var fromMainPage = false;
 var nameCat= [];
 var categId = [];
 var newtimestamp = false;
 var fromSettings = false;
-//var ItTitle = [];
-//var ItUser = [];
-//var ItId = [];
-//var ItDays = [];
 var timestampa, timestampb, timestampc, timestampd;
 var track, control, info, tourXmlName, dd, sname, fillhtml, catId;
 var LeafIcon = L.Icon.extend({
@@ -89,6 +63,7 @@ function onDeviceReady() {
 		isOffline = false;
 	}
 	
+	
 	setTimeout(function(){
 		checkLanguageSettings();
 	},1500);
@@ -115,7 +90,7 @@ function checkLanguageSettings()
 				populateDB();
 			}
 			else{
-				language = results.rows.item(0).data;
+				langstr = language = results.rows.item(0).data;
 				console.log("langstr: "+langstr);
 				checkForLanguage();
 				if (isOffline == false){
@@ -153,8 +128,8 @@ function populateDB(tx)
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id unique, name, catid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id unique, name, catid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (name, descr, category, subcategory, long, lat)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (name, descr, category, subcategory, long, lat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
 //		tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
 		console.log("populateDB()2");
@@ -261,22 +236,6 @@ function createItDb(){
 	loadItineraryXml(2);
 }
 
-//function createItDb2(){
-//	alert("error10CB()");
-//	db.transaction(function(tx) {
-//		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
-//		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, duration, isActive, completed)');
-//	});
-//	loadItineraryXml(2);
-//}
-
-//function createDb(){
-//	console.log("in createDb()");
-//	db.transaction(populateDB, errorCB, successCB);
-//	setTimeout(function(){
-//		populateDatabases();
-//	},1000);
-//}
 
 function populateDatabases(){
 	console.log("in populateDatabases");
@@ -416,6 +375,7 @@ function popPoiEnDb(){
 		for(var i = 0; i < LenCat; i++)	
 		{
 			poiName = xmlDoc2.getElementsByTagName("pois")[0].getElementsByTagName("Poi")[i].getElementsByTagName("Name")[0].textContent;
+			poiId = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("SiteId")[0].textContent;
 			poiDescr = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Description")[0].textContent;
 			poiLong = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Longitude")[0].textContent;
 			poiLat = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Latitude")[0].textContent;
@@ -426,8 +386,8 @@ function popPoiEnDb(){
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
 //			alert(poiName+" "+poiDescr+" "+poiLong+" "+poiLat+" "+poiCat+" "+subCatId+" time: "+timestamp);
-			tx.executeSql('INSERT INTO POIEN (name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?)'
-					,[poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], success6CB, error6CB);
+			tx.executeSql('INSERT INTO POIEN (siteid, name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?,?)'
+					,[poiId,poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], success6CB, error6CB);
 		}
 //		alert("5: "+poiName);
 	});	
@@ -449,6 +409,7 @@ function popPoiGrDb(){
 		timestampd = $(xmlDoc3).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	{
 			poiName = xmlDoc3.getElementsByTagName("pois")[0].getElementsByTagName("Poi")[i].getElementsByTagName("Name")[0].textContent;
+			poiId = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("SiteId")[0].textContent;
 			poiDescr = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Description")[0].textContent;
 			poiLong = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Longitude")[0].textContent;
 			poiLat = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Latitude")[0].textContent;
@@ -460,8 +421,8 @@ function popPoiGrDb(){
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
 //			alert(poiName+" "+poiDescr+" "+poiLong+" "+poiLat+" "+poiCat+" "+subCatId+" time: "+timestamp);
-			tx.executeSql('INSERT INTO POIGR (name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?)'
-					,[poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], successCB, error2CB);
+			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat) VALUES (?,?,?,?,?,?,?)'
+					,[poiId,poiName, poiDescr, poiCat, subCatId, poiLong, poiLat], successCB, error2CB);
 		}
 //		alert("6: "+poiName);
 	});	
@@ -842,8 +803,10 @@ function drawPlacesPageEn(len){
 			var email = $('#emailaccountchange2').val();
 			console.log("2222 email: "+email);
 			if ( email == null || email == ""){
-				$('#emailaccountchange2').val(currentEmail);
-				console.log(currentEmail);
+				var cm = "";
+				if (currentEmail!=undefined) cm=currentEmail;
+				$('#emailaccountchange2').val(cm);
+				console.log(cm);
 			}
 //		    var div = $(document).height();
 //		    var doc = $(window).height();
@@ -1103,7 +1066,7 @@ function generateMap()
 	
 	var osm;
 	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-	if (isOffline)
+	/*if (isOffline)
 	{
 		alert("Offline Mode");
 		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
@@ -1116,9 +1079,11 @@ function generateMap()
 		alert("Online Mode");
 			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 		}
-	//osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+	*/
+	osm = new L.TileLayer('map/{z}/{x}/{y}.png');
 	map.addLayer(osm);
-	
+	map._layersMaxZoom=maxZoom;
+	map._layersMinZoom=minZoom;
 	document.getElementById('map').style.display = 'block';
 	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
@@ -1408,29 +1373,6 @@ function reloadPlacesPage(){
 	if ( email != null && email != ''){
 		$('#emailaccountchange2').val(currentEmail);
 	}
-//	if (currentEmail== null && newEmail !='' )
-//	{
-//		db.transaction(function(tx) {
-//			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,newEmail]);
-//		});
-//		settingsChanged = true;
-//	}
-//	else if (currentEmail != null && newEmail =='')
-//	{
-//		db.transaction(function(tx) {
-//			tx.executeSql('DELETE FROM SETTINGS WHERE ID=?',[2]);
-//		});
-//		currentEmail = null;
-//		settingsChanged = true;
-//	}
-//	else if (currentEmail != newEmail)
-//	{
-//		db.transaction(function(tx) {
-//			tx.executeSql('UPDATE SETTINGS SET DATA =? WHERE ID=?',[newEmail,2]);
-//		});
-//		currentEmail = newEmail;
-//		settingsChanged = true;
-//	}
 	saveEmail(newEmail);
 	checkForLanguage();
 	onClickSettings();
@@ -1469,13 +1411,6 @@ function firstSwitchToMainPage(email){
 	if (fromMainPage == false){
 		generateMap();
 	}
-//	if (email !=null && email !='')
-//	{
-//		console.log("1234567");
-//		db.transaction(function(tx) {
-//			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
-//		});
-//	}
 	if (isOffline == true)
 	{
 		alert(MyApp.resources.NoInternetAccess);
@@ -1486,36 +1421,12 @@ function firstSwitchToMainPage(email){
 	},2300);
 	setLabelsForMainPage();
 	if (firstTime == true){
-//		firstTime = false;
 		onClickbtnCurrent();
-//		setTimeout(function(){
-//			onClickbtnFilterPlaces();
-//		},2500);
 	}
-//	setTimeout(function(){
-//		show();
-//	},3500);
-//	$(".popupBasic").popup({
-//		  create: function( event, ui ) {}
-//		});
-//	$( ".popupBasic" ).popup("open");
-//	if (showPlacesInfo == true){
-//		var divInfo = getElementById();
-//		document.getElementById('availableFiles').innerHTML=My;
-//		setTimeout(function(){
-//			slide();
-//		},3000);
-//	}
 }
 
 function switchToMainPage(email)
 {
-//	if (email !=null && email !='')
-//	{
-//		db.transaction(function(tx) {
-//			tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[2,email], successCB, errorCB);
-//		});
-//	}
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
 		map.invalidateSize();
@@ -1530,9 +1441,6 @@ function switchToMainPage(email)
 	    onClickSettings();
 	    fromSettings = false;
 	}
-//	setTimeout(function(){
-//		$('.options').css({'display':'none'});
-//	},600);
 }
 
 function switchToMainPage2(){
@@ -1544,15 +1452,6 @@ function switchToMainPage2(){
 	onClickbtnTour();
 }
 
-/*
-function switchToMainPage3(){
-	$.mobile.changePage($('#mainpage'), 'pop');
-	setTimeout(function(){
-		map.invalidateSize();
-	},1000);
-	setLabelsForMainPage();
-//	onClickbtnCurrent();
-}*/
 
 function switchToFirstPage()
 {
@@ -1562,18 +1461,11 @@ function switchToFirstPage()
 	$.mobile.changePage($('#firstpage'), 'pop');
 }
 
-/*
-function switchToSettingPage()
-{
-	getSelectedSettings();
-	$.mobile.changePage($('#settingspage'), 'pop'); 
-}*/
 
 function onClickbtnPlaces()
 {
 	slideBack();
 	if (firstTime == true){
-//		firstTime = false;
 		console.log("first time == true");
 		showAllPlaces();
 	}
@@ -1587,7 +1479,6 @@ function onClickbtnPlaces()
 				console.log("in here2!");
 				console.log("Current marker "+currentMarkers[i]);
 			}
-//			currentMarkers = [];
 		}
 	}
 	if (track != null)
@@ -1600,7 +1491,6 @@ function onClickbtnPlaces()
 	$("#abtnFilterPlaces").show();
     $("#abtnFilterTour").hide();
     $('#abtnTour').removeClass("active");
-//    $('#abtnPlaces').addClass("active");
     $('#abtnCurrentPosition').removeClass("active");
 
 }
@@ -1612,16 +1502,13 @@ function onClickbtnTour()
 	$("#abtnFilterPlaces").hide();
     $("#abtnFilterTour").show();
     $('#abtnTour').addClass("active");
-//    $('#abtnPlaces').removeClass("active");
     $('#abtnCurrentPosition').removeClass("active");
 
     if (track != null)
 	{
     	map.addLayer(track);
-//    	map.addLayer(osm);
     	map.removeControl(control);
     	control = new L.Control.Layers({}, {'Track':track});
-//    	map.addControl(new L.Control.Layers({}, {'Track':track}));
     	map.addControl(control);
 	}
     else
@@ -1639,44 +1526,9 @@ function onClickbtnTour()
     
 }    
 
-/*
-function getSelectedSettings()
-{
-	db.transaction(function (tx) {
-		tx.executeSql('SELECT * FROM SETTINGS',[], function(tx, rs){
-			if (rs.rows.item(0)['data'] == 'GR')
-			{
-				$("#language_select").val("GR");
-	//			langstr = 'gr';
-			}
-			else if (rs.rows.item(0)['data'] == 'EN')
-			{
-				$("#language_select").val("EN");
-	//			langstr = 'en';
-			}
-			if (rs.rows.length > 1)
-			{
-				currentEmail = rs.rows.item(1)['data'];
-				$('#emailaccountchange').val(currentEmail);
-			}
-		}, errorCB);
-		});
-}*/
-
-/*
-function showKeyEmail()
-{
-	if(window.event.keyCode == 13)
-	{
-		switchToMainPage($('#emailaccount').val());
-	}
-}*/
 
 function submitSelectedPlaces()
 {
-//	$('#btnPBack').addClass('ui-disabled');
-//	$('#btnClearAll').addClass('ui-disabled');
-//	$('#btnShowNone').addClass('ui-disabled');
 	var descr;
 	if (currentMarkers != null)
 	{
@@ -1739,11 +1591,13 @@ function submitSelectedPlacesEn(){
 //									console.log("POIEN: "+results.rows.item(i).subcategory);
 									if (checked[j] == results.rows.item(i).subcategory){
 										descr = results.rows.item(i).descr;
-										if (descr.length > 140){			//slicing the description to the first 140 charactes.
-											descr = descr.slice(0,140);
+										if (descr.length > 200){			//slicing the description to the first 140 charactes.
+											descr = descr.slice(0,200);
 											descr += "...";
 											descr += "<br>";
 										}
+										var poiid = results.rows.item(i).siteid;
+										var poicat = results.rows.item(i).category;
 										var x = results.rows.item(i).lat;
 										var y = results.rows.item(i).long;
 										x = x.replace(x.charAt(2), ".");
@@ -1753,7 +1607,7 @@ function submitSelectedPlacesEn(){
 											x = y;
 											y = temp;
 										}
-										descr += "<p onclick=getMoreInfo("+x+","+y+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+										descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 										descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 										console.log("in SubmitSelected En3");
 										lat2 = results.rows.item(i).lat;
@@ -1833,6 +1687,8 @@ function submitSelectedPlacesGr(){
 											descr += "<br>";
 											console.log("1231231: "+descr);
 										}
+										var poiid = results.rows.item(i).siteid;
+										var poicat = results.rows.item(i).category;
 										var x = results.rows.item(i).lat;
 										var y = results.rows.item(i).long;
 										x = x.replace(x.charAt(2), ".");
@@ -1842,7 +1698,7 @@ function submitSelectedPlacesGr(){
 											x = y;
 											y = temp;
 										}
-										descr += "<p onclick=getMoreInfo("+x+","+y+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+										descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 										descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 										lat2 = results.rows.item(i).lat;
 										if ( lat2.indexOf("\n") == -1){
@@ -1896,6 +1752,8 @@ function showAllPlaces(){
 						descr += "<br>";
 //						descr += '';
 					}
+					var poiid = results.rows.item(i).siteid;
+					var poicat = results.rows.item(i).category;
 					var x = results.rows.item(i).lat;
 					var y = results.rows.item(i).long;
 					x = x.replace(x.charAt(2), ".");
@@ -1905,7 +1763,7 @@ function showAllPlaces(){
 						x = y;
 						y = temp;
 					}
-					descr += "<p onclick=getMoreInfo("+x+","+y+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 					lat2 = results.rows.item(i).lat;
 					if ( lat2.indexOf("\n") == -1){
@@ -1933,6 +1791,8 @@ function showAllPlaces(){
 						descr += "...";
 						descr += "<br>";
 					}
+					var poiid = results.rows.item(i).siteid;
+					var poicat = results.rows.item(i).category;
 					var x = results.rows.item(i).lat;
 					var y = results.rows.item(i).long;
 					x = x.replace(x.charAt(2), ".");
@@ -1942,7 +1802,7 @@ function showAllPlaces(){
 						x = y;
 						y = temp;
 					}
-					descr += "<p onclick=getMoreInfo("+x+","+y+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 					lat2 = results.rows.item(i).lat;
 					if ( lat2.indexOf("\n") == -1){
@@ -2685,11 +2545,19 @@ function getDirections(x,y)
 	}
 }
 
-function getMoreInfo(x,y)
+function getMoreInfo(poiid, categid)
 {
-	console.log("inGetMoreInfo");
-	console.log("x: "+x);
-	console.log("y: "+y);
+	var lang = 'en';
+	if (langstr=='gr') {lang='el'};
+		
+	if (isOffline){
+		alert(MyApp.resources.UserMustBeOnLine);
+	}
+	else
+	{
+		var url = 'http://www.kos.gr/'+lang+'/'+categs[categid]+'/SitePages/view.aspx?nID='+poiid;
+		console.log("inGetMoreInfo");
+	}
 }
 
 function slide()

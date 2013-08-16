@@ -317,7 +317,7 @@ small {
 
 .button a {
 	width: 100%;
-	max-width: 265px;
+	/*max-width: 265px;*/
 	display: block;
 	margin: 20px auto;
 	color: #fff !important;
@@ -333,8 +333,8 @@ small {
 }
 
 .button.small a {
-	width: 100px;
-/*	max-width: 150px;*/
+/*	width: 100px;
+	max-width: 150px;*/
 	display: block;
 	margin: 20px auto;
 	color: #fff !important;
@@ -348,6 +348,7 @@ small {
 	text-shadow: 0px 0px 0px rgba(000, 000, 000, 0), 0px 0px 0px
 		rgba(255, 255, 255, 0);
 }
+
 
 .button.btn_over {
 	position: absolute;
@@ -375,6 +376,21 @@ small {
 		rgba(255, 255, 255, 0.5);
 }
 
+.button.blue a:hover {
+	background: -moz-linear-gradient(top, #f49426 0%, #b56911);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f49426),
+		to(#b56911));
+	border-color: #b56911;
+	-moz-box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+
+	background: -webkit-gradient(linear, left top, left bottom, from(#f49426),
+ to(#b56911));
+}
 .button.grey a {
 	background: -moz-linear-gradient(top, #918F87 0%, #6B6963);
 	background: -webkit-gradient(linear, left top, left bottom, from(#918F87),
@@ -433,7 +449,10 @@ small {
 .buttons .button {
 	float: left;
 	margin: 0px 20px 0px 0px;
+	width: 100%
 }
+
+
 
 /*-----------------------------------------------------------------------------------*/
 /*	Devider Settings
@@ -676,6 +695,8 @@ small {
 	width: 100%;
 	padding: 0px 20px;
 }
+
+.msg {text-align:center;}
 
 /*-----------------------------------------------------------------------------------*/
 /*	Location Button Settings
