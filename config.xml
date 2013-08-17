@@ -55,7 +55,7 @@
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 
     <!-- Plugins can also be added here. -->
-	<gap:plugin name="Globalization" value="org.apache.cordova.Globalization" />
+	<plugin name="Globalization" value="org.apache.cordova.Globalization" />
 	<gap:plugin name="SplashScreen" value="org.apache.cordova.SplashScreen"/>
     <gap:plugin name="Echo" value="org.apache.cordova.Echo" />
     
