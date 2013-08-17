@@ -2586,4 +2586,16 @@ function clearWatch() {
 function loadURL(url){
     navigator.app.loadUrl(url, { openExternal:true });
     return false;
-} 
+}
+
+function exitApplication()
+{
+	if(navigator.app)
+	{
+		navigator.app.exitApp();
+	}
+	else if(navigator.device)
+	{
+		navigator.device.exitApp();
+	}
+}
