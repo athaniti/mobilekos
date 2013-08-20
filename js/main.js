@@ -6,7 +6,9 @@ var screenHeight;
 var currentTimestamp = [];
 var currentLat;
 var currentLong;
+var watchClear = false;
 var marker1;
+var cancelBackButton = false;
 var watchID = null;
 var fromLoadCoords = false;
 var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3,xmlDoc4,xmlDoc5;
@@ -78,7 +80,6 @@ function onDeviceReady() {
 
 function checkLanguageSettings()
 {
-	
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SETTINGS', [], function (tx, results) {
 			len = results.rows.length;
@@ -93,6 +94,7 @@ function checkLanguageSettings()
 				langstr = language = results.rows.item(0).data;
 				console.log("langstr: "+langstr);
 				checkForLanguage();
+				cancelBackButton = true;
 				if (isOffline == false){
 //					sync();
 				}
@@ -138,7 +140,7 @@ function populateDB(tx)
 }
 
 function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
+    console.log("Error processing SQL: "+err.code);
 }
 
 function successCB() {
@@ -164,16 +166,23 @@ function error13CB(){
 }
 
 function onBackKeyDown(e) {
-	if ($.mobile.activePage.is('#firstpage')) {
-		e.preventDefault();
-		navigator.app.exitApp();
+	console.log("cancelBackButton "+cancelBackButton);
+	if (cancelBackButton == true){
+//		Do Nothing!
+		console.log("doing nothing");
 	}
-	else if ($.mobile.activePage.is('#mainpage')){
-		fromMainPage = true;
-		navigator.app.backHistory();
-	}
-	else {
-		navigator.app.backHistory();
+	else{
+		if ($.mobile.activePage.is('#firstpage')) {
+			e.preventDefault();
+			navigator.app.exitApp();
+		}
+		else if ($.mobile.activePage.is('#mainpage')){
+			fromMainPage = true;
+			navigator.app.backHistory();
+		}
+		else {
+			navigator.app.backHistory();
+		}
 	}
 }
 
@@ -650,7 +659,6 @@ function popNewCategoriesEnDb(data){
 }
 
 function json2xml(o, tab){
-//	alert('in json2xml');
 	var toXml = function(v, name, ind) {
 		var xml = "";
 		if (v instanceof Array) {
@@ -761,12 +769,10 @@ function drawPlacesPageEn(len){
 		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {			
 			var subId;
 			for (var k=0; k<len; k++){
-//				alert("12 "+nameCat[k]);
 				fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
 				fillhtml += "<legend>" + nameCat[k] + "</legend>";
 				fillhtml += "<div data-role='controlgroup'>";
 				subLen = results.rows.length;
-//				alert("sublen: "+sublen);
 				for(var j=0; j<subLen ; j++){
 //					alert("13 "+results.rows.item(j).catid);
 					subId = results.rows.item(j).catid;
@@ -911,6 +917,7 @@ function onClickbtnFilterPlaces()
 	else {
 		readCatDbGr();
 	}
+//	
 //	}
 //	$('#placespage').trigger("create");
 //	$.mobile.changePage($('#placespage'), 'pop');
@@ -1061,45 +1068,117 @@ function removeOptionListSelected()
 function generateMap()
 { 
 //	var strictBounds = 	new L.LatLngBounds(	new L.LatLng(36.6284187, 26.7715134),
-//											new L.LatLng(36.9202150, 27.4904318)
-//											);, maxBounds: strictBounds, minZoom: 11 
-	
-	var osm;
-	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-	/*if (isOffline)
-	{
-		alert("Offline Mode");
-		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+//	new L.LatLng(36.9202150, 27.4904318)
+//	);, maxBounds: strictBounds, minZoom: 11 
+	if (isOffline == false){
+		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+//		var loadingControl = L.Control.loading({separate: true});
+		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+		map.addLayer(osm);
+		document.getElementById('map').style.display = 'block';
+		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//		addCustomIcon();
+//		map.addControl(geolocationControl(HelloWorldFunction));
+//		map.addControl(loadingControl);
+		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+		map.addControl(clearControl(clearMap));
+	}
+	if (isOffline == true){
+		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+//		var loadingControl = L.Control.loading({separate: true});
+		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+		map.addLayer(osm);
 		map._layersMaxZoom=15;
 		map._layersMinZoom=12;
-
+		document.getElementById('map').style.display = 'block';
+		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+		map.addControl(clearControl(clearMap));
 	}
-	else
-		{
-		alert("Online Mode");
-			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-		}
-	*/
-	osm = new L.TileLayer('map/{z}/{x}/{y}.png');
-	map.addLayer(osm);
-	map._layersMaxZoom=maxZoom;
-	map._layersMinZoom=minZoom;
-	document.getElementById('map').style.display = 'block';
-	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-	map.addControl(clearControl(clearMap));
-
 }
+//
+//function generateMap()
+//{ 
+//	if (isOffline == false){
+//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+//        var loadingControl = L.Control.loading({separate: true});
+//		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+//		map.addLayer(osm);
+//		document.getElementById('map').style.display = 'block';
+//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//		addCustomIcon();
+//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+////		map.addControl(geolocationControl(HelloWorldFunction));
+////		map.addControl(loadingControl);
+////		map.addControl(clearControl(clearMap));
+//	}
+//	if (isOffline == true){
+//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+//        var loadingControl = L.Control.loading({separate: true});
+//		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+//		map.addLayer(osm);
+//		document.getElementById('map').style.display = 'block';
+//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//		addCustomIcon();
+//		map._layersMaxZoom=maxZoom;
+//		map._layersMinZoom=minZoom;
+//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+////		map.addControl(geolocationControl(HelloWorldFunction));
+////		map.addControl(loadingControl);
+////		map.addControl(clearControl(clearMap));
+//	}
+//}
+
+//function generateMap()
+//{
+////	var strictBounds = 	new L.LatLngBounds(	new L.LatLng(36.6284187, 26.7715134),
+////											new L.LatLng(36.9202150, 27.4904318)
+////											);, maxBounds: strictBounds, minZoom: 11 
+//	var osm;
+//	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+//	/*if (isOffline)
+//	{
+//		alert("Offline Mode");
+//		osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+//		map._layersMaxZoom=15;
+//		map._layersMinZoom=12;
+//
+//	}
+//	else
+//		{
+//		alert("Online Mode");
+//			osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+//		}
+//	*/
+//	osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+//	map.addLayer(osm);
+////	map._layersMaxZoom=maxZoom;
+////	map._layersMinZoom=minZoom;
+//	document.getElementById('map').style.display = 'block';
+//	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+//	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+//	map.addControl(clearControl(clearMap));
+//}
 
 function onClickbtnCurrent()
 {
 	$('#abtnCurrentPosition').addClass("active");
 //	$('#abtnPlaces').removeClass("active");
-   	$('#abtnTour').removeClass("active");
+	$('#abtnTour').removeClass("active");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").hide();
- 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true});
- 	switchToMainPage();
+	if (watchClear == false){
+		watchClear = true;
+//		navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true});
+//		navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout: 20000, enableHighAccuracy:true});
+		var options = { timeout: 20000, enableHighAccuracy: true };
+		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+		switchToMainPage();
+	}
+	else{
+		watchClear = false;
+		clearWatch();
+	}
 }
 
 function onSuccess(position)
@@ -1115,7 +1194,7 @@ function onSuccess(position)
 	}
 	else{
 		map.panTo([currentLat,currentLong ]);
-		if (marker1 !=null)
+		if (marker1 != null)
 		{
 			map.removeLayer(marker1);
 		}
@@ -1131,7 +1210,7 @@ function onSuccess(position)
 
 function onError(error)
 {
-//	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 	alert("Could not get your location");
 }
 
@@ -1452,7 +1531,6 @@ function switchToMainPage2(){
 	onClickbtnTour();
 }
 
-
 function switchToFirstPage()
 {
 	db.transaction(function(tx) {
@@ -1461,9 +1539,9 @@ function switchToFirstPage()
 	$.mobile.changePage($('#firstpage'), 'pop');
 }
 
-
 function onClickbtnPlaces()
 {
+	clearWatch();
 	slideBack();
 	if (firstTime == true){
 		console.log("first time == true");
@@ -1526,9 +1604,9 @@ function onClickbtnTour()
     
 }    
 
-
 function submitSelectedPlaces()
 {
+	cancelBackButton = false;
 	var descr;
 	if (currentMarkers != null)
 	{
@@ -1973,21 +2051,16 @@ function popItinerariesDb(xmlDoc){
 		$(xmlDoc).find("Point").each(function(){
 //			day.push($(this).parent().parent().attr("Kml"));
 			day =   $(this).parent().parent().attr("Kml");
-//			alert($(this).parent().parent().attr("Kml"));
 //			pointCode.push(($(this).attr("Code")));
 			pointCode = $(this).attr("Code");
-//			alert(($(this).parent().parent().text()).slice(2,10));
 //			pointName.push(($(this).text()));
 			pointName = $(this).text();
-//			alert(($(this).text()));
 //			duration.push(($(this).parent().parent().text()).slice(2,10));
-//			alert(($(this).attr("Code")));
 			console.log("1 "+duration);
 			duration = $(this).parent().parent().text().slice(0,10);
 			console.log("2 "+duration);
 			itActive = 0;
 			itCompleted = 0;
-//			alert("id: "+id+" title: "+title+" user: "+user+ " days: "+day +" "+pointCode+" "+pointName+" "+duration);
 			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
 					,[id,title,user,day,pointCode,pointName,coords,duration,itActive,itCompleted], successCB, error12CB);
 		});
@@ -2010,7 +2083,7 @@ function popItiDayDb(){
 }
 
 function error12CB(){
-	alert("error12CB");
+	console.log("error12CB");
 }
 
 function loadItineraryXml(x){
@@ -2576,6 +2649,7 @@ function slideBack()
 }
 
 function clearWatch() {
+	console.log("in clearWatch");
     if (watchID != null) {
         navigator.geolocation.clearWatch(watchID);
         watchID = null;
