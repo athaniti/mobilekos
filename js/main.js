@@ -1070,31 +1070,31 @@ function generateMap()
 //	var strictBounds = 	new L.LatLngBounds(	new L.LatLng(36.6284187, 26.7715134),
 //	new L.LatLng(36.9202150, 27.4904318)
 //	);, maxBounds: strictBounds, minZoom: 11 
-	if (isOffline == false){
-		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-//		var loadingControl = L.Control.loading({separate: true});
-		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-		map.addLayer(osm);
-		document.getElementById('map').style.display = 'block';
-		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-//		addCustomIcon();
-//		map.addControl(geolocationControl(HelloWorldFunction));
-//		map.addControl(loadingControl);
-		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-		map.addControl(clearControl(clearMap));
-	}
-	if (isOffline == true){
+//	if (isOffline == false){
+//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+////		var loadingControl = L.Control.loading({separate: true});
+//		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+//		map.addLayer(osm);
+//		document.getElementById('map').style.display = 'block';
+//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+////		addCustomIcon();
+////		map.addControl(geolocationControl(HelloWorldFunction));
+////		map.addControl(loadingControl);
+//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+//		map.addControl(clearControl(clearMap));
+//	}
+//	if (isOffline == true){
 		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
 //		var loadingControl = L.Control.loading({separate: true});
 		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
 		map.addLayer(osm);
-		map._layersMaxZoom=15;
+		map._layersMaxZoom=16;
 		map._layersMinZoom=12;
 		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
 		map.addControl(clearControl(clearMap));
-	}
+//	}
 }
 //
 //function generateMap()
