@@ -97,7 +97,7 @@ function onDeviceReady() {
     window.plugins.version.getVersionName(
     	    function(version_name) {
     	        //do something with version_name
-    	    	versionstr += version_name+' - ';
+    	    	versionstr += version_name;
     	        console.log(version_name);
 
     	    },
@@ -107,7 +107,7 @@ function onDeviceReady() {
 
     	    }
     	);
-
+alert(versionstr);
 //	error10CB();
 //	checkItinerariesDb();
 //	checkDb();
