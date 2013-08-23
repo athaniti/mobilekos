@@ -1,6 +1,7 @@
-var baseapiurl='ath.dataverse.gr:18090/api/';
+//var baseapiurl='ath.dataverse.gr:18090/api/';
+var baseapiurl='http://www.kos.gr:90/api/';
 var baseurl = 'http://www.kos.gr/';
-var maxZoom = 15;
+var maxZoom = 16;
 var minZoom = 12;
 var categs = new Array();
 categs[0]="";

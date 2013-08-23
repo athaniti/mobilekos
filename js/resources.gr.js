@@ -7,7 +7,7 @@ var grResources = {
         PBack:"ΟK",
         ImportantEmail:"κάποια σχόλια",
         CurrentPosition:"Θέση",
-        Places:"Σημεία",
+        Places:"Αναζήτηση",
         Settings:"Επιλογές",
         Tour:"Περιήγηση",
         SettingsHeading:"'Αλλαξε τις επιλογές σου",
@@ -35,5 +35,9 @@ var grResources = {
     	ShowNone:"Εμφάνιση κανενός",
     	MoreInfo:"Περισσότερες πληροφορίες",
 		CouldNotLoadItineraries:"Δεν βρέθηκαν περιηγήσεις με τη συγκεκριμένη διεύθυνση email",
-		placesPageHeader:"Επιλέξτε την κατηγορία από τα μέρη που θέλετε να εμφανιστούν στον χάρτη"    	
+		placesPageHeader:"Επιλέξτε την κατηγορία από τα μέρη που θέλετε να εμφανιστούν στον χάρτη",
+		AwayFromKos:"Η θέση σας είναι εκτός ορίων του νησιού της Κω",
+		ExitApp:"Έξοδος από την εφαρμογή;",
+		NoLocation:"Δεν βρέθηκε η τοποθεσία σας",
+		CouldNotGetFilesFromPortal:"Η επικοινωνία με τον server απέτυχε"
 };

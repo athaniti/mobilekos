@@ -13,6 +13,7 @@ var watchID = null;
 var fromLoadCoords = false;
 var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3,xmlDoc4,xmlDoc5;
 var currentMarkers = [];
+var checked = [];
 var db;
 var po=0;
 var showPlacesInfo = false;
@@ -32,6 +33,7 @@ var nameCat= [];
 var categId = [];
 var newtimestamp = false;
 var fromSettings = false;
+//var enableTourButton = false;
 var timestampa, timestampb, timestampc, timestampd;
 var track, control, info, tourXmlName, dd, sname, fillhtml, catId;
 var LeafIcon = L.Icon.extend({
@@ -64,11 +66,48 @@ function onDeviceReady() {
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
 	}
+	setInterval(function(){
+		console.log("Checking Internet Connection...");
+		if(navigator.network && navigator.network.connection.type != Connection.NONE){
+			isOffline = false;
+		}
+	},180000);
 	
 	
 	setTimeout(function(){
 		checkLanguageSettings();
 	},1500);
+	
+	var versionstr = '';
+	//check for Version
+    window.plugins.version.getVersionCode(
+    	    function(version_code) {
+    	        //do something with version_code
+    	        versionstr += version_code+' - ';
+    	        console.log(version_code);
+
+    	    },
+    	    function(errorMessage) {
+    	        //do something with errorMessage
+    	        console.log(errorMessage);
+
+    	    }
+    	);
+    
+    window.plugins.version.getVersionName(
+    	    function(version_name) {
+    	        //do something with version_name
+    	    	versionstr += version_name+' - ';
+    	        console.log(version_name);
+
+    	    },
+    	    function(errorMessage) {
+    	        //do something with errorMessage
+    	        console.log(errorMessage);
+
+    	    }
+    	);
+
 //	error10CB();
 //	checkItinerariesDb();
 //	checkDb();
@@ -91,7 +130,8 @@ function checkLanguageSettings()
 				populateDB();
 			}
 			else{
-				langstr = language = results.rows.item(0).data;
+//				langstr = language = results.rows.item(0).data;
+				language = results.rows.item(0).data;
 				console.log("langstr: "+langstr);
 				checkForLanguage();
 				cancelBackButton = true;
@@ -114,7 +154,7 @@ function populateDB(tx)
 	db.transaction(function (tx) {
 		console.log("populateDB(tx)");
 		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
-		tx.executeSql('DROP TABLE IF EXISTS POINTS');
+//		tx.executeSql('DROP TABLE IF EXISTS POINTS');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
 		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
@@ -125,7 +165,7 @@ function populateDB(tx)
 //		tx.executeSql('DROP TABLE IF EXISTS ROUTES');
 		tx.executeSql('DROP TABLE IF EXISTS TEMP');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited, long, lat)');
+//		tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited, long, lat)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id unique, name, catid)');
@@ -198,7 +238,7 @@ function sync(){
 		}, errorCB);
 	});
 	console.log("in sync2");
-	downloadXmlFiles();	
+	downloadXmlFiles();
 }
 
 function checkDb(){
@@ -352,11 +392,11 @@ function popSubCategoriesGrDb(){
 			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
 			if (catId == 7){
-				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
+				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
 						['0x010043E0C6427A88F547B069EF3C265F983C','Χωριά',catId], success4CB, error4CB);
 			}
 			else if (catId == 9){
-				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
+				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
 						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Γενικές πληροφορίες',catId], success4CB, error4CB);
 			}
 			else{
@@ -796,9 +836,9 @@ function drawPlacesPageEn(len){
 			$.mobile.changePage($('#placespage'), 'slideUp');
 			customHeader(2);
 		    $('#abtnTour2').removeClass("active");
-//		    $('#abtnPlaces2').addClass("active");
+		    $('#abtnPlaces2').addClass("active");
 		    $('#abtnCurrentPosition2').removeClass("active");
-		    $('#abtnExit2').removeClass("active");
+//		    $('#abtnExit2').removeClass("active");
 		    $('.options').css({'display':'none'});
 		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 		    setLabelsForMainPage();
@@ -825,10 +865,10 @@ function drawPlacesPageEn(len){
 }
 
 function customHeader(x){
-//	document.getElementById('btnPlaces'+x).innerText= MyApp.resources.Places;
+	document.getElementById('btnPlaces'+x).innerText= MyApp.resources.Places;
 	document.getElementById('abtnCurrentPosition'+x).innerText= MyApp.resources.CurrentPosition;
 	document.getElementById('btnTour'+x).innerHTML= MyApp.resources.Tour;
-	document.getElementById('btnExit'+x).innerHTML= MyApp.resources.Exit;
+//	document.getElementById('btnExit'+x).innerHTML= MyApp.resources.Exit;
 }
 
 function readCatDbGr(){
@@ -890,9 +930,9 @@ function drawPlacesPageGr(len){
 				console.log(currentEmail);
 			}
 		    $('#abtnTour2').removeClass("active");
-//		    $('#abtnPlaces2').addClass("active");
+		    $('#abtnPlaces2').addClass("active");
 		    $('#abtnCurrentPosition2').removeClass("active");
-		    $('#abtnExit2').removeClass("active");
+//		    $('#abtnExit2').removeClass("active");
 		    $('.options').css({'display':'none'});
 		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 		    setLabelsForMainPage();
@@ -1067,23 +1107,6 @@ function removeOptionListSelected()
 
 function generateMap()
 { 
-//	var strictBounds = 	new L.LatLngBounds(	new L.LatLng(36.6284187, 26.7715134),
-//	new L.LatLng(36.9202150, 27.4904318)
-//	);, maxBounds: strictBounds, minZoom: 11 
-//	if (isOffline == false){
-//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-////		var loadingControl = L.Control.loading({separate: true});
-//		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-//		map.addLayer(osm);
-//		document.getElementById('map').style.display = 'block';
-//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-////		addCustomIcon();
-////		map.addControl(geolocationControl(HelloWorldFunction));
-////		map.addControl(loadingControl);
-//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-//		map.addControl(clearControl(clearMap));
-//	}
-//	if (isOffline == true){
 		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
 //		var loadingControl = L.Control.loading({separate: true});
 		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
@@ -1093,41 +1116,8 @@ function generateMap()
 		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-		map.addControl(clearControl(clearMap));
-//	}
+//		map.addControl(clearControl(clearMap));
 }
-//
-//function generateMap()
-//{ 
-//	if (isOffline == false){
-//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-//        var loadingControl = L.Control.loading({separate: true});
-//		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-//		map.addLayer(osm);
-//		document.getElementById('map').style.display = 'block';
-//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-//		addCustomIcon();
-//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-////		map.addControl(geolocationControl(HelloWorldFunction));
-////		map.addControl(loadingControl);
-////		map.addControl(clearControl(clearMap));
-//	}
-//	if (isOffline == true){
-//		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
-//        var loadingControl = L.Control.loading({separate: true});
-//		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
-//		map.addLayer(osm);
-//		document.getElementById('map').style.display = 'block';
-//		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-//		addCustomIcon();
-//		map._layersMaxZoom=maxZoom;
-//		map._layersMinZoom=minZoom;
-//		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-////		map.addControl(geolocationControl(HelloWorldFunction));
-////		map.addControl(loadingControl);
-////		map.addControl(clearControl(clearMap));
-//	}
-//}
 
 //function generateMap()
 //{
@@ -1163,15 +1153,18 @@ function generateMap()
 function onClickbtnCurrent()
 {
 	$('#abtnCurrentPosition').addClass("active");
+	setTimeout(function(){
+		$('#abtnCurrentPosition').removeClass("active");
+	},800);
 //	$('#abtnPlaces').removeClass("active");
-	$('#abtnTour').removeClass("active");
-	$("#abtnFilterTour").hide();
-	$("#abtnFilterPlaces").hide();
+//	$('#abtnTour').removeClass("active");
+//	$("#abtnFilterTour").hide();
+//	$("#abtnFilterPlaces").hide();
 	if (watchClear == false){
 		watchClear = true;
 //		navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true});
 //		navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout: 20000, enableHighAccuracy:true});
-		var options = { timeout: 20000, enableHighAccuracy: true };
+		var options = { timeout: 10000, enableHighAccuracy: true };
 		watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
 		switchToMainPage();
 	}
@@ -1189,29 +1182,34 @@ function onSuccess(position)
 	currentLong = position.coords.longitude;
 	console.log("currentLong: "+currentLong);
 	if (fromLoadCoords == true){
-//		fromLoadCoords = false;
+		fromLoadCoords = false;
 		getDirections();
 	}
 	else{
-		map.panTo([currentLat,currentLong ]);
-		if (marker1 != null)
-		{
-			map.removeLayer(marker1);
+		if ((currentLat < 36.65) || (currentLat > 36.91) || (currentLong < 26.90) || (currentLong > 27.35)){
+			alert(MyApp.resources.AwayFromKos);
+			clearWatch();
 		}
-		map.setZoom(13);
-		var markerLocation = new L.LatLng(currentLat,currentLong);
-		var marker = new L.Marker(markerLocation).addTo(map)
-		.bindPopup(MyApp.resources.CurrentPosition)
-		.openPopup();
-		map.addLayer(marker);
-		marker1= marker;
+		else{
+			map.panTo([currentLat,currentLong ]);
+			if (marker1 != null)
+			{
+				map.removeLayer(marker1);
+			}
+			map.setZoom(13);
+			var markerLocation = new L.LatLng(currentLat,currentLong);
+			var marker = new L.Marker(markerLocation).addTo(map)
+			.bindPopup(MyApp.resources.CurrentPosition)
+			.openPopup();
+			map.addLayer(marker);
+			marker1= marker;
+		}
 	}
 }
-
 function onError(error)
 {
-	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
-	alert("Could not get your location");
+//	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+	alert(MyApp.resources.NoLocation);
 }
 
 function addGroupMarker(x, y, name, descr, categ)
@@ -1310,8 +1308,10 @@ function switchToEmailPage(langid)
 //    $.mobile.changePage($('#secondpage'), 'pop');
 //    setLabelsForEmailPage();
     
+        
 	if (isOffline == false){
 //		sync();
+		
 	}
 //	firstSwitchToMainPage();
 	firstSwitchToPlacesPage();
@@ -1372,10 +1372,9 @@ function setLabelsForMainPage()
 
 function setHeaderLabels(){
 	document.getElementById('btnCurrentPosition').innerHTML= MyApp.resources.CurrentPosition;  
-//	document.getElementById('btnPlaces').innerText= MyApp.resources.Places;
-//	document.getElementById('btnPlaces').innerText= MyApp.resources.CurrentPosition;
+	document.getElementById('btnPlaces').innerText= MyApp.resources.Places;
 	document.getElementById('btnTour').innerHTML= MyApp.resources.Tour;
-	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;
+//	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;
 }
 
 function setSettingsLabels(){}
@@ -1459,9 +1458,9 @@ function reloadPlacesPage(){
 }
 
 function reloadItinerariesPage(){
-	var newLanguage = $("#language_select4").val();
-	var newEmail =  $("#emailaccountchange4").val();
-	var newlangstr = $("#language_select4").val();
+	var newLanguage = $("#language_select3").val();
+	var newEmail =  $("#emailaccountchange3").val();
+	var newlangstr = $("#language_select3").val();
 	var settingsChanged = false;
 //	langstr = newlangstr.toLowerCase();
 	console.log(langstr);
@@ -1509,9 +1508,9 @@ function switchToMainPage(email)
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
 		map.invalidateSize();
-	},1000);
+	},1500);
 	email = $('#emailaccountchange').val();
-	console.log("123: "+email);
+	console.log("123email: "+email);
 	if ( email == null || email == ''){
 		$('#emailaccountchange').val(currentEmail);
 	}
@@ -1542,23 +1541,23 @@ function switchToFirstPage()
 function onClickbtnPlaces()
 {
 	clearWatch();
-	slideBack();
-	if (firstTime == true){
-		console.log("first time == true");
-		showAllPlaces();
-	}
-	else{
-		console.log("currentMarkers.length "+currentMarkers.length);
-		if (currentMarkers != null)// && (firstTime == false))
-		{
-			console.log("in here!");
-			for(var i = 0; i < currentMarkers.length; ++i){
-				map.addLayer(currentMarkers[i]);
-				console.log("in here2!");
-				console.log("Current marker "+currentMarkers[i]);
-			}
+//	slideBack();
+//	if (firstTime == true){
+//		console.log("first time == true");
+//		showAllPlaces();
+//	}
+//	else{
+	console.log("currentMarkers.length "+currentMarkers.length);
+	if (currentMarkers != null)// && (firstTime == false))
+	{
+		console.log("in here!");
+		for(var i = 0; i < currentMarkers.length; ++i){
+			map.addLayer(currentMarkers[i]);
+			console.log("in here2!");
+			console.log("Current marker "+currentMarkers[i]);
 		}
 	}
+//	}
 	if (track != null)
 	{
 		console.log(track);
@@ -1568,24 +1567,58 @@ function onClickbtnPlaces()
 	}
 	$("#abtnFilterPlaces").show();
     $("#abtnFilterTour").hide();
+    $('#abtnPlaces').addClass("active");
     $('#abtnTour').removeClass("active");
     $('#abtnCurrentPosition').removeClass("active");
+}
 
+function onClickbtnPlaces2()
+{
+	clearWatch();
+	console.log("currentMarkers.length "+currentMarkers.length);
+	if (currentMarkers != null)// && (firstTime == false))
+	{
+		console.log("in here!");
+		for(var i = 0; i < currentMarkers.length; ++i){
+			map.addLayer(currentMarkers[i]);
+			console.log("in here2!");
+			console.log("Current marker "+currentMarkers[i]);
+		}
+	}
+	if (track != null)
+	{
+		console.log(track);
+		console.log("track not null!");
+		map.removeLayer(track);
+		map.removeControl(control);
+	}
+	setLabelsForMainPage();
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setTimeout(function(){
+		map.invalidateSize();
+	},2000);
+	$("#abtnFilterPlaces").show();
+    $("#abtnFilterTour").hide();
+    $('#abtnPlaces').addClass("active");
+    $('#abtnTour').removeClass("active");
+    $('#abtnCurrentPosition').removeClass("active");
 }
 
 function onClickbtnTour()
 {
+	cancelBackButton = false;
 	clearWatch();
 	slideBack();
 	$("#abtnFilterPlaces").hide();
     $("#abtnFilterTour").show();
+    $('#abtnPlaces').removeClass("active");
     $('#abtnTour').addClass("active");
     $('#abtnCurrentPosition').removeClass("active");
-
+//    enableTourButton = true;
     if (track != null)
 	{
     	map.addLayer(track);
-    	map.removeControl(control);
+//    	map.removeControl(control);
     	control = new L.Control.Layers({}, {'Track':track});
     	map.addControl(control);
 	}
@@ -1606,6 +1639,7 @@ function onClickbtnTour()
 
 function submitSelectedPlaces()
 {
+	checked = [];
 	cancelBackButton = false;
 	var descr;
 	if (currentMarkers != null)
@@ -1625,7 +1659,7 @@ function submitSelectedPlaces()
 }
 
 function submitSelectedPlacesEn(){
-	var checked = [];
+//	var descr2;
 	fromselectedplaces = true;
 	console.log("in SubmitSelected En1");
 	$('#placesContent input[type=checkbox]:checked').each(function () {
@@ -1634,15 +1668,15 @@ function submitSelectedPlacesEn(){
 	});
 	setTimeout(function(){
 		console.log("checked.length0= "+checked.length);
-		if (checked.length == 0){
-			console.log("checked.length= "+checked.length);
-			showAllPlaces();
-			$.mobile.changePage($('#mainpage'), 'pop');
-			setTimeout(function(){
-				map.invalidateSize();
-			},2000);
-		}
-		else{
+//		if (checked.length == 0){
+//			console.log("checked.length= "+checked.length);
+////			showAllPlaces();
+//			$.mobile.changePage($('#mainpage'), 'pop');
+//			setTimeout(function(){
+//				map.invalidateSize();
+//			},2000);
+//		}
+//		else{
 			db.transaction(function (tx) {
 				tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
 					var len = results.rows.length, subNew;
@@ -1664,7 +1698,7 @@ function submitSelectedPlacesEn(){
 							var lat2;
 							console.log("in second tx.executeSql");
 							for (var j=0; j<checked.length; j++){
-								//						alert("@: "+checked[j]);
+//								alert("@: "+checked[j]);
 								for (var i = 0; i < len; i++){
 //									console.log("POIEN: "+results.rows.item(i).subcategory);
 									if (checked[j] == results.rows.item(i).subcategory){
@@ -1698,12 +1732,12 @@ function submitSelectedPlacesEn(){
 								}
 							}
 							$.mobile.changePage($('#mainpage'), 'pop');
-							//					map.invalidateSize();
+							$('#abtnPlaces').addClass("active");
 							$("#abtnFilterTour").hide();
-							$("#abtnFilterPlaces").hide();
+							$("#abtnFilterPlaces").show();
 							setTimeout(function(){
 								map.invalidateSize();
-							},1000);
+							},2500);
 							setLabelsForMainPage();
 							$('.options').css({'display':'none'});
 						}, errorCB);
@@ -1711,29 +1745,74 @@ function submitSelectedPlacesEn(){
 				}, errorCB);
 			});
 			console.log("in SubmitSelected En4");
-		}
-	},2500);
-
+//		}
+	},3500);
 }
 
+//function switchToMainPage(email)
+//{
+//	$.mobile.changePage($('#mainpage'), 'pop');
+//	setTimeout(function(){
+//		map.invalidateSize();
+//	},1000);
+//	email = $('#emailaccountchange').val();
+//	console.log("123: "+email);
+//	if ( email == null || email == ''){
+//		$('#emailaccountchange').val(currentEmail);
+//	}
+//	setLabelsForMainPage();
+//	if (fromSettings == true){
+//	    onClickSettings();
+//	    fromSettings = false;
+//	}
+//}
+
 function submitSelectedPlacesGr(){
-	var checked = [];
+	
+	var counter=0;
 	fromselectedplaces = true;
 	console.log("in here!!");
-	$('#placesContent input[type=checkbox]:checked').each(function () {
-		checked.push(this.name);		//push checked items into values list
-		console.log(this.name);
-	});
+//	$('#placesContent input[type=checkbox]:checked').each(function () {
+//		checked.push(this.name);		//push checked items into values list
+//		console.log(this.name);
+//		counter++;
+//	});
+//	$('#placespage input[type=checkbox]').each(function (){
+//		if (this.checked == true){
+//			checked.push(this.name);		//push checked items into values list
+//			console.log("name: "+this.name);
+//		}
+//		});
+//	var countChecked = function() {
+//		var n = $( "input:checked" ).length;
+//		console.log("n are " + n);
+//	};
+//	countChecked();
+//	var $b = $('input[type=checkbox]');
+//    console.log("find "+$b.find(':checked').length); // gives 0
+//    console.log("filter "+$b.filter(':checked').length); // works
+	var checkboxes = document.getElementById('placesContent');
+	console.log(checkboxes.length);
+	for (var w=0; w<checkboxes.length; w++) {
+	     // And stick the checked ones onto an array...
+		console.log("12 "+this.name);
+	     if (checkboxes[w].checked) {
+	    	 console.log("12");
+	    	 checked.push(checkboxes[w]);
+	     }
+	}
 	setTimeout(function(){
-		if (checked.length == 0){
-			console.log("checked.length= "+checked.length);
-			showAllPlaces();
-			$.mobile.changePage($('#mainpage'), 'pop');
-			setTimeout(function(){
-				map.invalidateSize();
-			},2000);
-		}
-		else{
+		console.log("counter: "+counter);
+		console.log("checked.length= "+checked.length);
+//		if (checked.length == 0){
+//			console.log("checked.length= "+checked.length);
+////			showAllPlaces();
+//			$.mobile.changePage($('#mainpage'), 'pop');
+//			setTimeout(function(){
+//				map.invalidateSize();
+//			},2000);
+//		}
+//		else{
 			db.transaction(function (tx) {
 				tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
 					var len = results.rows.length, subNew;
@@ -1763,7 +1842,7 @@ function submitSelectedPlacesGr(){
 											descr = descr.slice(0,140);
 											descr += "...";
 											descr += "<br>";
-											console.log("1231231: "+descr);
+//											console.log("1231231: "+descr);
 										}
 										var poiid = results.rows.item(i).siteid;
 										var poicat = results.rows.item(i).category;
@@ -1788,131 +1867,137 @@ function submitSelectedPlacesGr(){
 							}
 							$.mobile.changePage($('#mainpage'), 'pop');
 //							map.invalidateSize();
+							$('#abtnPlaces').addClass("active");
 							$("#abtnFilterTour").hide();
-							$("#abtnFilterPlaces").hide();
+							$("#abtnFilterPlaces").show();
 							setTimeout(function(){
 								map.invalidateSize();
-							},1000);
+							},2500);
 							setLabelsForMainPage();
 							$('.options').css({'display':'none'});
 						}, errorCB);
 					});
 				}, errorCB);
 			});
-		}
-	},2500);
+//		}
+	},3500);
 }
 
-function showAllPlaces(){
-	if (currentMarkers != null){
-		for(var i = 0; i < currentMarkers.length; ++i)
-		{
-			map.removeLayer(currentMarkers[i]);
-		}
-		currentMarkers = [];
-	}
-	var descr;
-	var lat2;
-	document.getElementById("loading_gif").style.display = "block";
-	if (langstr == 'en'){
-//		alert("lang: en");
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
-				var len = results.rows.length, i;
-//				dataloading();
-				console.log("eep");
-				
-				for (i = 0; i < len; i++){
-					descr = results.rows.item(i).descr;
-					if (descr.length > 140){			//slicing the description to the first 140 charactes.
-						descr = descr.slice(0,140);
-						descr += "...";
-						descr += "<br>";
-//						descr += '';
-					}
-					var poiid = results.rows.item(i).siteid;
-					var poicat = results.rows.item(i).category;
-					var x = results.rows.item(i).lat;
-					var y = results.rows.item(i).long;
-					x = x.replace(x.charAt(2), ".");
-					y = y.replace(y.charAt(2), ".");
-					if (x < 35){
-						var temp = x;
-						x = y;
-						y = temp;
-					}
-					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-					lat2 = results.rows.item(i).lat;
-					if ( lat2.indexOf("\n") == -1){
-						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-								results.rows.item(i).name, descr, results.rows.item(i).category);
-						}
-					}
-//				dataload();
-//				$('#loading_gif').removeClass();
-				console.log("oop");
-				document.getElementById("loading_gif").style.display = "none";
-				}
-			, errorCB);
-		});
-	}
-	else{
-//		alert("lang: gr");
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
-				var len = results.rows.length, i;
-				for (i = 0; i < len; i++){
-					descr = results.rows.item(i).descr;
-					if (descr.length > 140){			//slicing the description to the first 140 charactes.
-						descr = descr.slice(0,140);				
-						descr += "...";
-						descr += "<br>";
-					}
-					var poiid = results.rows.item(i).siteid;
-					var poicat = results.rows.item(i).category;
-					var x = results.rows.item(i).lat;
-					var y = results.rows.item(i).long;
-					x = x.replace(x.charAt(2), ".");
-					y = y.replace(y.charAt(2), ".");
-					if (x < 35){
-						var temp = x;
-						x = y;
-						y = temp;
-					}
-					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-					lat2 = results.rows.item(i).lat;
-					if ( lat2.indexOf("\n") == -1){
-						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-										results.rows.item(i).name, descr, results.rows.item(i).category);
-					}
-				}
-				document.getElementById("loading_gif").style.display = "none";
-			}, errorCB);
-		});
-	}
-}
+//function showAllPlaces(){
+//	if (currentMarkers != null){
+//		for(var i = 0; i < currentMarkers.length; ++i)
+//		{
+//			map.removeLayer(currentMarkers[i]);
+//		}
+//		currentMarkers = [];
+//	}
+//	var descr;
+//	var lat2;
+//	document.getElementById("loading_gif").style.display = "block";
+//	if (langstr == 'en'){
+////		alert("lang: en");
+//		db.transaction(function (tx) {
+//			tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+//				var len = results.rows.length, i;
+////				dataloading();
+//				console.log("eep");
+//				
+//				for (i = 0; i < len; i++){
+//					descr = results.rows.item(i).descr;
+//					if (descr.length > 140){			//slicing the description to the first 140 charactes.
+//						descr = descr.slice(0,140);
+//						descr += "...";
+//						descr += "<br>";
+////						descr += '';
+//					}
+//					var poiid = results.rows.item(i).siteid;
+//					var poicat = results.rows.item(i).category;
+//					var x = results.rows.item(i).lat;
+//					var y = results.rows.item(i).long;
+//					x = x.replace(x.charAt(2), ".");
+//					y = y.replace(y.charAt(2), ".");
+//					if (x < 35){
+//						var temp = x;
+//						x = y;
+//						y = temp;
+//					}
+//					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+//					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+//					lat2 = results.rows.item(i).lat;
+//					if ( lat2.indexOf("\n") == -1){
+//						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+//								results.rows.item(i).name, descr, results.rows.item(i).category);
+//						}
+//					}
+////				dataload();
+////				$('#loading_gif').removeClass();
+//				$('#abtnPlaces').addClass("active");
+//				$("#abtnFilterTour").hide();
+//				$("#abtnFilterPlaces").show();
+//				console.log("oop");
+//				document.getElementById("loading_gif").style.display = "none";
+//				}
+//			, errorCB);
+//		});
+//	}
+//	else{
+////		alert("lang: gr");
+//		db.transaction(function (tx) {
+//			tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+//				var len = results.rows.length, i;
+//				for (i = 0; i < len; i++){
+//					descr = results.rows.item(i).descr;
+//					if (descr.length > 140){			//slicing the description to the first 140 charactes.
+//						descr = descr.slice(0,140);				
+//						descr += "...";
+//						descr += "<br>";
+//					}
+//					var poiid = results.rows.item(i).siteid;
+//					var poicat = results.rows.item(i).category;
+//					var x = results.rows.item(i).lat;
+//					var y = results.rows.item(i).long;
+//					x = x.replace(x.charAt(2), ".");
+//					y = y.replace(y.charAt(2), ".");
+//					if (x < 35){
+//						var temp = x;
+//						x = y;
+//						y = temp;
+//					}
+//					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+//					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+//					lat2 = results.rows.item(i).lat;
+//					if ( lat2.indexOf("\n") == -1){
+//						addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+//										results.rows.item(i).name, descr, results.rows.item(i).category);
+//					}
+//				}
+//				$('#abtnPlaces').addClass("active");
+//				$("#abtnFilterTour").hide();
+//				$("#abtnFilterPlaces").show();
+//				document.getElementById("loading_gif").style.display = "none";
+//			}, errorCB);
+//		});
+//	}
+//}
 
-function showNone()
-{
-//	$('#btnPBack').addClass('ui-disabled');
-//	$('#btnClearAll').addClass('ui-disabled');
-//	$('#btnShowNone').addClass('ui-disabled');
-	if (currentMarkers != null){
-		for(var i = 0; i < currentMarkers.length; ++i)
-		{
-			map.removeLayer(currentMarkers[i]);
-		}
-	}
-	$.mobile.changePage($('#mainpage'), 'pop');
-	setTimeout(function(){
-		map.invalidateSize();
-	},1000);
-	setLabelsForMainPage();
-	$('.options').css({'display':'none'});
-}
-
+//function showNone()
+//{
+////	$('#btnPBack').addClass('ui-disabled');
+////	$('#btnClearAll').addClass('ui-disabled');
+////	$('#btnShowNone').addClass('ui-disabled');
+//	if (currentMarkers != null){
+//		for(var i = 0; i < currentMarkers.length; ++i)
+//		{
+//			map.removeLayer(currentMarkers[i]);
+//		}
+//	}
+//	$.mobile.changePage($('#mainpage'), 'pop');
+//	setTimeout(function(){
+//		map.invalidateSize();
+//	},1000);
+//	setLabelsForMainPage();
+//	$('.options').css({'display':'none'});
+//}
 
 function checkForLanguage()
 {
@@ -1932,6 +2017,7 @@ function checkForLanguage()
 
 function showKmlFile()
 {
+	console.log("in showkmlFile");
 	if (track != null)
 	{
 		map.removeLayer(track);
@@ -1939,15 +2025,17 @@ function showKmlFile()
 	}
 	if (currentMarkers != null)
 	{
-		for(var i = 0; i < currentMarkers.length; ++i)
+		for (var i = 0; i < currentMarkers.length; ++i)
 		{
 			map.removeLayer(currentMarkers[i]);
 		}
 //		currentMarkers = [];
 	}
+	console.log("itId "+itId+" dd "+dd);
 	var localtour;
 	var kmlPath;
 	kmlPath = 'kml/itinerary_'+itId+'_'+dd+'.kml';
+//	kmlPath = 'file:///mnt/sdcard/itinerary_'+itId+'_'+dd+'.kml';
 	console.log("kmlPath: "+kmlPath);
 //	var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	track = new L.KML(kmlPath, {async: true});
@@ -1992,7 +2080,8 @@ function loadItinerariesfromPortal()
 	checkForLanguage();
     $('#abtnTour5').addClass("active");
     $('#abtnCurrentPosition5').removeClass("active");
-    $('#abtnExit5').removeClass("active");
+    $('#abtnPlaces5').removeClass("active");
+//    $('#abtnExit5').removeClass("active");
     $('.options').css({'display':'none'});
 	document.getElementById('btnSaveChanges5').innerHTML= MyApp.resources.SaveChanges;
 //	document.getElementById('btnLoad5').innerHTML= MyApp.resources.Load;
@@ -2194,9 +2283,9 @@ function loadItineraries()
 			$('#itinerarypage').trigger('pagecreate');     
 			customHeader(3);
 			$('#abtnTour3').addClass("active");
-//			$('#abtnPlaces3').removeClass("active");
+			$('#abtnPlaces3').removeClass("active");
 			$('#abtnCurrentPosition3').removeClass("active");
-			$('#abtnExit3').removeClass("active");
+//			$('#abtnExit3').removeClass("active");
 			$('.options').css({'display':'none'});
 			document.getElementById('btnSaveChanges3').innerHTML= MyApp.resources.SaveChanges;
 			document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;
@@ -2238,15 +2327,43 @@ function loadFromPortal(email)
 				console.log('inside1');
 				if(data != '')
 				{
-					console.log('inside2');
-					for (var i in data) 
-					{
-						$('#portalItineraries').append("<label style='margin-top:10px;' for='chk_"+data[i].ItineraryId+"'>"
-								+ data[i].ItineraryTitle +"</label><input name='"+data[i].ItineraryId+"' id='chk_"
-								+data[i].ItineraryId+"' class='custom' type='checkbox' value='"+ data[i].ItineraryTitle +"' />" );
+					console.log('inside2 '+data);
+					for (var i in data) {
+						   var ic=data[i].ItineraryId;
+						   console.log(ic);
+//						   if(json.elements[i].Days=="0"){ic="_"+ic;}
+//						   ibcont = json.elements[i].Title;//alert(ic);
+//						   AddMarker(json.elements[i].Lat, json.elements[i].Lng, ic, ibcont,map);
+//						  }
+					
+//						$('#portalItineraries').append("<label style='margin-top:10px;' for='chk_"+data[i].ItineraryId+"'>"
+//						+ data[i].ItineraryTitle +"</label><input name='"+data[i].ItineraryId+"' id='chk_"
+//						+data[i].ItineraryId+"' class='custom' type='checkbox' value='"+ data[i].ItineraryTitle +"' />" );
+//						$('#portalItineraries').append('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right" id="'
+//						+ i +"onClick="+loadXmlFromPortal()+
+////						"</label><input name='"+data[i].ItineraryId+"' id='chk_"
+////						+data[i].ItineraryId+"' class='custom' type='checkbox' value='"+ data[i].ItineraryTitle +
+//						"' />" );
+						$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right" id="'
+								+data[i].ItineraryId+'" >'+data[i].ItineraryTitle+'</a>').click(function() {
+//									j = $(this).attr("id");
+//									loadXmlFromPortal(j);
+									console.log($(this).attr("id"));
+									getFilesFromPortal($(this).attr("id"));
+								}).appendTo($('#portalItineraries'));
 					}
+					$('#portalItineraries').trigger('create');
+//					$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right"id="'
+//							+results.rows.item(k).pointcode+"|"+results.rows.item(k).coordinates+'" >'
+//							+results.rows.item(k).pointname+'</a>').click(function() {
+//								j = $(this).attr("id");
+//								loadCoordinates(j);
+//								}).appendTo($('#availablePois'));
+//					$('#availablePois').trigger('create');
+//					<a data-role="button" data-iconpos="right" data-icon="arrow-r" class="ui-disabled" id="abtnLoadSelected" href="#" 
+//						onClick="loadXmlFromPortal()"><span  id="btnLoadSelected"></span></a>
 //					$('#abtnLoadSelected').removeClass('ui-disabled');
-					$('#itineraryportalpage').trigger('pagecreate');
+//					$('#itineraryportalpage').trigger('pagecreate');
 				}
 				else
 				{
@@ -2284,23 +2401,104 @@ function getFilesFromPortal(id)
 		data:"{}",
 		success: function(data) {
 			var xmlFile = data.Xmlfile;
+			var kmlFile = data.Kmlfile;
 			var filename = data.Itinerary.ItineraryTitle + "_" + data.Itinerary.ItineraryId + ".xml";
-			fileWrite(filename, xmlFile);
+//			fileWrite(filename, xmlFile);
 			for (i in data.Kmlfiles)
 			{
 				var kmlFile = data.Kmlfiles[i];
+//				console.log("kmlFile "+kmlFile.toString());
+//				console.log("kmlFile2 "+kmlFile.valueOf());
+				
+				var kmlFile2;
+				kmlFile2 = JSON.stringify(kmlFile);
+				console.log("json2.js1: "+kmlFile2);
+//				console.log("json2.js: "+kmlFile2);
+				var o=kmlFile2.indexOf('Xmlfile:');
+				console.log("o "+o);
+				var n=kmlFile2.lastIndexOf("/kml");
+				console.log("n "+n);
+//				console.log(x.substring(15, n+5));
+//				console.log(x.slice(n+11));
+				kmlFile2 = kmlFile2.substring(o+8, n+5);
+				console.log("json2.js: "+kmlFile2);
 				filename =  data.Kmlfiles[i].Kmlfilename;
-				fileWrite(filename, kmlFile);
+				fileWrite(filename, kmlFile2);
+				
 			}
+			console.log("123 "+xmlFile);
+			popItinerariesDb3(xmlFile,id);
+//			console.log("345 "+kmlFile);
 		},
 		error: function () {
-			alert("Could not get files from Portal");
+			alert(MyApp.resources.CouldNotGetFilesFromPortal);
 		}
+	});
+}
+
+function fileWrite(filePath, text)
+{
+	var onFSWin = function(fileSystem) {
+		fileSystem.root.getFile(filePath, {create: true, exclusive: false}, onGetFileWin, onFSFail);
+	};
+
+	var onGetFileWin = function(fileEntry) {
+		fileEntry.createWriter(gotFileWriter, onFSFail);
+	};
+
+	var gotFileWriter = function(writer) {
+		writer.write(text);
+	};
+
+	var onFSFail = function(error) {
+		alert('error');
+	};
+
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSWin, onFSFail);
+}
+
+function popItinerariesDb3(xmlDoc,id2){
+	var title;
+	var user;
+	var id;
+	var pointCode;
+	var pointName;
+	var duration;
+	var day;
+	var coords;
+	db.transaction(function(tx){
+		title = $(xmlDoc).find("It_Title").text();
+		user = $(xmlDoc).find("User").text();
+//		id = $(xmlDoc).find("Itinerary").attr("id");
+		id = id2;
+		console.log("--1 "+id+user+title);
+		$(xmlDoc).find("Point").each(function(){
+//			day.push($(this).parent().parent().attr("Kml"));
+			day = $(this).parent().parent().attr("Kml");
+//			pointCode.push(($(this).attr("Code")));
+			pointCode = $(this).attr("Code");
+//			pointName.push(($(this).text()));
+			$(this).find('Title').each(function(){
+				pointName = $(this).text();
+			});
+//			pointName = $(this).children().text();
+//			duration.push(($(this).parent().parent().text()).slice(2,10));
+			console.log("1 "+duration);
+			duration = $(this).parent().parent().text().slice(0,10);
+			console.log("2 "+duration);
+			itActive = 0;
+			itCompleted = 0;
+			console.log("--- "+id+title+user+day+pointCode+pointName+coords+duration+itActive+itCompleted);
+			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
+					,[id,title,user,day,pointCode,pointName,coords,duration,itActive,itCompleted], successCB, error12CB);
+		});
+		loadEachItineraryPage(id);
 	});
 }
 
 function loadEachItineraryPage(id)
 {
+	console.log("in loadEachItineraryPage");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results){
 			var len = results.rows.length;
@@ -2349,6 +2547,7 @@ function showAvailableDays(id)
 	//$('#availablePois').text('');
 	document.getElementById('availablePois').innerHTML='';
 	$('#availableDays').text('');
+	console.log("in showAvailableDays");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
 			var len = results.rows.length;
@@ -2364,6 +2563,7 @@ function showAvailableDays(id)
 				if (day[j] != day[j-1]){
 					$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'
 							+day[j-1]+'" value="'+day[j-1]+'"/><label for="'+day[j-1]+'">'+"Day "+day[j-1]+'</label>');
+					console.log("day[j-1] "+day[j-1]);
 				}
 			}
 			$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'+day[j-1]+
@@ -2378,13 +2578,15 @@ function showAvailableDays(id)
 //								+results.rows.item(k).pointcode+'">'+results.rows.item(k).pointname+" | Visited"+'</label>');
 //						$('#availablePois').trigger('create');
 //						$('<a id="'+results.rows.item(k).pointcode+"|"+results.rows.item(k).coordinates+'" href="#">'
+						console.log("999 "+results.rows.item(k).pointcode+results.rows.item(k).coordinates
+								+results.rows.item(k).pointname);
 						$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right"id="'
 								+results.rows.item(k).pointcode+"|"+results.rows.item(k).coordinates+'" >'
-								+results.rows.item(k).pointname+'</a>')
-						.click(function() {
-							j = $(this).attr("id");
-							loadCoordinates(j);
-							}).appendTo($('#availablePois'));
+								+results.rows.item(k).pointname+'</a>').click(function() {
+									j = $(this).attr("id");
+									loadCoordinates(j);
+									}).appendTo($('#availablePois'));
+						$('#availablePois').trigger('create');
 						var y=k;
 					}
 				}
@@ -2401,9 +2603,9 @@ function showAvailableDays(id)
 			$('#eachitinerarypage').trigger('pagecreate');
 			customHeader(4);
 		    $('#abtnTour4').addClass("active");
-//		    $('#abtnPlaces4').removeClass("active");
+		    $('#abtnPlaces4').removeClass("active");
 		    $('#abtnCurrentPosition4').removeClass("active");
-		    $('#abtnExit4').removeClass("active");
+//		    $('#abtnExit4').removeClass("active");
 			$('#availablePois').trigger('create');
 			$('#availableDays').trigger('create');
 			document.getElementById('btnSaveChanges4').innerHTML= MyApp.resources.SaveChanges;
@@ -2439,15 +2641,15 @@ function loadCoordinates(k)
 //	});
 //}
 
-function initializePoints(xmlTourDoc){
-	var routeid = $(xmlTourDoc).filter(":first").attr("id");
-	$(xmlTourDoc).find('Point').each(function(){
-		var code = $(this).attr("Code");
-		db.transaction(function(tx){
-			tx.executeSql('INSERT INTO POINTS(id, Id_Portal, routeId, isActive, visited) VALUES (?,?,?,?,?)',[code,0,routeid,0,0], successCB, errorCB);
-		});
-	});
-}
+//function initializePoints(xmlTourDoc){
+//	var routeid = $(xmlTourDoc).filter(":first").attr("id");
+//	$(xmlTourDoc).find('Point').each(function(){
+//		var code = $(this).attr("Code");
+//		db.transaction(function(tx){
+//			tx.executeSql('INSERT INTO POINTS(id, Id_Portal, routeId, isActive, visited) VALUES (?,?,?,?,?)',[code,0,routeid,0,0], successCB, errorCB);
+//		});
+//	});
+//}
 
 function checkSettingsDB(){
 	var msg;
@@ -2622,11 +2824,28 @@ function getMoreInfo(poiid, categid)
 {
 	var lang = 'en';
 	if (langstr=='gr') {lang='el';}
-		
+//	fillhtml = '';
 	if (isOffline){
+		console.log("1");
 		alert(MyApp.resources.UserMustBeOnLine);
 		console.log("inGetMoreInfo - Offline");
-
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<checked.length; j++){
+					var x = results.rows.item(i).siteid;
+					var y = results.rows.item(i).category;
+					if ((poiid == x) && (categid == y)){
+						var completeDescr = results.rows.item(j).descr;
+//						descr = results.rows.item(i).descr;
+						console.log(completeDescr);
+//						$(<a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a>).
+//						appendTo($("#popupBasic"));
+						$("#popupBasic").html(completeDescr);
+					}
+				}
+			});
+		});
 	}
 	else
 	{
@@ -2656,7 +2875,6 @@ function clearWatch() {
     }
 }
 
-
 function loadURL(url){
     navigator.app.loadUrl(url, { openExternal:true });
     return false;
@@ -2664,12 +2882,18 @@ function loadURL(url){
 
 function exitApplication()
 {
-	if(navigator.app)
-	{
-		navigator.app.exitApp();
+	var r=confirm(MyApp.resources.ExitApp);
+	if (r==true){
+		if(navigator.app)
+		{
+			navigator.app.exitApp();
+		}
+		else if(navigator.device)
+		{
+			navigator.device.exitApp();
+		}
 	}
-	else if(navigator.device)
+	else
 	{
-		navigator.device.exitApp();
 	}
 }

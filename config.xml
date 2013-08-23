@@ -74,7 +74,7 @@
     <plugin name="Echo" value="org.apache.cordova.Echo" />
     <plugin name="Globalization" value="org.apache.cordova.Globalization"/>
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
-    
+    <plugin name="Version" value="com.phonegap.plugins.Version"/>
     <!--
         <gap:plugin name="Example" />
         A list of available plugins are available at https://build.phonegap.com/docs/plugins

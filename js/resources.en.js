@@ -7,7 +7,7 @@ var enResources = {
 		PBack:"Ok",
 		ImportantEmail:"some comments",
 		CurrentPosition:"Position",
-		Places:"Places",
+		Places:"Search",
 		Settings:"Settings",
 		Tour:"Tour",
 		SettingsHeading:"Change your settings",
@@ -37,5 +37,9 @@ var enResources = {
 		CouldNotLoadItineraries:"Couldn't find itineraries for the specified email address",
 		Hide:"hide",
 		ShowPlaces:"Places near you",
-		placesPageHeader:"Select the category of places you would like to show on map"
+		placesPageHeader:"Select the category of places you would like to show on map",
+		AwayFromKos:"Your current location is outside the island of Kos",
+		ExitApp:"Are you sure you want to exit?",
+		NoLocation:"Could not get your location",
+		CouldNotGetFilesFromPortal:"Could not get files from portal"
 };
