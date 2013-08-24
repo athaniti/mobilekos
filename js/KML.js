@@ -16,19 +16,39 @@ L.KML = L.FeatureGroup.extend({
     },
 
     loadXML: function(url, cb, options, async) {
-        if (async == undefined) async = this.options.async;
-        if (options == undefined) options = this.options;
-
-        var req = new window.XMLHttpRequest();
-        req.open('GET', url, async);
-        try {
-            req.overrideMimeType('text/xml'); // unsupported by IE
-        } catch(e) {}
-        req.onreadystatechange = function() {
-            if (req.readyState != 4) return;
-            if(req.status == 200) cb(req.responseXML, options);
-        };
-        req.send(null);
+//        if (async == undefined) async = this.options.async;
+//        if (options == undefined) options = this.options;
+//        /*
+    	var req = new XMLHttpRequest();
+    	req.open("GET", url, false);
+    	req.setRequestHeader('Content-Type', 'text/xml');
+    	req.send("");
+    	if ((req.status != 200) && (req.status != 0)){
+    		alert("Error loading Xml file4: "+ req.status);
+    	}
+    	cb(req.responseXML, options);
+    	console.log("1");
+//    	_addKML(xmlDoc4,options);
+    	
+//    	*/
+//        var req = new XMLHttpRequest();
+//        req.open('GET', url, async);
+//        try {
+//            req.overrideMimeType('text/xml'); // unsupported by IE
+//            console.log("in KML try");
+//        } catch(e) {console.log("in KML catch");}
+//        req.onreadystatechange = function() {
+//        	console.log("in onreadystatechange ");
+//            if (req.readyState != 4) {
+//            	console.log("req.readyState "+req.readyState);
+//            	console.log("req.status "+req.status);
+//            	return;}
+//            if(req.status == 200) {
+//            	console.log("req.status "+req.readyState);
+//            	cb(req.responseXML, options);
+//            	}
+//        };
+//        req.send(null);
     },
 
     addKML: function(url, options, async) {
@@ -57,6 +77,7 @@ L.KML = L.FeatureGroup.extend({
 L.Util.extend(L.KML, {
 
     parseKML: function (xml) {
+    	console.log("in Parsing");
         var style = this.parseStyle(xml);
         var el = xml.getElementsByTagName("Folder");
         var layers = [], l;

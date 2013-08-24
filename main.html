@@ -18,16 +18,16 @@
 <script src="dist/leaflet-src051.js"></script>
 <link rel="stylesheet" type="text/css" href="dist/leaflet051.css">
 <script src="js/cordova.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/version.js"></script>
 <script src="js/common.js"></script>
 <script src="js/json2.js"></script>
 <script src="js/main.js"></script>
 <script src="js/Control.Loading.js"></script>
 <script src="js/KML.js"></script>
-<script src="js/GPX.js"></script>
+<!-- script src="js/GPX.js"></script-->
 <script src="js/resources.default.js"> </script>
 <script src="js/resources.gr.js"> </script> 
 <script src="js/resources.en.js"> </script>
+<script src="js/version.js"></script>
 <script type="text/css">
 	html {width:95%, height:100%}
 	body {width:95%, height:100%}
@@ -118,7 +118,7 @@
 				<label for="emailaccount" id="lblemailaccount"></label>
 				<input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" />
 			</div>
-			<div class="button orange small">
+			<div class="button small orange">
 				<a href="#" onClick = "backToMainPage();"><span id="btnSaveChanges"> </span></a>
 			</div>
 		</div>
@@ -299,7 +299,7 @@
 		<div class="container">
 	 		<span id="lblnotavailablefiles"></span>
 	 		
-	 		<div id="availableFiles" class="button blue">
+	 		<div id="availableFiles">
 			</div>
 			<div class="button orange">
 				<a href="#" id="abtnLoadfromportal" onClick="loadItinerariesfromPortal()"><span  id="btnLoadfromportal"></span></a>

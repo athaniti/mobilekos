@@ -14,7 +14,7 @@ var grResources = {
         LanguageSelect:"Γλώσσα:",
         EmailAccount:"Λογαριασμός Email:",
         EmailAccountPlaceholder:"λογαριασμός email",
-        FilterTour:"Φόρτωση Περιήγησης",
+        FilterTour:"Επιλογή Περιήγησης",
         LoadAvailableTour:"Φόρτωση Διαθέσιμων Περιηγήσεων",
         LoadPortalTour:"Φόρτωση Περιηγήσεων από Portal",
         FilterPlaces:"Φίλτρα Σημείων",
@@ -39,5 +39,6 @@ var grResources = {
 		AwayFromKos:"Η θέση σας είναι εκτός ορίων του νησιού της Κω",
 		ExitApp:"Έξοδος από την εφαρμογή;",
 		NoLocation:"Δεν βρέθηκε η τοποθεσία σας",
-		CouldNotGetFilesFromPortal:"Η επικοινωνία με τον server απέτυχε"
+		CouldNotGetFilesFromPortal:"Η επικοινωνία με τον server απέτυχε",
+		UpdateApp:"Υπάρχει νέα έκδοση της εφαρμογής. Θέλετε να την κατεβάσετε;"
 };
