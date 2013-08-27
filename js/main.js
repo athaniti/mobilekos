@@ -3,12 +3,14 @@ var map;
 var firstTime = true;
 var basemap;
 var screenHeight;
+var screenWidth;
 var currentTimestamp = [];
 var currentLat;
 var currentLong;
 var text2;
 var updateAppUrl;
 var currentVersionCode;
+var testname, testdescr, testwebsite, testaddress,testplace,testphone,testemail;
 var platformName;
 var watchClear = false;
 var marker1;
@@ -138,7 +140,7 @@ function checkLanguageSettings()
 				setTimeout(function(){
 //					firstSwitchToMainPage();
 					firstSwitchToPlacesPage();
-				},500);
+				},2500);
 			}
 		},success13CB, error13CB);
 //		populateDB();
@@ -196,12 +198,10 @@ function createCatArraysEn(){
 
 function createCatArraysGr(){
 	catNameGr = [];
-	catGuid = [];
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT name FROM CATEGORIESGR', [], function (tx, results) {
 			for (var i = 0; i < results.rows.length; i++){
 				catNameGr.push(results.rows.item(i).name);
-//				catGuid.push(results.rows.item(i).id);
 			}
 		}, error9CB);
 	});
@@ -210,6 +210,7 @@ function createCatArraysGr(){
 function createSubCatArraysEn(){
 	sCatId = [];
 	snameEn = [];
+	sId = [];
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
 			for (var i = 0; i < results.rows.length; i++){
@@ -255,7 +256,7 @@ function success13CB(){
 	console.log("success13CB");
 	setTimeout(function(){
 		switchToSecondPage();
-	},3000);
+	},4000);
 	showPlacesInfo = true;
 //	createDb();
 }
@@ -658,7 +659,7 @@ function downloadXmlFiles(){
 		dataType: "json",
 //		url:  baseapiurl+"/basefile",
 //		contentType: "application/json; charset=utf-8",
-		url: "http://ath.dataverse.gr:18090/api/basefile",
+		url: baseapiurl+"basefile",
 		type: "GET",
 		async: true,
 		data: "{}",
@@ -1289,43 +1290,44 @@ function addGroupMarker(x, y, name, descr, categ)
 	var marker;
 	var markerLocation = new L.LatLng(x, y);
 	categ = $.trim(categ);
+	var x = screenWidth;
 	switch (categ)
 	{
 	case "1":
 		marker = new L.Marker(markerLocation, {icon: MarkerShopping}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "2":
 		marker = new L.Marker(markerLocation, {icon: MarkerSights}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "3":
 		marker = new L.Marker(markerLocation, {icon: MarkerAccommodation}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "4":
 		marker = new L.Marker(markerLocation, {icon: MarkerActivities}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "5":
 		marker = new L.Marker(markerLocation, {icon: MarkerSea}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "6":
 		marker = new L.Marker(markerLocation, {icon: MarkerTransport}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "8":
 		marker = new L.Marker(markerLocation, {icon: MarkerFood}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	case "10":
 		marker = new L.Marker(markerLocation, {icon: MarkerEntertainment}).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	default:
 		marker = new L.Marker(markerLocation).addTo(map)
-							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>");
+							.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 	}
     map.addLayer(marker);
     currentMarkers.push(marker);
@@ -1749,7 +1751,7 @@ function submitSelectedPlacesEn(){
 		console.log("name: "+this.name);
 		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
-			console.log("name: "+this.name);
+			console.log("name222: "+this.name);
 		}
 //		if (this.checked) {
 //			checked.push($(this).val());
@@ -2804,12 +2806,11 @@ HelloWorldFunction = function () {
 
 function SetElementHeight(){
 	screenHeight=$('.ui-mobile').outerHeight(true);
-	var w=$('.ui-mobile').outerWidth(true);
+	screenWidth=$('.ui-mobile').outerWidth(true);
 	console.log("outerHeight= "+ screenHeight);
-	console.log("outerWidth= "+ w);
+	console.log("outerWidth= "+ screenWidth);
 	$('#map').css('height',screenHeight-85);
-	$('#map').css('width',w);
-
+	$('#map').css('width',screenWidth);
 }
 	$(window).bind('orientationchange resize', function(event,ui){
 	 SetElementHeight();
@@ -2848,7 +2849,7 @@ function getMoreInfo(poiid, categid)
 		console.log("catid: "+ categid);
 		console.log("inGetMoreInfo - Offline");
 		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIEN WHERE siteid = "'+poiid+'" AND category = "'+categid+'"', [], function (tx, results) {
+			tx.executeSql('SELECT * FROM POIEN WHERE siteid ="312" AND category="8"', [], function (tx, results) {
 //				var len = results.rows.length;
 //				for (var j=0; j<len; j++){
 //					var x = results.rows.item(j).siteid;
@@ -2859,19 +2860,29 @@ function getMoreInfo(poiid, categid)
 //						console.log(completeDescr);
 				var j=0;
 //				var completeDescr = results.rows.item(j).descr;
-						slideen(results.rows.item(j).name, results.rows.item(j).descr, results.rows.item(j).website, results.rows.item(j).address, 
-								results.rows.item(j).place, results.rows.item(j).phone, results.rows.item(j).email);
+//				testname =results.rows.item(j).name;
+//				testdescr=results.rows.item(j).descr;
+//				testwebsite=results.rows.item(j).website;
+//				testaddress=results.rows.item(j).address;
+//				testplace=results.rows.item(j).place;
+//				testphone=results.rows.item(j).phone;
+//				testemail=results.rows.item(j).email;
+				setTimeout(function(){
+					slidegr(results.rows.item(j).name, results.rows.item(j).descr, results.rows.item(j).website, results.rows.item(j).address, 
+							results.rows.item(j).place, results.rows.item(j).phone, results.rows.item(j).email);
+				},2500);
 //						$(<a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a>).
 //						appendTo($("#popupBasic"));
 //						$("#popupBasic").html(completeDescr);
 //					}
 //				}
-			});
+			},errorCCB());
 		});
+//		slideen(testname,testdescr,	testwebsite,testaddress,testplace,	testphone,	testemail	);
 	}
 	else{
 		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIGR WHERE siteid = "'+poiid+'" AND category = "'+categid+'"', [], function (tx, results) {
+			tx.executeSql('SELECT * FROM POIGR WHERE siteid ="'+poiid+'" AND category ="'+categid+'"', [], function (tx, results) {
 //				var len = results.rows.length;
 //				for (var j=0; j<len; j++){
 //					var x = results.rows.item(j).siteid;
@@ -2881,29 +2892,46 @@ function getMoreInfo(poiid, categid)
 ////						descr = results.rows.item(i).descr;
 //						console.log(completeDescr);
 				var j=0;
+//				testname =results.rows.item(j).name;
+//				testdescr =results.rows.item(j).descr;
+//				testwebsite =results.rows.item(j).website;
+//				testaddress =results.rows.item(j).address;
+//				testplace =results.rows.item(j).place;
+//				testphone =results.rows.item(j).phone;
+//				testemail =results.rows.item(j).email;
 //				var completeDescr = results.rows.item(j).descr;
-				slidegr(results.rows.item(j).name, results.rows.item(j).descr, results.rows.item(j).website, results.rows.item(j).address, 
-						results.rows.item(j).place, results.rows.item(j).phone, results.rows.item(j).email);
+				setTimeout(function(){
+					slidegr(results.rows.item(j).name, results.rows.item(j).descr, results.rows.item(j).website, results.rows.item(j).address, 
+							results.rows.item(j).place, results.rows.item(j).phone, results.rows.item(j).email);
+				},2500);
+				
 //						$(<a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a>).
 //						appendTo($("#popupBasic"));
 //						$("#popupBasic").html(completeDescr);
 //					}
 //				}
-			});
+			},errorCCB());
 		});
+//	slidegr(testname,testdescr,	testwebsite,testaddress,testplace,	testphone,	testemail	);
 	}
+}
+
+function errorCCB(err){
+	console.log("error errorCCB "+err);
 }
 
 function slideen(name, descr, web, add, place, phone, email)
 {
 	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
 	var fillhtml ='';
-	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>link: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 				+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
 	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
 	$("#inner").html(fillhtml);
 	console.log("inSlide");
-	$('.inner_wrap').addClass('active');
+	var objDiv = document.getElementById("innner");
+//	objDiv.scrollTop = objDiv.scrollHeight;
+//	$('.inner_wrap').addClass('active');
 }
 
 function slidegr(name, descr, web, add, place, phone, email)
@@ -2915,7 +2943,9 @@ function slidegr(name, descr, web, add, place, phone, email)
 	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
 	$("#inner").html(fillhtml);
 	console.log("inSlide");
-	$('.inner_wrap').addClass('active');	
+	var objDiv = document.getElementById("innner");
+//	objDiv.scrollTop = objDiv.scrollHeight;
+//	$('.inner_wrap').addClass('active');	
 }
 
 function slideBack()
