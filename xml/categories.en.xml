@@ -1,36 +1,30 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Categories>
   <timestamp>1377088133</timestamp>
-  <Category id="1" guid="7c8dfb8f-a160-459f-965f-8fd5c209db80">
-    <Name>Shopping</Name>
-    <Subcategories><Subcategory id="1_1">
-        <Name>Shopping</Name>
-      </Subcategory>
-    </Subcategories>
-  </Category>
-  <Category id="2" guid="8a07f556-98f2-4b84-a4fd-67eb2472c20e">
-    <Name>Sights</Name>
+  
+  <Category id="5" guid="34d09bb3-790f-41ca-91ae-675a91c2e5a6">
+    <Name>Sea</Name>
     <Subcategories>
-      <Subcategory id="2_1">
-        <Name>Archaeological Site</Name>
+      <Subcategory id="5_1">
+        <Name>Beaches</Name>
       </Subcategory>
-      <Subcategory id="2_2">
-        <Name>Monument</Name>
+      <Subcategory id="5_2">
+        <Name>Marinas and Moorings</Name>
       </Subcategory>
-      <Subcategory id="2_3">
-        <Name>Museum</Name>
+      <Subcategory id="5_3">
+        <Name>Sailing and Yacht</Name>
       </Subcategory>
-      <Subcategory id="2_4">
-        <Name>Cultural Space</Name>
+      <Subcategory id="5_4">
+        <Name>Cruises</Name>
       </Subcategory>
-      <Subcategory id="2_5">
-        <Name>Church</Name>
+	  <Subcategory id="5_5">
+        <Name>Diving</Name>
       </Subcategory>
-      <Subcategory id="2_6">
-        <Name>Monastery</Name>
+	  <Subcategory id="5_6">
+        <Name>Water Sports</Name>
       </Subcategory>
-      <Subcategory id="2_7">
-        <Name>Site of Interest</Name>
+	  <Subcategory id="5_7">
+        <Name>Water Parks</Name>
       </Subcategory>
     </Subcategories>
   </Category>
@@ -38,44 +32,16 @@
     <Name>Accommodation</Name>
     <Subcategories>
       <Subcategory id="3_1">
-        <Name>Hotel</Name>
+        <Name>Hotels</Name>
       </Subcategory>
       <Subcategory id="3_2">
-        <Name>Rent Room</Name>
+        <Name>Rental Rooms</Name>
       </Subcategory>
       <Subcategory id="3_3">
-        <Name>Rent House</Name>
+        <Name>Rental Houses</Name>
       </Subcategory>
       <Subcategory id="3_4">
-        <Name>Office rental</Name>
-      </Subcategory>
-    </Subcategories>
-  </Category>
-  <Category id="4" guid="da559931-882f-48ec-b82d-4cdeada4afd2">
-    <Name>Activities</Name>
-    <Subcategories>
-      <Subcategory id="4_1">
-        <Name>Activity</Name>
-      </Subcategory>
-      <Subcategory id="4_2">
-        <Name>Business</Name>
-      </Subcategory>
-    </Subcategories>
-  </Category>
-  <Category id="5" guid="34d09bb3-790f-41ca-91ae-675a91c2e5a6">
-    <Name>Sea</Name>
-    <Subcategories>
-      <Subcategory id="5_1">
-        <Name>Beach</Name>
-      </Subcategory>
-      <Subcategory id="5_2">
-        <Name>Marina</Name>
-      </Subcategory>
-      <Subcategory id="5_3">
-        <Name>Business</Name>
-      </Subcategory>
-      <Subcategory id="5_4">
-        <Name>Cruise</Name>
+        <Name>Rental Agencies</Name>
       </Subcategory>
     </Subcategories>
   </Category>
@@ -83,50 +49,125 @@
     <Name>Transport</Name>
     <Subcategories>
       <Subcategory id="6_1">
-        <Name>Transport Means Rental Office</Name>
+        <Name>Car Rentals</Name>
       </Subcategory>
       <Subcategory id="6_2">
-        <Name>TAXI</Name>
+        <Name>Motorcycle Rentals</Name>
       </Subcategory>
       <Subcategory id="6_3">
-        <Name>Travel Agency</Name>
+        <Name>Bike Rentals</Name>
+      </Subcategory>
+	  <Subcategory id="6_4">
+        <Name>TAXI</Name>
+      </Subcategory>
+	  <Subcategory id="6_5">
+        <Name>Travel Agencies</Name>
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="7" guid="69e29445-50c2-4a37-a73f-c6ae7a1f193e">
-    <Name>Regions</Name>
-    <Subcategories />
+  <Category id="2" guid="8a07f556-98f2-4b84-a4fd-67eb2472c20e">
+    <Name>Sights</Name>
+    <Subcategories>
+      <Subcategory id="2_1">
+        <Name>Archaelogical Sites and Monuments</Name>
+      </Subcategory>
+      <Subcategory id="2_2">
+        <Name>Museums</Name>
+      </Subcategory>
+      <Subcategory id="2_3">
+        <Name>Churches and Monasteries</Name>
+      </Subcategory>
+      <Subcategory id="2_4">
+        <Name>Venues of Culture</Name>
+      </Subcategory>
+      <Subcategory id="2_5">
+        <Name>Sites of Interest</Name>
+      </Subcategory>
+    </Subcategories>
   </Category>
-  <Category id="8" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
+  <Category id="7" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
     <Name>Food and Fun</Name>
     <Subcategories>
+      <Subcategory id="7_1">
+        <Name>Restaurants</Name>
+      </Subcategory>
+      <Subcategory id="7_2">
+        <Name>Cafes</Name>
+      </Subcategory>
+      <Subcategory id="7_3">
+        <Name>Night Clubs</Name>
+      </Subcategory>
+    </Subcategories>
+  </Category>
+  <Category id="4" guid="da559931-882f-48ec-b82d-4cdeada4afd2">
+    <Name>Activities</Name>
+    <Subcategories>
+      <Subcategory id="4_1">
+        <Name>Hiking</Name>
+      </Subcategory>
+      <Subcategory id="4_2">
+        <Name>Cycling</Name>
+      </Subcategory>
+	  <Subcategory id="4_3">
+        <Name>Relax Centers</Name>
+      </Subcategory>
+	  <Subcategory id="4_4">
+        <Name>Fitness Centers</Name>
+      </Subcategory>
+	  <Subcategory id="4_5">
+        <Name>Sports Centers</Name>
+      </Subcategory>
+    </Subcategories>
+  </Category>
+  <Category id="1" guid="7c8dfb8f-a160-459f-965f-8fd5c209db80">
+    <Name>Shopping</Name>
+    <Subcategories>
+	  <Subcategory id="1_1">
+        <Name>Souvenir Shops</Name>
+      </Subcategory>
+	  <Subcategory id="1_2">
+        <Name>Local Markets</Name>
+      </Subcategory>
+	  <Subcategory id="1_3">
+        <Name>Bakeries</Name>
+      </Subcategory>
+	  <Subcategory id="1_4">
+        <Name>Super Markets</Name>
+      </Subcategory>
+	  <Subcategory id="1_5">
+        <Name>Greengrocers</Name>
+      </Subcategory>
+    </Subcategories>
+  </Category>
+  <Category id="8" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
+    <Name>General Information</Name>
+    <Subcategories>
       <Subcategory id="8_1">
-        <Name>Restaurant</Name>
+        <Name>Public Services</Name>
       </Subcategory>
-      <Subcategory id="8_2">
-        <Name>Coffee Shop</Name>
+	  <Subcategory id="8_2">
+        <Name>Health Clinics</Name>
       </Subcategory>
-      <Subcategory id="8_3">
-        <Name>NightClub</Name>
+	  <Subcategory id="8_3">
+        <Name>Dispensaries</Name>
       </Subcategory>
-    </Subcategories>
-  </Category>
-  <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
-    <Name>Information Guide</Name>
-    <Subcategories>
-      <Subcategory id="9_1">
-        <Name>Information Guide</Name>
+	  <Subcategory id="8_4">
+        <Name>Pharmacies</Name>
       </Subcategory>
-    </Subcategories>
-  </Category>
-  <Category id="10" guid="dc8e324a-aab7-4769-927b-cd98e24dde95">
-    <Name>Entertainment</Name>
-    <Subcategories>
-      <Subcategory id="10_1">
-        <Name>Event</Name>
+	  <Subcategory id="8_5">
+        <Name>Currency Exchange</Name>
       </Subcategory>
-      <Subcategory id="10_2">
-        <Name>Permanent Event</Name>
+	  <Subcategory id="8_6">
+        <Name>Banks</Name>
+      </Subcategory>
+	  <Subcategory id="8_7">
+        <Name>Parking</Name>
+      </Subcategory>
+	  <Subcategory id="8_8">
+        <Name>Gas Stations</Name>
+      </Subcategory>
+	  <Subcategory id="8_9">
+        <Name>Courier</Name>
       </Subcategory>
     </Subcategories>
   </Category>
