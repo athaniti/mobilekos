@@ -9,7 +9,7 @@
 <!--<link href="jquery.mobile/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>-->
 <link href="jquery.mobile/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="jquery.mobile/custom_theme.css" />
-<script src="jquery.mobile/jquery-1.10.2.min.js"></script>
+<script src="jquery.mobile/jquery-1.9.1.js"></script>
 <script src="jquery.mobile/jquery.mobile-1.3.2.min.js"></script>
 <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
 <script src="scrollbar/js/jquery.tinyscrollbar.min.js"></script>
@@ -22,12 +22,24 @@
 <script src="js/json2.js"></script>
 <script src="js/main.js"></script>
 <script src="js/Control.Loading.js"></script>
+<script src="js/nicescroll.js"></script>
 <script src="js/KML.js"></script>
 <!-- script src="js/GPX.js"></script-->
 <script src="js/resources.default.js"> </script>
 <script src="js/resources.gr.js"> </script> 
 <script src="js/resources.en.js"> </script>
 <script src="js/version.js"></script>
+<style>
+    /* hardware acceleration for smoother transitions on WebKit browsers 
+    .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal),
+    .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal) > div,
+    .ui-panel-animate.ui-panel-closed.ui-panel-display-reveal > div,
+    .ui-panel-animate.ui-panel-content-wrap,
+    .ui-panel-animate.ui-panel-content-fixed-toolbar {
+      -webkit-backface-visibility: visible;
+      -webkit-transform: none;
+    }*/
+</style>
 <script type="text/css">
 	html {width:95%, height:100%}
 	body {width:95%, height:100%}
@@ -51,9 +63,11 @@
 				<img src="images/icon_logo_big.png" alt="logo">
 				<p></p>
 				<p></p>
-				<h6 class="msg">Please wait...</h6>
-				
-				<!-- script>
+				<h4>Please Wait...</h4>
+				<!--div class="loading_gif">
+					<div class="loader"><span>Please Wait...</span></div>
+				</div>
+				< script>
 					window.onload = function () {
 					    console.log("it works!");
 					    setTimeout(function(){
@@ -92,11 +106,11 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<div class="exit_icon">
+			<!--  div class="exit_icon">
 				<a href="#" onClick="exitApplication();"> <img
 					src="images/exit-icon.png" alt="logo" />
 				</a>
-			</div>
+			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -104,7 +118,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="options" style="display:none; z-index:9999;">
 		 <div class="container">
 			<div data-role="fieldcontain">
@@ -135,24 +148,25 @@
 	</div>
 	
 	<div class="main_content">
-		<div id="loading_gif"></div>
+		<div class="loading_gif">
+			<div class="loader"><span>Please Wait...</span></div>
+		</div>
 		<!--  div class="clickPlaces">Click on Places button to see POIs near you</div-->
 		<!-- a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a-->
 		<!-- div data-role="popup" id="popupBasic">
 		    <!--  p>This is a completely basic popup, no options set.</p>
+		</div>
+		<div data-role="popup" id="popupBasic" class="ui-popup ui-overlay-shadow ui-corner-all ui-body-c" data-disabled="false" 
+			data-shadow="true" data-corners="true" data-transition="none" data-position-to="origin">
+			<p>This is a completely basic popup, no options set.
+			</p>
 		</div-->
 		<div id="map"></div>
-		<div id="inner" >
-			<!-- div class="markers_icons">
-				<img src="images/markers_icon.png" alt="markers">
-			</div >
-			<div class="marker_icon">
-				<img src="images/marker.png" alt="marker">
-			</div-->
-			<b>Click on Places button  </b><br><span class="description">to see Points of Interest near you!!</span>
-			<div class="close_btn">
-				<a href="#" onClick = "slideBack();"><span id="btnHide"> </span></a>
-				<!-- a href="#" onClick = "onClickbtnFilterPlaces();"><span id="btnShowPlacesPage"> </span></a> -->
+		<div class="inner_wrap" >
+			<div id="inner">
+				<div class="close_btn">
+					<a href="#" onClick = "slideBack();"><span id="btnHide"> </span></a>
+				</div>
 			</div>
 		</div>
 		<!--div id="inner" style="display: block;"><b>Click on Places Button to see pois near you<br>!!! @#$%@#$%@#$%@#$@#$%</b></div-->
@@ -184,11 +198,11 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<div class="exit_icon">
-				<a href="#" onClick = "exitApplication();">
-					<img src="images/exit-icon.png" alt="logo"/>
-				</a>	
-			</div>
+			<!--  div class="exit_icon">
+				<a href="#" onClick="exitApplication();"> <img
+					src="images/exit-icon.png" alt="logo" />
+				</a>
+			</div>-->
 		 	<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -227,6 +241,9 @@
     	<div class="viewport">
         	<div class="overview">-->
 	<div class="main_content2" style="padding-top:10px;">
+		<div class="loading_gif">
+			<div class="loader"><span>Please Wait...</span></div>
+		</div>
 		<div class="container">	
 			<div id="placesPageHeader" style="text-align:center"></div>
 			<div id="placesContent"></div>
@@ -257,11 +274,11 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<div class="exit_icon">
+			<!--  div class="exit_icon">
 				<a href="#" onClick="exitApplication();"> <img
 					src="images/exit-icon.png" alt="logo" />
 				</a>
-			</div>
+			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -318,11 +335,11 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<div class="exit_icon">
+			<!--  div class="exit_icon">
 				<a href="#" onClick="exitApplication();"> <img
 					src="images/exit-icon.png" alt="logo" />
 				</a>
-			</div>
+			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -385,11 +402,11 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-		 	<div class="exit_icon">
+			<!--  div class="exit_icon">
 				<a href="#" onClick="exitApplication();"> <img
 					src="images/exit-icon.png" alt="logo" />
 				</a>
-			</div>
+			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">

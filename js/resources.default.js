@@ -44,5 +44,6 @@ MyApp.resources = {
 		ExitApp:"Are you sure you want to exit?",
 		NoLocation:"Could not get your location",
 		CouldNotGetFilesFromPortal:"Could not get files from portal",
-		UpdateApp:"There is a new version of Kos.Mobile. Would you like to download it now?"
+		UpdateApp:"There is a new version of Kos.Mobile. Would you like to download it now?",
+		Close:"Close"
 };
