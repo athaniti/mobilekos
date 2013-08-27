@@ -41,5 +41,5 @@ var grResources = {
 		NoLocation:"Δεν βρέθηκε η τοποθεσία σας",
 		CouldNotGetFilesFromPortal:"Η επικοινωνία με τον server απέτυχε",
 		UpdateApp:"Υπάρχει νέα έκδοση της εφαρμογής. Θέλετε να την κατεβάσετε;",
-		Close:"Κλείσιμο"
+		Hide:"Κλείσιμο"
 };

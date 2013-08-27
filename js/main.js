@@ -17,7 +17,7 @@ var watchID = null;
 var fromLoadCoords = false;
 var xmlDoc,xmlDoc1,xmlDoc2,xmlDoc3,xmlDoc4,xmlDoc5;
 var currentMarkers = [];
-//var checked = [];
+var checked = [];
 var catNameEn = [];
 var catNameGr = [];
 var catGuid = [];
@@ -116,6 +116,7 @@ function checkLanguageSettings()
 			len = results.rows.length;
 			console.log("SETTINGS.length= "+len);
 			if ((len == null) || (len == 0)){
+				console.log("okook");
 				switchToSecondPage();
 				showPlacesInfo = true;
 //				createDb();
@@ -131,9 +132,8 @@ function checkLanguageSettings()
 //					sync();
 				}
 				createCatArraysEn();
-				createCatArraysGr();
 				createSubCatArraysEn();
-				createSubCatArraysGr();
+//				createSubCatArraysGr();
 //				checkAppVersion();
 				setTimeout(function(){
 //					firstSwitchToMainPage();
@@ -181,14 +181,17 @@ function populateDB(tx)
 function createCatArraysEn(){
 	catNameEn = [];
 	catGuid = [];
+	console.log("in createCatArraysEn()");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
 			for (var i = 0; i < results.rows.length; i++){
+				console.log("catName1111: "+results.rows.item(i).name);
 				catNameEn.push(results.rows.item(i).name);
 				catGuid.push(results.rows.item(i).id);
 			}
 		}, error9CB);
 	});
+	createCatArraysGr();
 }
 
 function createCatArraysGr(){
@@ -216,6 +219,7 @@ function createSubCatArraysEn(){
 			}
 		}, error9CB);
 	});
+	createSubCatArraysGr();
 }
 
 function createSubCatArraysGr(){
@@ -247,11 +251,13 @@ function switchToSecondPage()
 }
 
 function success13CB(){
+	populateDB();
 	console.log("success13CB");
-	switchToSecondPage();
+	setTimeout(function(){
+		switchToSecondPage();
+	},3000);
 	showPlacesInfo = true;
 //	createDb();
-	populateDB();
 }
 
 function error13CB(){
@@ -402,10 +408,12 @@ function populateDatabases(){
 //	popPoiGrDb();
 	popTimestampDb();
 //	setTimeout(function(){sync();},1000);
-	createCatArraysEn();
-	createCatArraysGr();
-	createSubCatArraysEn();
-	createSubCatArraysGr();
+	setTimeout(function(){
+		createCatArraysEn();
+	},1000);
+	setTimeout(function(){
+		createSubCatArraysEn();
+	},1000);
 }
 
 function popCategoriesEnDb(){
@@ -418,6 +426,7 @@ function popCategoriesEnDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
 			catName = xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
+			console.log("catName: "+catName);
 			guid = xmlDoc.getElementsByTagName("Category")[i].getAttribute('guid');
 //			alert(catId+ " "+ guid+" "+catName+" "+timestamp);
 			tx.executeSql('INSERT INTO CATEGORIESEN (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success3CB, error3CB);
@@ -438,22 +447,22 @@ function popSubCategoriesEnDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-			if (catId == 7){
-				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
-						['7_1','Villages',catId], success4CB, error4CB);
-			}
-//			else if (catId == 9){
+//			if (catId == 7){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
-//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','General Information',catId], success4CB, error4CB);
+//						['7_1','Villages',catId], success4CB, error4CB);
 //			}
-			else{
+////			else if (catId == 9){
+////				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
+////						['0x010020858B5F00431840A5FF9BA2B0E92EAE','General Information',catId], success4CB, error4CB);
+////			}
+//			else{
 				for (var j=0; j<sub.length; j++){
 					subName = sub[j].getElementsByTagName("Name")[0].textContent;
 					subId = sub[j].getAttribute('id');
 //					alert(subId +" __ "+subName +" __ "+ catId);
 					tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], success4CB, error4CB);
 				}
-			}
+//			}
 		}
 //		alert("3: "+subName);
 	});
@@ -497,15 +506,15 @@ function popSubCategoriesGrDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-			if (catId == 7){
-				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-						['7_1','Χωριά',catId], success4CB, error4CB);
-			}
+//			if (catId == 7){
+//				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
+//						['7_1','Χωριά',catId], success4CB, error4CB);
+//			}
 //			else if (catId == 9){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
 //						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Γενικές πληροφορίες',catId], success4CB, error4CB);
 //			}
-			else{
+//			else{
 				for (var j=0; j<sub.length; j++){
 					subName = sub[j].getElementsByTagName("Name")[0].textContent;
 //					alert(subName);
@@ -513,7 +522,7 @@ function popSubCategoriesGrDb(){
 //					alert(subId +" __ "+subName +" __ "+ catId);
 					tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], successCB, error4CB);
 				}
-			}
+//			}
 		}
 //	alert("4: "+subName);
 });
@@ -870,10 +879,9 @@ function createXmlString(xmlString){
 	getTimestamp(xmlString);
 }
 
-
 function loadXmlCat(x) {
 	if (x == 1){
-		xmlpathcat = 'xml/categories.en.old.xml';
+		xmlpathcat = 'xml/categories.en.xml';
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET", xmlpathcat, false);
 		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
@@ -885,7 +893,7 @@ function loadXmlCat(x) {
 		popCategoriesEnDb();
 	}
 	else {
-		xmlpathcat = 'xml/categories.gr.old.xml';
+		xmlpathcat = 'xml/categories.gr.xml';
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET", xmlpathcat, false);
 		xmlhttp.setRequestHeader('Content-Type', 'text/xml');
@@ -898,34 +906,14 @@ function loadXmlCat(x) {
 	}
 }
 
-//function readCatDbEn(){
-////	var divplaces = document.getElementById('placesContent');
-//	fillhtml='';
-//	nameCat = new Array();
-//	categId = new Array();
-//	var len;
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
-//			len = results.rows.length;
-//			for (var i = 0; i < len; i++){
-//				nameCat.push(results.rows.item(i).name);
-//				categId.push(results.rows.item(i).id);
-//			}
-//			len = nameCat.length;
-//			drawPlacesPageEn(len);
-//		}, error9CB);
-//	});
-//}
-
 function drawPlacesPageEn(len){
 	var fillhtml='';
-//	var fillHeader='';
-//	var divplaces = document.getElementById('placesContent');
 	fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.placesPageHeader+'</span>';
-//	var subLen;
 	len = catNameEn.length;
+	console.log("wwwww1 "+len);
+	console.log("wwwww12 "+snameEn.length);
 	for (var k=0; k <catNameEn.length ; k++){
-		console.log(catNameEn[k]);
+		console.log("wwwww "+catNameEn[k]);
 		fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
 		fillhtml += "<legend>" + catNameEn[k] + "</legend>";
 		fillhtml += "<div data-role='controlgroup'>";
@@ -934,8 +922,6 @@ function drawPlacesPageEn(len){
 			console.log("catGuid[k] "+catGuid[k]);
 			console.log("sCatId[j] "+sCatId[j]);
 			if ( catGuid[k] == sCatId[j]){
-//				alert("sname2: "+sname);
-				
 				fillhtml += "<input type='checkbox' class='checkbox' name='"+snameEn[j]+"' id='"+snameEn[j]+"' />";
 				fillhtml += "<label for='"+ snameEn[j] +"'>"+ snameEn[j] +"</label>";
 			}
@@ -943,66 +929,29 @@ function drawPlacesPageEn(len){
 		fillhtml += "</div>";
 		fillhtml += "</fieldset>";
 	}
-	
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
-//			var subId;
-//			for (var k=0; k<len; k++){
-//				fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
-//				fillhtml += "<legend>" + catNameEn[k] + "</legend>";
-//				fillhtml += "<div data-role='controlgroup'>";
-//				subLen = results.rows.length;
-//				for(var j=0; j<subLen ; j++){
-////					alert("13 "+results.rows.item(j).catid);
-//					subId = results.rows.item(j).catid;
-//					sname = results.rows.item(j).name;
-//					sname = $.trim(sname);
-//					if ( catGuid[k] == subId){
-////						alert("sname2: "+sname);
-//						fillhtml += "<input type='checkbox' class='checkbox' name='"+sname+"' id='"+sname+"' />";
-//						fillhtml += "<label for='"+ sname+"'>"+ sname +"</label>";
-//					}
-//				}
-//				fillhtml += "</div>";
-//				fillhtml += "</fieldset>";
-////				alert(fillhtml);
-//			}
-//			divplaces.innerHTML = fillhtml;
-			$("#placesContent").html(fillhtml);
-			$('#placespage').trigger("create");
-			$("#placesPageHeader").html(fillHeader);
-//			$.mobile.changePage($('#placespage'), 'slideup(1000)');
-//			document.getElementById("loading_gif").style.display = "none";
-			$( ".loading_gif" ).css( "display", "none" );
-			$.mobile.changePage($('#placespage'), 'slideUp');
-			customHeader(2);
-		    $('#abtnTour2').removeClass("active");
-		    $('#abtnPlaces2').addClass("active");
-		    $('#abtnCurrentPosition2').removeClass("active");
-//		    $('#abtnExit2').removeClass("active");
-		    $('.options').css({'display':'none'});
-		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
-		    setLabelsForMainPage();
-//		    document.getElementById('placesPageHeader').innerHTML= MyApp.resources.placesPageHeader;
-//		    $("#placesContent").ready(function(){
-//		        $('#scrollbar1').tinyscrollbar();
-//		    });
-			var email = $('#emailaccountchange2').val();
-			console.log("2222 email: "+email);
-			if ( email == null || email == ""){
-				var cm = "";
-				if (currentEmail!=undefined) cm=currentEmail;
-				$('#emailaccountchange2').val(cm);
-				console.log(cm);
-			}
-//		    var div = $(document).height();
-//		    var doc = $(window).height();
-//		    console.log("div= "+div+" doc= "+doc);
-//		    if (div > doc ) {
-//		        
-//		    }
-//		});
-//	});
+	$("#placesContent").html(fillhtml);
+	$('#placespage').trigger("create");
+	$("#placesPageHeader").html(fillHeader);
+//	$.mobile.changePage($('#placespage'), 'slideup(1000)');
+//	document.getElementById("loading_gif").style.display = "none";
+	$( ".loading_gif" ).css( "display", "none" );
+	$.mobile.changePage($('#placespage'), 'slideUp');
+	customHeader(2);
+	$('#abtnTour2').removeClass("active");
+	$('#abtnPlaces2').addClass("active");
+	$('#abtnCurrentPosition2').removeClass("active");
+//	$('#abtnExit2').removeClass("active");
+	$('.options').css({'display':'none'});
+	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
+//	setLabelsForMainPage();
+	var email = $('#emailaccountchange2').val();
+	console.log("2222 email: "+email);
+	if ( email == null || email == ""){
+		var cm = "";
+		if (currentEmail!=undefined) cm=currentEmail;
+		$('#emailaccountchange2').val(cm);
+		console.log(cm);
+	}
 }
 
 function customHeader(x){
@@ -1012,80 +961,47 @@ function customHeader(x){
 //	document.getElementById('btnExit'+x).innerHTML= MyApp.resources.Exit;
 }
 
-//function readCatDbGr(){
-////	var divplaces = document.getElementById('placesContent');
-//	fillhtml='';
-//	nameCat = new Array();
-//	categId = new Array();
-//	var len;
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM CATEGORIESGR', [], function (tx, results) {
-//			len = results.rows.length;
-//			for (var i = 0; i < len; i++){
-//				nameCat.push(results.rows.item(i).name);
-//				categId.push(results.rows.item(i).id);
-//			}
-//			len = nameCat.length;
-//			drawPlacesPageGr(len);
-//		}, error9CB);
-//	});
-//}
-
 function drawPlacesPageGr(len){
 	var fillhtml='';
 	len = catNameGr.length;
-//	var divplaces = document.getElementById('placesContent');
 	fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.placesPageHeader+'</span>';
 	var subLen;
-	db.transaction(function (tx) {
-		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {			
-//			var subId;
-			for (var k=0; k<len; k++){
-//				alert("12 "+nameCat[k]);
-				fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
-				fillhtml += "<legend>" + catNameGr[k] + "</legend>";
-				fillhtml += "<div data-role='controlgroup'>";
-				subLen = results.rows.length;
-//				alert("sublen: "+sublen);
-				for(var j=0; j<subLen ; j++){
-//					alert("13 "+results.rows.item(j).catid);
-					subId = results.rows.item(j).catid;
-					sname = results.rows.item(j).name;
-					if ( catGuid[k] == subId){
-//						alert("sname2: "+sname);
-						fillhtml += "<input type='checkbox' class='checkbox' name='"+sname+"' id='"+sname+"' />";
-						fillhtml += "<label for='"+ sname+"'>"+ sname +"</label>";
-					}
-				}
-				fillhtml += "</div>";
-				fillhtml += "</fieldset>";
-//				alert(fillhtml);
+	for (var k=0; k <catNameGr.length ; k++){
+//		console.log(catNameGr[k]);
+		fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
+		fillhtml += "<legend>" + catNameGr[k] + "</legend>";
+		fillhtml += "<div data-role='controlgroup'>";
+		for(var j=0; j<snameGr.length ; j++){
+//			console.log(snameGr[k]);
+//			console.log("catGuid[k] "+catGuid[k]);
+//			console.log("sCatId[j] "+sCatId[j]);
+			if ( catGuid[k] == sCatId[j]){
+				fillhtml += "<input type='checkbox' class='checkbox' name='"+snameGr[j]+"' id='"+snameGr[j]+"' />";
+				fillhtml += "<label for='"+ snameGr[j] +"'>"+ snameGr[j] +"</label>";
 			}
-			$("#placesContent").html(fillhtml);
-			$('#placespage').trigger("create");
-			$("#placesPageHeader").html(fillHeader);
-//			document.getElementById("loading_gif").style.display = "none";
-			$( ".loading_gif" ).css( "display", "none" );
-			$.mobile.changePage($('#placespage'), 'pop');
-			customHeader(2);
-			var email = $('#emailaccountchange2').val();
-			if ( email == null || email == ""){
-				$('#emailaccountchange2').val(currentEmail);
-				console.log(currentEmail);
-			}
-		    $('#abtnTour2').removeClass("active");
-		    $('#abtnPlaces2').addClass("active");
-		    $('#abtnCurrentPosition2').removeClass("active");
-//		    $('#abtnExit2').removeClass("active");
-		    $('.options').css({'display':'none'});
-		    document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
-		    setLabelsForMainPage();
-//		    document.getElementById('placesPageHeader').innerHTML= MyApp.resources.placesPageHeader;
-//		    $(document).ready(function(){
-//		        $('#scrollbar1').tinyscrollbar();
-//		    });
-		});
-	});
+		}
+		fillhtml += "</div>";
+		fillhtml += "</fieldset>";
+	}
+	$("#placesContent").html(fillhtml);
+	$('#placespage').trigger("create");
+	$("#placesPageHeader").html(fillHeader);
+//	document.getElementById("loading_gif").style.display = "none";
+	$( ".loading_gif" ).css( "display", "none" );
+	$.mobile.changePage($('#placespage'), 'pop');
+	customHeader(2);
+	var email = $('#emailaccountchange2').val();
+	if ( email == null || email == ""){
+		$('#emailaccountchange2').val(currentEmail);
+		console.log(currentEmail);
+	}
+	$('#abtnTour2').removeClass("active");
+	$('#abtnPlaces2').addClass("active");
+	$('#abtnCurrentPosition2').removeClass("active");
+//	$('#abtnExit2').removeClass("active");
+	$('.options').css({'display':'none'});
+	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
+//	setLabelsForMainPage();
 }
 
 function onClickbtnFilterPlaces()
@@ -1461,7 +1377,10 @@ function switchToEmailPage(langid)
 //		sync();
 	}
 //	firstSwitchToMainPage();
-	firstSwitchToPlacesPage();
+	setTimeout(function(){
+		firstSwitchToPlacesPage();
+	},2300);
+		
 }
 
 function firstSwitchToPlacesPage()
@@ -1509,12 +1428,12 @@ function setLabelsForMainPage()
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
 //	document.getElementById('btnLoadSelected').innerHTML= MyApp.resources.LoadSelected;
 	document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;
+//	document.getElementById('btnHide').innerHTML= MyApp.resources.Hide;
 //	document.getElementById('itinerarypageheader').innerHTML= MyApp.resources.LoadAvailableTour;  
 //	document.getElementById('itineraryportalpageheader').innerHTML= MyApp.resources.LoadPortalTour;  
 	document.getElementById('btnClearAll').innerHTML= MyApp.resources.ClearAll;
 	document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
 	document.getElementById('btnSaveChanges').innerHTML= MyApp.resources.SaveChanges;
-//	document.getElementById('btnHide').innerHTML= MyApp.resources.Hide;
 //	document.getElementById('btnShowPlacesPage').innerHTML= MyApp.resources.ShowPlaces;
 }
 
@@ -1809,126 +1728,130 @@ function submitSelectedPlaces()
 
 function submitSelectedPlacesEn(){
 //	var descr2;
-	var checked = [];
+//	var checked = [];
 //	fromselectedplaces = true;
 //	console.log("in SubmitSelected En1");
 //	$('.placesCheckbox:checked').each(function () {
-//		checked.push(this.name);		//push checked items into values list
-//		console.log(this.name);
+//	checked.push(this.name);		//push checked items into values list
+//	console.log(this.name);
 //	});
 //	var checkboxes = document.getElementById('placesContent');
 //	console.log(checkboxes.length);
 //	for (var w=0; w<checkboxes.length; w++) {
-//	     // And stick the checked ones onto an array...
-//		console.log("12 "+this.name);
-//	     if (checkboxes[w].checked) {
-//	    	 console.log("12");
-//	    	 checked.push(checkboxes[w]);
-//	     }
+//	// And stick the checked ones onto an array...
+//	console.log("12 "+this.name);
+//	if (checkboxes[w].checked) {
+//	console.log("12");
+//	checked.push(checkboxes[w]);
+//	}
 //	}
 	$('input[type="checkbox"]').each(function(){
 		console.log("name: "+this.name);
-		if($(this).is(':checked')){
+		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
 			console.log("name: "+this.name);
 		}
+//		if (this.checked) {
+//			checked.push($(this).val());
+//            console.log($(this).val()); 
+//        }
 //		else{
-//			// perform operation for unchecked
+//		// perform operation for unchecked
 //		}
 	});
 //	$(':checkbox').each(function() {
-//		console.log("name: "+this.name);
-////		if (this.checked == true){
-//		if($(this).attr("checked")==true){
-//			checked.push(this.name);		//push checked items into values list
-//			console.log("name: "+this.name);
-//		}
+//	console.log("name: "+this.name);
+////	if (this.checked == true){
+//	if($(this).attr("checked")==true){
+//	checked.push(this.name);		//push checked items into values list
+//	console.log("name: "+this.name);
+//	}
 //	});
 //	(function(checked){
-	checked.push('Hotel');
+//	checked.push('Hotel');
 //	checked.push('Monument');
 //	checked.push('Museum');
-		console.log("checked.length= "+checked.length);
-//		if (checked.length == 0){
-//			console.log("checked.length= "+checked.length);
-////			showAllPlaces();
-//			$.mobile.changePage($('#mainpage'), 'pop');
-//			setTimeout(function(){
-//				map.invalidateSize();
-//			},2000);
-//		}
-//		else{
+	console.log("checked.length= "+checked.length);
+//	if (checked.length == 0){
+//	console.log("checked.length= "+checked.length);
+////	showAllPlaces();
+//	$.mobile.changePage($('#mainpage'), 'pop');
+//	setTimeout(function(){
+//	map.invalidateSize();
+//	},2000);
+//	}
+//	else{
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
+			var len = results.rows.length, subNew;
+			for (var j=0; j<checked.length; j++){
+//				alert("("+checked[j]+")");
+				for (var i = 0; i < len; i++){
+//					console.log("in SubmitSelected En2");
+					subNew = $.trim(results.rows.item(i).name);
+//					console.log("_"+subNew+"_");
+					if (checked[j] == subNew){
+						checked[j] = results.rows.item(i).id;
+//						console.log("!!#!!"+checked[j]);
+					}
+				}
+			}
 			db.transaction(function (tx) {
-				tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
-					var len = results.rows.length, subNew;
+				tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+					var len = results.rows.length;
+					var lat2;
 					for (var j=0; j<checked.length; j++){
-//						alert("("+checked[j]+")");
+//						alert("@: "+checked[j]);
 						for (var i = 0; i < len; i++){
-//							console.log("in SubmitSelected En2");
-							subNew = $.trim(results.rows.item(i).name);
-//							console.log("_"+subNew+"_");
-							if (checked[j] == subNew){
-								checked[j] = results.rows.item(i).id;
-//								console.log("!!#!!"+checked[j]);
+//							console.log("POIEN: "+results.rows.item(i).subcategory);
+							if (checked[j] == results.rows.item(i).subcategory){
+								descr = results.rows.item(i).descr;
+								if (descr.length > 200){			//slicing the description to the first 140 charactes.
+									descr = descr.slice(0,200);
+									descr += "...";
+									descr += "<br>";
+								}
+								var poiid = results.rows.item(i).siteid;
+								var poicat = results.rows.item(i).category;
+								var x = results.rows.item(i).lat;
+								var y = results.rows.item(i).long;
+								x = x.replace(x.charAt(2), ".");
+								y = y.replace(y.charAt(2), ".");
+								if (x < 35){
+									var temp = x;
+									x = y;
+									y = temp;
+								}
+								descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+//								descr += '<a href="#popupBasic" data-rel="popup">'+MyApp.resources.MoreInfo+'</a>';			
+								descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+//								console.log("in SubmitSelected En3");
+								lat2 = results.rows.item(i).lat;
+								if ( lat2.indexOf("\n") == -1){
+									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+											results.rows.item(i).name, descr, results.rows.item(i).category);
+//									console.log(results.rows.item(i).name);
+								}
 							}
 						}
 					}
-					db.transaction(function (tx) {
-						tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
-							var len = results.rows.length;
-							var lat2;
-							for (var j=0; j<checked.length; j++){
-//								alert("@: "+checked[j]);
-								for (var i = 0; i < len; i++){
-//									console.log("POIEN: "+results.rows.item(i).subcategory);
-									if (checked[j] == results.rows.item(i).subcategory){
-										descr = results.rows.item(i).descr;
-										if (descr.length > 200){			//slicing the description to the first 140 charactes.
-											descr = descr.slice(0,200);
-											descr += "...";
-											descr += "<br>";
-										}
-										var poiid = results.rows.item(i).siteid;
-										var poicat = results.rows.item(i).category;
-										var x = results.rows.item(i).lat;
-										var y = results.rows.item(i).long;
-										x = x.replace(x.charAt(2), ".");
-										y = y.replace(y.charAt(2), ".");
-										if (x < 35){
-											var temp = x;
-											x = y;
-											y = temp;
-										}
-										descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-//										descr += '<a href="#popupBasic" data-rel="popup">'+MyApp.resources.MoreInfo+'</a>';			
-										descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-//										console.log("in SubmitSelected En3");
-										lat2 = results.rows.item(i).lat;
-										if ( lat2.indexOf("\n") == -1){
-											addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-														results.rows.item(i).name, descr, results.rows.item(i).category);
-//											console.log(results.rows.item(i).name);
-										}
-									}
-								}
-							}
-//							document.getElementById("loading_gif").style.display = "none";
-							$( ".loading_gif" ).css( "display", "none" );
-							$.mobile.changePage($('#mainpage'), 'pop');
-							$('#abtnPlaces').addClass("active");
-							$("#abtnFilterTour").hide();
-							$("#abtnFilterPlaces").show();
-							setTimeout(function(){
-								map.invalidateSize();
-							},2500);
-							setLabelsForMainPage();
-							$('.options').css({'display':'none'});
-						}, errorCB);
-					});
+//					document.getElementById("loading_gif").style.display = "none";
+					$( ".loading_gif" ).css( "display", "none" );
+					$.mobile.changePage($('#mainpage'), 'pop');
+					$('#abtnPlaces').addClass("active");
+					$("#abtnFilterTour").hide();
+					$("#abtnFilterPlaces").show();
+					setTimeout(function(){
+						map.invalidateSize();
+					},2500);
+					setLabelsForMainPage();
+					$('.options').css({'display':'none'});
 				}, errorCB);
 			});
-//			console.log("in SubmitSelected En4");
-//		}
+		}, errorCB);
+	});
+//	console.log("in SubmitSelected En4");
+//	}
 //	})(checked);
 }
 
@@ -1937,52 +1860,23 @@ function submitSelectedPlacesGr(){
 //	var counter=0;
 	fromselectedplaces = true;
 	console.log("in here!!");
-	var checked =[];
-//	$('#placesContent input[type=checkbox]:checked').each(function () {
-//		checked.push(this.name);		//push checked items into values list
-//		console.log(this.name);
-//		counter++;
-//	});
-//	$('#placespage input[type=checkbox]').each(function (){
-//		if (this.checked == true){
-//			checked.push(this.name);		//push checked items into values list
-//			console.log("name: "+this.name);
-//		}
-//		});
-//	var countChecked = function() {
-//		var n = $( "input:checked" ).length;
-//		console.log("n are " + n);
-//	};
-//	countChecked();
-//	var $b = $('input[type=checkbox]');
-//    console.log("find "+$b.find(':checked').length); // gives 0
-//    console.log("filter "+$b.filter(':checked').length); // works
-//	var checkboxes = document.getElementById('placesContent');
-//	console.log(checkboxes.length);
-//	for (var w=0; w<checkboxes.length; w++) {
-//	     // And stick the checked ones onto an array...
-//		console.log("12 "+this.name);
-//	     if (checkboxes[w].checked) {
-//	    	 console.log("12");
-//	    	 checked.push(checkboxes[w]);
-//	     }
-//	}
-//	$(':checkbox').each(function() {
+//	$('input[type="checkbox"]').each(function(){
 //		console.log("name: "+this.name);
-//		if ($(this).is(":checked")){
+//		if($(this).is(':checked')){
 //			checked.push(this.name);		//push checked items into values list
 //			console.log("name: "+this.name);
+//		} 
+	
+//		else{
+//			// perform operation for unchecked
 //		}
 //	});
 	$('input[type="checkbox"]').each(function(){
 		console.log("name: "+this.name);
-		if($(this).is(':checked')){
+		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
 			console.log("name: "+this.name);
 		}
-//		else{
-//			// perform operation for unchecked
-//		}
 	});
 	setTimeout(function(){
 //		console.log("counter: "+counter);
