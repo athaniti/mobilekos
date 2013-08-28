@@ -10,8 +10,11 @@ var currentLong;
 var text2;
 var updateAppUrl;
 var currentVersionCode;
+var currentVersionName;
 var testname, testdescr, testwebsite, testaddress,testplace,testphone,testemail;
 var platformName;
+var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], slidePlace= [], slidePhone= [], slideEmail= [];
+var slideIdgr = [], slideCatgr = [], slideNamegr = [], slideDescrgr= [], slideWebsitegr= [], slideAddressgr= [], slidePlacegr= [], slidePhonegr= [], slideEmailgr= [];
 var watchClear = false;
 var marker1;
 var cancelBackButton = false;
@@ -84,13 +87,25 @@ function onDeviceReady() {
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
 	}
-	window.plugins.version.getVersionCode(function(version_code) {
-//	        alert("version_code "+version_code);	//do something with version_code
-	        currentVersionCode = version_code;
-	    },
-	    function(errorMessage) {
-//        alert(errorMessage);		//do something with errorMessage
-    });
+//	window.plugins.version.getVersionCode(function(version_code) {
+////	        alert("version_code "+version_code);	//do something with version_code
+//	        currentVersionCode = version_code;
+//	    },
+//	    function(errorMessage) {
+////        alert(errorMessage);		//do something with errorMessage
+//    });
+	window.plugins.version.getVersionName(
+		    function(version_name) {
+		        //do something with version_name
+		        console.log(version_name);
+		        currentVersionName = version_name;
+		        checkAppVersion();
+		    },
+		    function(errorMessage) {
+		        //do something with errorMessage
+		        console.log(errorMessage);
+		    }
+		);
 
 	setInterval(function(){
 		console.log("Checking Internet Connection...");
@@ -98,7 +113,6 @@ function onDeviceReady() {
 			isOffline = false;
 		}
 	},180000);
-//	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) wv.getSettings().setAllowUniversalAccessFromFileURLs(true);
 	
 	setTimeout(function(){
 		checkLanguageSettings();
@@ -136,6 +150,7 @@ function checkLanguageSettings()
 				}
 				createCatArraysEn();
 				createSubCatArraysEn();
+				createPoiArraysEn();
 //				createSubCatArraysGr();
 //				checkAppVersion();
 				setTimeout(function(){
@@ -238,6 +253,47 @@ function createSubCatArraysGr(){
 	});
 }
 
+function createPoiArraysEn(){
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
+			var k = results.rows.length;
+			console.log("k"+ k);
+			for (var p =0;p<k; p++){
+				slideId.push(results.rows.item(p).siteid); 
+				slideCat.push(results.rows.item(p).category);
+				slideName.push(results.rows.item(p).name);
+				slideDescr.push(results.rows.item(p).descr);
+				slideWebsite.push(results.rows.item(p).website);
+				slideAddress.push(results.rows.item(p).address); 
+				slidePlace.push(results.rows.item(p).place); 
+				slidePhone.push(results.rows.item(p).phone); 
+				slideEmail.push(results.rows.item(p).email);
+			}
+		});
+	});
+	createPoiArraysGr();
+}
+
+function createPoiArraysGr(){
+	console.log("in createPOIArraysEn()");
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+			var k = results.rows.length;
+			for (var p =0;p<k; p++){
+				slideIdgr.push(results.rows.item(p).siteid); 
+				slideCatgr.push(results.rows.item(p).category);
+				slideNamegr.push(results.rows.item(p).name);
+				slideDescrgr.push(results.rows.item(p).descr);
+				slideWebsitegr.push(results.rows.item(p).website);
+				slideAddressgr.push(results.rows.item(p).address); 
+				slidePlacegr.push(results.rows.item(p).place); 
+				slidePhonegr.push(results.rows.item(p).phone); 
+				slideEmailgr.push(results.rows.item(p).email);
+			}
+		});
+	});
+}
+
 function errorCB(err) {
     console.log("Error processing SQL: "+err.code);
 }
@@ -317,19 +373,43 @@ function checkAppVersion(){
 			var k = data.indexOf("VersionString") + 16; 
 			var y = data.indexOf("AppLinkAndroid"); 
 			var newVersion = data.slice(k,y-3);
-			newVersion = parseInt(newVersion);
+			var update;
 			console.log("newVersion ="+newVersion);
-			if ( newVersion > currentVersionCode){
-//				udpateApp(data);
-			} 
+//			var newerVersion = function compareVersionNumbers(newVersion, currentVersionName){
+			var v1parts = newVersion.split('.');
+			var v2parts = currentVersionName.split('.');
+			console.log(v1parts);
+			console.log(v2parts);
+			for (var i = 0; i < v1parts.length; ++i) {
+				if (v2parts.length === i) {
+					update = 1;
+				}
+				if (v1parts[i] === v2parts[i]) {
+					update = -1;
+				}
+				if (v1parts[i] > v2parts[i]) {
+					update = 1;
+				}
+			}
+			if (v1parts.length != v2parts.length) {
+				update = -1;
+			}
+			if (update == 1){
+				console.log("newerVersion 1");
+				udpateApp();
+			}
+			else if (update == -1){
+				console.log("newerVersion -1");
+			}
+
 		},
 		error: function () {
-			console.log("Could get new Version");
+			console.log("Could NOT get new Version");
 		}
 	});
 }
 
-function udpateApp(data){
+function udpateApp(){
 	var r=confirm(MyApp.resources.UpdateApp);
 	if (r==true){
 		var k = platformName.indexOf("Android");
@@ -417,6 +497,9 @@ function populateDatabases(){
 	},1000);
 	setTimeout(function(){
 		createSubCatArraysEn();
+	},1000);
+	setTimeout(function(){
+		createPoiArraysEn();
 	},1000);
 }
 
@@ -512,11 +595,11 @@ function popSubCategoriesGrDb(){
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
 //			if (catId == 7){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['7_1','Ξ§Ο‰ΟΞΉΞ¬',catId], success4CB, error4CB);
+//						['7_1','Χωριά',catId], success4CB, error4CB);
 //			}
 //			else if (catId == 9){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Ξ“ΞµΞ½ΞΉΞΊΞ­Ο‚ Ο€Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞ―ΞµΟ‚',catId], success4CB, error4CB);
+//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Γενικές πληροφορίες',catId], success4CB, error4CB);
 //			}
 //			else{
 				for (var j=0; j<sub.length; j++){
@@ -559,7 +642,7 @@ function popPoiEnDb(){
 			{
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
-//			console.log(poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
+//			console.log(poiId+" || "+poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
 			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)'
 					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email], successCB, error2CB);
 		}
@@ -1747,7 +1830,7 @@ function submitSelectedPlacesEn(){
 //	}
 //	}
 	$('input[type="checkbox"]').each(function(){
-		console.log("name: "+this.name);
+//		console.log("name: "+this.name);
 		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
 			console.log("name222: "+this.name);
@@ -1873,7 +1956,7 @@ function submitSelectedPlacesGr(){
 //		}
 //	});
 	$('input[type="checkbox"]').each(function(){
-		console.log("name: "+this.name);
+//		console.log("name: "+this.name);
 		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
 			console.log("name: "+this.name);
@@ -2423,6 +2506,7 @@ function createXmlDb(){
 			async: false,
 			data:"{}",
 			success: function(data) {
+				
 				var xmlFile;
 				xmlFile = JSON.stringify(data);
 				var o = xmlFile.indexOf("<?xml");
@@ -2462,6 +2546,7 @@ function createXmlDb(){
 //					duration = $(this).parent().parent().text().slice(0,10);
 //					itActive = 0;
 //					itCompleted = 0;
+				db.transaction(function (tx) {
 				$(xmlFile).find("Point").each(function(){
 					day =   $(this).parent().parent().attr("Kml");
 					pointCode = $(this).attr("Code");
@@ -2477,7 +2562,7 @@ function createXmlDb(){
 //					alert(duration);
 					itActive = 0;
 					itCompleted = 0;
-					db.transaction(function (tx) {
+					
 //						tx.executeSql('INSERT INTO XMLDB(id, xmlstring) VALUES (?,?)',[r,xmlFile], successCB, error12CB);
 						console.log("--- "+id+title+" "+user+" "+day+" "+pointCode+" "+pointName+" "+coords+" "+duration+" "+itActive+" "+itCompleted);
 						tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
@@ -2723,6 +2808,7 @@ function showAvailableDays(id)
 					'" value="'+day[j-1]+'"/><label for="'+day[j-1]+'">'+"Day "+day[j-1]+'</label>');
 			$(".days").click(function show(){
 				dd = $(this).attr("id");
+				var m;
 				$('#availablePois').text('');
 				for (var k=0; k < len; k++){
 					if ((results.rows.item(k).day == dd) && (results.rows.item(k).id == id)){
@@ -2731,14 +2817,15 @@ function showAvailableDays(id)
 //								+results.rows.item(k).pointcode+'">'+results.rows.item(k).pointname+" | Visited"+'</label>');
 //						$('#availablePois').trigger('create');
 //						$('<a id="'+results.rows.item(k).pointcode+"|"+results.rows.item(k).coordinates+'" href="#">'
+						m = results.rows.item(k).pointname;
 						console.log("999 "+results.rows.item(k).pointcode+results.rows.item(k).coordinates
 								+results.rows.item(k).pointname);
 						$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right"id="'
-								+results.rows.item(k).pointcode+"|"+results.rows.item(k).coordinates+'" >'
+								+results.rows.item(k).pointcode+'" >'
 								+results.rows.item(k).pointname+'</a>').click(function() {
-									j = $(this).attr("name");
+//									j = $(this).attr("name");
 //									loadCoordinates(j);
-									getMoreInfo2(j);
+									getMoreInfo2(m);
 									}).appendTo($('#availablePois'));
 						$('#availablePois').trigger('create');
 						var y=k;
@@ -2974,100 +3061,64 @@ function getDirections(x,y)
 }
 
 function getMoreInfo2(poiName){
+	var k;
+	console.log("getMoreInfo2 "+poiName);
 	if (langstr == 'en'){
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIEN WHERE name =? ', [poiName], function (tx, results) {
-				slideen(results.rows.item[0].name, results.rows.item[0].descr, results.rows.item[0].website, results.rows.item[0].address, 
-						results.rows.item[0].place, results.rows.item[0].phone, results.rows.item[0].email);
-			});
-		});
+		for (var c =0; c < slideId.length ; c++){
+//			console.log("inslideen222"+slideName[c]);
+			if (poiName == slideName[c]){
+				console.log("inslideen333");
+				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], slidePhone[c], slideEmail[c]);
+				break;
+			}
+		}
 	}
 	else{
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIGR WHERE name =? ', [poiName], function (tx, results) {
-				slidegr(results.rows.item[0].name, results.rows.item[0].descr, results.rows.item[0].website, results.rows.item[0].address, 
-						results.rows.item[0].place, results.rows.item[0].phone, results.rows.item[0].email);
-			});
-		});
+		console.log("..."+slideId.length);
+		for (var c =0; c < slideId.length ; c++){
+//			console.log("inslideen222"+slideNamegr[c]);
+			if (poiName == slideName[c]){
+				console.log("inslideen333");
+				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], slidePhonegr[c], slideEmailgr[c]);
+				break;
+			}
+		}
+	}
+}
+
+function slideen2(name, k){
+//	console.log("inslideen2" +name);
+	for (var c =0; c<k; c++){
+//		console.log("inslideen222"+slideName[c]);
+		if (name == slideName[c]){
+			console.log("inslideen333");
+			slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], slidePhone[c], slideEmail[c]);
+			break;
+		}
 	}
 }
 
 function getMoreInfo(poiid, categid)
 {
-//	var lang = 'en';
-//	if (langstr=='gr') {lang='el';}
-//	fillhtml = '';
 	console.log("inGetMoreInfo - Offline");
 	if (langstr == 'en'){
 		console.log("poiid: "+ poiid);
 		console.log("catid: "+ categid);
 		console.log("inGetMoreInfo - Offline");
-		db.transaction(function (tx) {
-//			tx.executeSql('INSERT INTO CATEGORIESEN (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success3CB, error3CB);
-			tx.executeSql('SELECT * FROM POIEN WHERE siteid =? ', [poiid], function (tx, results) {
-//				var len = results.rows.length;
-//				for (var j=0; j<len; j++){
-//					var x = results.rows.item(j).siteid;
-//					var y = results.rows.item(j).category;
-//					if ((poiid == x) && (categid == y)){
-//						var completeDescr = results.rows.item(j).descr;
-////						descr = results.rows.item(i).descr;
-//						console.log(completeDescr);
-				var j=0;
-//				var completeDescr = results.rows.item(j).descr;
-//				testname =results.rows.item(j).name;
-//				testdescr=results.rows.item(j).descr;
-//				testwebsite=results.rows.item(j).website;
-//				testaddress=results.rows.item(j).address;
-//				testplace=results.rows.item(j).place;
-//				testphone=results.rows.item(j).phone;
-//				testemail=results.rows.item(j).email;
-				setTimeout(function(){
-					slideen(results.rows.item[0].name, results.rows.item[0].descr, results.rows.item[0].website, results.rows.item[0].address, 
-							results.rows.item[0].place, results.rows.item[0].phone, results.rows.item[0].email);
-				},2500);
-//						$(<a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a>).
-//						appendTo($("#popupBasic"));
-//						$("#popupBasic").html(completeDescr);
-//					}
-//				}
-			},errorCCB());
-		});
-//		slideen(testname,testdescr,	testwebsite,testaddress,testplace,	testphone,	testemail	);
+		console.log("slideId.length" +slideId.length);
+		for (var b =0; b < slideId.length ; b++){
+			console.log("11 "+ slideId[b] + " "+ slideCat[b]);
+			if ((poiid == slideId[b]) && (categid == slideCat[b])){
+				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], slidePhone[b],slideEmail[b]);
+			}
+		}
 	}
 	else{
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM POIGR WHERE siteid =? ', [poiid], function (tx, results) {
-//				var len = results.rows.length;
-//				for (var j=0; j<len; j++){
-//					var x = results.rows.item(j).siteid;
-//					var y = results.rows.item(j).category;
-//					if ((poiid == x) && (categid == y)){
-//						var completeDescr = results.rows.item(j).descr;
-////						descr = results.rows.item(i).descr;
-//						console.log(completeDescr);
-				var j=0;
-//				testname =results.rows.item(j).name;
-//				testdescr =results.rows.item(j).descr;
-//				testwebsite =results.rows.item(j).website;
-//				testaddress =results.rows.item(j).address;
-//				testplace =results.rows.item(j).place;
-//				testphone =results.rows.item(j).phone;
-//				testemail =results.rows.item(j).email;
-//				var completeDescr = results.rows.item(j).descr;
-				setTimeout(function(){
-					slidegr(results.rows.item[0].name, results.rows.item[0].descr, results.rows.item[0].website, results.rows.item[0].address, 
-							results.rows.item[0].place, results.rows.item[0].phone, results.rows.item[0].email);
-				},2500);
-				
-//						$(<a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a>).
-//						appendTo($("#popupBasic"));
-//						$("#popupBasic").html(completeDescr);
-//					}
-//				}
-			},errorCCB());
-		});
-//	slidegr(testname,testdescr,	testwebsite,testaddress,testplace,	testphone,	testemail	);
+		for (var b =0; b < slideId.length ; b++){
+			if ((poiid == slideIdgr[b]) && (categid == slideCatgr[b])){
+				slidegr(slideNamegr[b], slideDescrgr[b], slideWebsitegr[b], slideAddressgr[b], slidePlacegr[b], slidePhonegr[b],slideEmailgr[b]);
+			}
+		}
 	}
 }
 
@@ -3077,36 +3128,69 @@ function errorCCB(err){
 
 function slideen(name, descr, web, add, place, phone, email)
 {
-	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
+	console.log("in Slideen");
+//	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
 	var fillhtml ='';
 	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 				+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
 	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
 	$("#inner").html(fillhtml);
-	console.log("inSlide");
-	var objDiv = document.getElementById("innner");
+	console.log("inSlide "+fillhtml);
+//	var objDiv = document.getElementById("innner");
 //	objDiv.scrollTop = objDiv.scrollHeight;
-//	$('.inner_wrap').addClass('active');
+	$('.inner_wrap').addClass('active');
+}
+
+function slideen3(name, descr, web, add, place, phone, email)
+{
+	console.log("in Slideen");
+//	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
+	var fillhtml ='';
+	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+				+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
+	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
+	$("#inner2").html(fillhtml);
+	console.log("inSlide "+fillhtml);
+//	var objDiv = document.getElementById("innner");
+//	objDiv.scrollTop = objDiv.scrollHeight;
+	$('.inner_wrap').addClass('active');
+}
+
+function slidegr3(name, descr, web, add, place, phone, email)
+{
+	console.log("in Slideen");
+//	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
+	var fillhtml ='';
+	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
+				+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
+	$("#inner2").html(fillhtml);
+	console.log("inSlide "+fillhtml);
+//	var objDiv = document.getElementById("innner");
+//	objDiv.scrollTop = objDiv.scrollHeight;
+	$('.inner_wrap').addClass('active');
 }
 
 function slidegr(name, descr, web, add, place, phone, email)
 {
-	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
+//	$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
 	var fillhtml ='';
-	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ξ™ΟƒΟ„ΞΏΟƒΞµΞ»Ξ―Ξ΄Ξ±: </b>'+web+'<br>' +'<b>Ξ”ΞΉΞµΟΞΈΟ…Ξ½ΟƒΞ·: </b>'+add+'<br>' +'<b>Ξ¤ΞΏΟ€ΞΏΞΈΞµΟƒΞ―Ξ±: </b>'
-				+place+'<br>' +'<b>Ξ¤Ξ·Ξ»Ξ­Ο†Ο‰Ξ½ΞΏ: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+	fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
+				+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
 	fillhtml += '<div class="button orange small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack"> </span></a></div>';
 	$("#inner").html(fillhtml);
 	console.log("inSlide");
 	var objDiv = document.getElementById("innner");
 //	objDiv.scrollTop = objDiv.scrollHeight;
-//	$('.inner_wrap').addClass('active');	
+	$('.inner_wrap').addClass('active');	
 }
 
 function slideBack()
 {
+	var fillhtml ='';
+	$("#inner").html(fillhtml);
 	console.log("inSlideBack");
-	$('.inner_wrap').removeClass('active');	
+	$('.inner_wrap').removeClass('active');
 }
 
 function clearWatch() {

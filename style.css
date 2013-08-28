@@ -584,7 +584,31 @@ small {
 	overflow-y:scroll !important;
 }
 
+#inner2 {
+	
+	background-color: #FFFFFF;
+	position: absolute;
+	width:90%;
+	height:90%;
+	top:5%;
+	bottom:5%;
+	left:5%;
+	right:5%;
+	color: #777777;
+	text-align: center;
+	padding: 10px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border: 4px solid rgba(0, 0, 0, 0.3);
+	overflow-y:scroll !important;
+}
+
 #inner .description {
+	font-size: 10px;
+}
+
+#inner2 .description {
 	font-size: 10px;
 }
 
@@ -608,6 +632,20 @@ small {
 	margin-right: -15px;
 }
 
+#inner2 .close_btn {
+	background-image: url('images/close_btn_white.png');
+	background-color: #777;
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin-top: -15px;
+	margin-right: -15px;
+}
 .markers_icons {
 	width: 110px;
 	display: block;
