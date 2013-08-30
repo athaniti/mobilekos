@@ -85,16 +85,16 @@
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="7" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
+  <Category id="8" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
     <Name>Food and Fun</Name>
     <Subcategories>
-      <Subcategory id="7_1">
+      <Subcategory id="8_1">
         <Name>Restaurants</Name>
       </Subcategory>
-      <Subcategory id="7_2">
+      <Subcategory id="8_2">
         <Name>Cafes</Name>
       </Subcategory>
-      <Subcategory id="7_3">
+      <Subcategory id="8_3">
         <Name>Night Clubs</Name>
       </Subcategory>
     </Subcategories>
@@ -139,34 +139,34 @@
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="8" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
+  <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
     <Name>General Information</Name>
     <Subcategories>
-      <Subcategory id="8_1">
+      <Subcategory id="9_1">
         <Name>Public Services</Name>
       </Subcategory>
-	  <Subcategory id="8_2">
+	  <Subcategory id="9_2">
         <Name>Health Clinics</Name>
       </Subcategory>
-	  <Subcategory id="8_3">
+	  <Subcategory id="9_3">
         <Name>Dispensaries</Name>
       </Subcategory>
-	  <Subcategory id="8_4">
+	  <Subcategory id="9_4">
         <Name>Pharmacies</Name>
       </Subcategory>
-	  <Subcategory id="8_5">
+	  <Subcategory id="9_5">
         <Name>Currency Exchange</Name>
       </Subcategory>
-	  <Subcategory id="8_6">
+	  <Subcategory id="9_6">
         <Name>Banks</Name>
       </Subcategory>
-	  <Subcategory id="8_7">
+	  <Subcategory id="9_7">
         <Name>Parking</Name>
       </Subcategory>
-	  <Subcategory id="8_8">
+	  <Subcategory id="9_8">
         <Name>Gas Stations</Name>
       </Subcategory>
-	  <Subcategory id="8_9">
+	  <Subcategory id="9_9">
         <Name>Courier</Name>
       </Subcategory>
     </Subcategories>

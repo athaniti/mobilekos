@@ -36,7 +36,7 @@ MyApp.resources = {
 		UserMustBeOnLine:"Internet Connection needed to get directions",
 		GetDirections:"Get directions",
 		ShowNone:"Show none",
-		MoreInfo:"More Î™nformation",
+		MoreInfo:"More Énformation",
 		CouldNotLoadItineraries:"Couldn't find itineraries for the specified email address",
 		Hide:"hide",
 		ShowPlaces:"Show places near you",
@@ -46,5 +46,7 @@ MyApp.resources = {
 		NoLocation:"Could not get your location",
 		CouldNotGetFilesFromPortal:"Could not get files from portal",
 		UpdateApp:"There is a new version of Kos.Mobile. Would you like to download it now?",
-		Hide:"Close"
+		Hide:"Close",
+		ItineraryPageHeaderNull:"No Itineraries found",
+		ItineraryPageHeaderOk:"You may select from the following itineraries"
 };

@@ -22,24 +22,13 @@
 <script src="js/json2.js"></script>
 <script src="js/main.js"></script>
 <script src="js/Control.Loading.js"></script>
-<script src="js/nicescroll.js"></script>
+<script src="js/jquery.nicescroll.js"></script>
 <script src="js/KML.js"></script>
 <!-- script src="js/GPX.js"></script-->
 <script src="js/resources.default.js"> </script>
 <script src="js/resources.gr.js"> </script> 
 <script src="js/resources.en.js"> </script>
 <script src="js/version.js"></script>
-<style>
-    /* hardware acceleration for smoother transitions on WebKit browsers 
-    .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal),
-    .ui-panel-animate.ui-panel:not(.ui-panel-display-reveal) > div,
-    .ui-panel-animate.ui-panel-closed.ui-panel-display-reveal > div,
-    .ui-panel-animate.ui-panel-content-wrap,
-    .ui-panel-animate.ui-panel-content-fixed-toolbar {
-      -webkit-backface-visibility: visible;
-      -webkit-transform: none;
-    }*/
-</style>
 <script type="text/css">
 	html {width:95%, height:100%}
 	body {width:95%, height:100%}
@@ -64,17 +53,6 @@
 				<p></p>
 				<p></p>
 				<h5>Please Wait...</h5>
-				<!--div class="loading_gif">
-					<div class="loader"><span>Please Wait...</span></div>
-				</div>
-				< script>
-					window.onload = function () {
-					    console.log("it works!");
-					    setTimeout(function(){
-					    	checkLanguageSettings();
-						},1500);
-					}
-				</script -->
 			</div>
 		</div>
 	</div>
@@ -106,11 +84,6 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<!--  div class="exit_icon">
-				<a href="#" onClick="exitApplication();"> <img
-					src="images/exit-icon.png" alt="logo" />
-				</a>
-			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -146,27 +119,16 @@
 			<li><a href="#" id="abtnExit" onClick = "exitApplication();"><span id="btnExit"></span></a></li-->
 		</ul>
 	</div>
-	
 	<div class="main_content">
 		<div class="loading_gif">
 			<div class="loader"><span>Please Wait...</span></div>
 		</div>
-		<!--  div class="clickPlaces">Click on Places button to see POIs near you</div-->
-		<!-- a href="#popupBasic" data-rel="popup" data-role="button" data-inline="true" data-transition="pop">Basic Popup</a-->
-		<!-- div data-role="popup" id="popupBasic">
-		    <!--  p>This is a completely basic popup, no options set.</p>
-		</div>
-		<div data-role="popup" id="popupBasic" class="ui-popup ui-overlay-shadow ui-corner-all ui-body-c" data-disabled="false" 
-			data-shadow="true" data-corners="true" data-transition="none" data-position-to="origin">
-			<p>This is a completely basic popup, no options set.
-			</p>
-		</div-->
 		<div id="map"></div>
 		<div class="inner_wrap" >
 			<div id="inner">
-				<div class="close_btn">
+				<!-- div class="button blue small">
 					<a href="#" id="abtnHide" onClick = "slideBack();">Hide</a>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!--div id="inner" style="display: block;"><b>Click on Places Button to see pois near you<br>!!! @#$%@#$%@#$%@#$@#$%</b></div-->
@@ -178,18 +140,7 @@
 			<a href="#" id="abtnFilterTour" onClick="loadItineraries();">
 			<span  id="btnFilterTour"></span></a>
 		</div>
-		<!-- div class="button compass btn_over">
-			<a href="#" id="abtnGeolocation" onClick ="onClickbtnFilterPlaces()"></a>
-		</div-->
 	</div>
-	<!--div class="placesInfo" style="display:none; z-index:9999;">
-			 <div class="container2">
-				 Click on Places button to see POIs near you.
-				<div class="button small blue">
-					<a href="#" onClick = "hide();"><span id="btnHide"> </span></a>
-				</div>
-			</div>
-	</div-->
 </div>
 
 <div data-role="page" id="placespage">
@@ -198,11 +149,6 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<!--  div class="exit_icon">
-				<a href="#" onClick="exitApplication();"> <img
-					src="images/exit-icon.png" alt="logo" />
-				</a>
-			</div>-->
 		 	<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -233,13 +179,8 @@
 			<li><a href="#" id="abtnPlaces2" onClick = "onClickbtnPlaces2();"><span id="btnPlaces2"></span></a></li>
 			<li><a href="#" id="abtnTour2" onClick = "switchToMainPage2();"><span id="btnTour2"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition2" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition2"></span></a></li>
-			<!--li><a href="#" id="abtnExit2" onClick = "navigator.app.exitApp();"><span id="btnExit2"></span></a></li-->
 		</ul>
 	</div>
-	<!--  div id="scrollbar1">
-    	<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-    	<div class="viewport">
-        	<div class="overview">-->
 	<div class="main_content2" style="padding-top:10px;">
 		<div class="loading_gif">
 			<div class="loader"><span>Please Wait...</span></div>
@@ -258,11 +199,6 @@
 						<span id="btnClearAll"> </span>
 					</a>
 				</div>
-				<!-- div class="button grey small">
-					<a href="#" data-inline="true" onClick = "showNone();">
-						<span id="btnShowNone"> </span>
-					</a>
-				</div> -->
 			</div>
 		</div>
     </div>
@@ -274,11 +210,6 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<!--  div class="exit_icon">
-				<a href="#" onClick="exitApplication();"> <img
-					src="images/exit-icon.png" alt="logo" />
-				</a>
-			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -288,6 +219,7 @@
 	</div>
 	<div class="options" style= "display:none; z-index:9999;">
 		 <div class="container">
+		 <div id="itinerarypageHeader" style="text-align:center"></div>
 			<div data-role="fieldcontain">
 				<label for="language_select" id="lbllanguageselect"></label>
 				<select name="language_select" id="language_select3">
@@ -309,7 +241,6 @@
 			<li><a href="#" id="abtnPlaces3" onClick = "onClickbtnPlaces2();"><span id="btnPlaces3"></span></a></li>
 			<li><a href="#" id="abtnTour3" onClick = "onClickbtnTour();"><span id="btnTour3"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition3" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition3"></span></a></li>
-			<!--li><a href="#" id="abtnExit3" onClick = "navigator.app.exitApp();"><span id="btnExit3"></span></a></li-->
 		</ul>
 	</div>
 	<div class="main_content">
@@ -334,11 +265,6 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<!--  div class="exit_icon">
-				<a href="#" onClick="exitApplication();"> <img
-					src="images/exit-icon.png" alt="logo" />
-				</a>
-			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -369,35 +295,23 @@
 			<li><a href="#" id="abtnPlaces4" onClick = "onClickbtnPlaces2();"><span id="btnPlaces4"></span></a></li>
 			<li><a href="#" id="abtnTour4" onClick = "onClickbtnTour();"><span id="btnTour4"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition4" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition4"></span></a></li>
-			<!-- li><a href="#" id="abtnExit4" onClick = "navigator.app.exitApp();"><span id="btnExit4"></span></a></li-->
 		</ul>
 	</div>
 	<div class="main_content" style="padding-top:20px;">
 		<div class="container">
-		<div class="inner_wrap" >
-			<div id="inner2">
-				<div class="close_btn">
-					<a href="#" id="abtnHide2" onClick = "slideBack();"> Hide</a>
+			<div class="inner_wrap" >
+				<div id="inner2">
 				</div>
 			</div>
-		</div>
   			<div align="center" style="margin-bottom:20px;"><fieldset id="availableDays" data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" ></fieldset></div>
-  			<!--div id="availablePois" class="button blue"></div>
-  			< >div align="center" style="margin-bottom:30px; width:80%;"><fieldset id="availablePois" data-role="controlgroup" 
-  			data-type="vertical" data-role="fieldcontain"></fieldset></div>
-	  		<img src="images/travel_directions.png" id='btnCallMap'/-->
 	  		<div id="availablePois"></div>
-	  		<div id="divItineraryInfo"></div>
-				<div class="button blue">
-					<a href="#" onClick = "showKmlFile();"><span id="btnLoad"> </span></a>
-				</div>		
-	 			<div class="button small blue">
-					<a href="#" onClick = "loadItineraries();"><span id="btnEachItineraryBack"> </span></a>
-				</div>
-				<!--<div align="center" data-role="controlgroup" data-type="horizontal"  data-role="fieldcontain" data-inline="true"  style=" margin-top: 5%; width:90%;">
-	  				<a  href="#"   data-icon="check" data-role="button"  data-theme="b" data-inline="true" onClick = "testdb();">
-	 				<span id="btntestdb"> </span></a> 
-	 			</div>-->
+	  		<div id="divItineraryInfo" style="text-align:center"></div>
+			<div class="button blue">
+				<a href="#" onClick = "showKmlFile();"><span id="btnLoad"> </span></a>
+			</div>		
+ 			<div class="button small blue">
+				<a href="#" onClick = "loadItineraries();"><span id="btnEachItineraryBack"> </span></a>
+			</div>
 		</div>
 	</div>
 </div>
@@ -408,11 +322,6 @@
 			<div class="app_logo">
 				<img src="images/logo_app.png" alt="logo"/>
 			</div>
-			<!--  div class="exit_icon">
-				<a href="#" onClick="exitApplication();"> <img
-					src="images/exit-icon.png" alt="logo" />
-				</a>
-			</div>-->
 			<div class="app_options no_active">
 				<a href="#" onClick = "onClickSettings();">
 					<img src="images/app_option_bg.png" alt="options">
@@ -458,13 +367,6 @@
 			<div class="button blue small">
 				<a href="#" id="abtnLoad" onClick="loadFromPortal($('#emailaccountitinerary').val())"><span  id="btnLoadItinerary"></span></a>
 			</div>
-			
-			<!--div data-role="controlgroup" style="width:80%" id="portalItineraries"></div>
-			
-			< div data-role="fieldcontain">
-				<a data-role="button" data-iconpos="right" data-icon="arrow-r" class="ui-disabled" id="abtnLoadSelected" href="#" 
-				onClick="loadXmlFromPortal()"><span  id="btnLoadSelected"></span></a>
-			</div-->
 			<div id="portalItineraries"></div>
 			
 			<div class="button blue small">

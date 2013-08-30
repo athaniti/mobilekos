@@ -84,16 +84,16 @@
       </Subcategory>
 	</Subcategories>
   </Category>
-  <Category id="7" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
+  <Category id="8" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
     <Name>Φαγητό και Διασκέδαση</Name>
     <Subcategories>
-      <Subcategory id="7_1">
+      <Subcategory id="8_1">
         <Name>Εστιατόρια</Name>
       </Subcategory>
-      <Subcategory id="7_2">
+      <Subcategory id="8_2">
         <Name>Καφετέριες</Name>
       </Subcategory>
-      <Subcategory id="7_3">
+      <Subcategory id="8_3">
         <Name>Νυχτερινά Κέντρα</Name>
       </Subcategory>
     </Subcategories>
@@ -138,34 +138,34 @@
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="8" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
+  <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
     <Name>Χρήσιμες Πληροφορίες</Name>
     <Subcategories>
-      <Subcategory id="8_1">
+      <Subcategory id="9_1">
         <Name>Δημόσιες Υπηρεσίες</Name>
       </Subcategory>
-	  <Subcategory id="8_2">
+	  <Subcategory id="9_2">
         <Name>Κέντρα Υγείας</Name>
       </Subcategory>
-	  <Subcategory id="8_3">
+	  <Subcategory id="9_3">
         <Name>Ιατρεία</Name>
       </Subcategory>
-	  <Subcategory id="8_4">
+	  <Subcategory id="9_4">
         <Name>Φαρμακεία</Name>
       </Subcategory>
-	  <Subcategory id="8_5">
+	  <Subcategory id="9_5">
         <Name>Υπηρεσίες Συναλλάγματος</Name>
       </Subcategory>
-	  <Subcategory id="8_6">
+	  <Subcategory id="9_6">
         <Name>Τράπεζες</Name>
       </Subcategory>
-	  <Subcategory id="8_7">
+	  <Subcategory id="9_7">
         <Name>Χώροι Στάθμευσης</Name>
       </Subcategory>
-	  <Subcategory id="8_8">
+	  <Subcategory id="9_8">
         <Name>Πρατήρια Καυσίμων</Name>
       </Subcategory>
-	  <Subcategory id="8_9">
+	  <Subcategory id="9_9">
         <Name>Ταχυμεταφορές</Name>
       </Subcategory>
     </Subcategories>
