@@ -139,7 +139,9 @@
 			</div>
 		</div>
 		<div class="inner_wrap" >
-			<div id="inner"></div>
+			<div id="inner">
+				<a class="boxclose"></a>
+			</div>
 		</div>
 		<div class="button blue btn_over">
 			<a href="#" id="abtnFilterPlaces" onClick ="onClickbtnFilterPlaces();">
@@ -213,10 +215,7 @@
     </div>
    	<div class="filtercategories" style="display:none; z-index:9999;">
 	 	<div class="container">
-			<div id="hotelContent"></div>
-			<div id="restaurantContent"></div>
-			<div id="archaiologicalContent"></div>
-			<div id="musicContent"></div>
+			
 			<div class="button blue small">
 				<a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges"> </span></a>
 			</div>
@@ -321,6 +320,7 @@
 		<div class="container">
 			<div class="inner_wrap" >
 				<div id="inner2">
+					<a class="boxclose"></a>
 				</div>
 			</div>
   			<div align="center" style="margin-bottom:20px;"><fieldset id="availableDays" data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" ></fieldset></div>
@@ -446,7 +446,9 @@
 		</div>
 		<div class="container">
 			<div class="inner_wrap" >
-				<div id="inner3"></div>
+				<div id="inner3">
+					<a class="boxclose"></a>
+				</div>
 			</div>
 			<div class="loading_gif">
 				<div class="loader"><span>Please Wait...</span></div>
@@ -461,6 +463,63 @@
 			</div>
 			<div id="showingInfo" style="text-align:center"></div>
 			<div id="orderedPlaces"></div>
+		</div>
+	</div>
+</div>
+
+<div  data-role="page" id="filterplaces" >
+	<div class="header">
+		<div class="container">
+			<div class="app_logo">
+				<img src="images/logo_app.png" alt="logo"/>
+			</div>
+			<div class="app_options no_active">
+				<a href="#" onClick = "onClickSettings();">
+					<img src="images/settings_new.png" alt="options">
+				</a>
+			</div>
+		</div>	
+	</div>
+	<div class="options" style="display:none; z-index:9999;">
+		 <div class="container">
+			<div data-role="fieldcontain">
+				<label for="language_select" id="lbllanguageselect"></label>
+				<select name="language_select" id="language_select6">
+	    			<option value="GR">Ελληνικά</option>
+	 				<option value="EN">English</option>
+				</select>
+			</div>
+			<div data-role="fieldcontain" >
+				<label for="emailaccount" id="lblemailaccount"></label>
+				<input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" />
+			</div>
+			<div class="button blue small">
+				<a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges7"> </span></a>
+			</div>
+		</div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces7" onClick = "onClickbtnPlaces2();"><span id="btnPlaces7"></span></a></li>
+			<li><a href="#" id="abtnTour7" onClick = "onClickbtnTour();"><span id="btnTour7"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition7" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition7"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="secondary_menu">
+			<ul>
+				<li><a href="#" id="abtnList3" onClick = "orderPlaces();"><span id="btnList3"></span></a></li>
+				<li><a href="#" id="abtnMap3" onClick = "showOrderedPlacesOnMap();"><span id="btnMap3"></span></a></li>
+				<li><a href="#" id="abtnFilter3" onClick = ""><span id="btnFilter3"></span></a></li>
+			</ul>
+		</div>
+		<div class="container">
+			<div id="filteredPlaces"></div>
+			<div id="hotelContent"></div>
+			<div id="restaurantContent"></div>
+			<div id="archaiologicalContent"></div>
+			<div id="musicContent"></div>
+			
 		</div>
 	</div>
 </div>
