@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Categories>
   <timestamp>1377088133</timestamp>
-  
   <Category id="5" guid="34d09bb3-790f-41ca-91ae-675a91c2e5a6">
     <Name>Sea</Name>
     <Subcategories>
@@ -48,19 +47,19 @@
   <Category id="6" guid="cc773226-381b-4c54-9d6f-02ccf4ded8d6">
     <Name>Transport</Name>
     <Subcategories>
-      <Subcategory id="6_1">
+      <Subcategory id="6_4">
         <Name>Car Rentals</Name>
       </Subcategory>
-      <Subcategory id="6_2">
+      <Subcategory id="6_5">
         <Name>Motorcycle Rentals</Name>
       </Subcategory>
-      <Subcategory id="6_3">
+      <Subcategory id="6_5">
         <Name>Bike Rentals</Name>
       </Subcategory>
-	  <Subcategory id="6_4">
+	  <Subcategory id="6_8">
         <Name>TAXI</Name>
       </Subcategory>
-	  <Subcategory id="6_5">
+	  <Subcategory id="6_3">
         <Name>Travel Agencies</Name>
       </Subcategory>
     </Subcategories>
@@ -72,29 +71,26 @@
         <Name>Archaelogical Sites and Monuments</Name>
       </Subcategory>
       <Subcategory id="2_2">
-        <Name>Museums</Name>
+        <Name>Museums and Cultural Centers</Name>
       </Subcategory>
       <Subcategory id="2_3">
-        <Name>Churches and Monasteries</Name>
+        <Name>Sites of Interest</Name>
       </Subcategory>
       <Subcategory id="2_4">
-        <Name>Venues of Culture</Name>
-      </Subcategory>
-      <Subcategory id="2_5">
-        <Name>Sites of Interest</Name>
+        <Name>Natural Beauties</Name>
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="8" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
+  <Category id="7" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
     <Name>Food and Fun</Name>
     <Subcategories>
-      <Subcategory id="8_1">
+      <Subcategory id="7_1">
         <Name>Restaurants</Name>
       </Subcategory>
-      <Subcategory id="8_2">
+      <Subcategory id="7_2">
         <Name>Cafes</Name>
       </Subcategory>
-      <Subcategory id="8_3">
+      <Subcategory id="7_5">
         <Name>Night Clubs</Name>
       </Subcategory>
     </Subcategories>
@@ -103,30 +99,24 @@
     <Name>Activities</Name>
     <Subcategories>
       <Subcategory id="4_1">
-        <Name>Hiking</Name>
-      </Subcategory>
-      <Subcategory id="4_2">
-        <Name>Cycling</Name>
+        <Name>Hiking and Cycling</Name>
       </Subcategory>
 	  <Subcategory id="4_3">
         <Name>Relax Centers</Name>
       </Subcategory>
 	  <Subcategory id="4_4">
-        <Name>Fitness Centers</Name>
-      </Subcategory>
-	  <Subcategory id="4_5">
-        <Name>Sports Centers</Name>
+        <Name>Sports Centers and Fitness Centers</Name>
       </Subcategory>
     </Subcategories>
   </Category>
   <Category id="1" guid="7c8dfb8f-a160-459f-965f-8fd5c209db80">
     <Name>Shopping</Name>
     <Subcategories>
+   	  <Subcategory id="1_2">
+        <Name>Local Markets</Name>
+      </Subcategory>
 	  <Subcategory id="1_1">
         <Name>Souvenir Shops</Name>
-      </Subcategory>
-	  <Subcategory id="1_2">
-        <Name>Local Markets</Name>
       </Subcategory>
 	  <Subcategory id="1_3">
         <Name>Bakeries</Name>
@@ -139,34 +129,34 @@
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
-    <Name>General Information</Name>
+  <Category id="8" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
+    <Name>Useful Information</Name>
     <Subcategories>
-      <Subcategory id="9_1">
+      <Subcategory id="8_1">
         <Name>Public Services</Name>
       </Subcategory>
-	  <Subcategory id="9_2">
+	  <Subcategory id="8_2">
         <Name>Health Clinics</Name>
       </Subcategory>
-	  <Subcategory id="9_3">
+	  <Subcategory id="8_3">
         <Name>Dispensaries</Name>
       </Subcategory>
-	  <Subcategory id="9_4">
+	  <Subcategory id="8_4">
         <Name>Pharmacies</Name>
       </Subcategory>
-	  <Subcategory id="9_5">
+	  <Subcategory id="8_5">
         <Name>Currency Exchange</Name>
       </Subcategory>
-	  <Subcategory id="9_6">
+	  <Subcategory id="8_6">
         <Name>Banks</Name>
       </Subcategory>
-	  <Subcategory id="9_7">
+	  <Subcategory id="8_7">
         <Name>Parking</Name>
       </Subcategory>
-	  <Subcategory id="9_8">
+	  <Subcategory id="8_8">
         <Name>Gas Stations</Name>
       </Subcategory>
-	  <Subcategory id="9_9">
+	  <Subcategory id="8_9">
         <Name>Courier</Name>
       </Subcategory>
     </Subcategories>

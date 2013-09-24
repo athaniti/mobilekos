@@ -142,10 +142,10 @@ a {
 	float: left;
 	position: relative;
 }
-
+/*
 #popupBasic {
-	/*position: absolute;
-	display: none;*/
+	position: absolute;
+	display: none;
 	z-index: 9999;
 }
 
@@ -158,8 +158,8 @@ a {
 	z-index: 9999;
 	width: 16px;
 	height: 16px;
-	/*	display: none;*/
-}
+	display: none;
+}*/
 
 /*-----------------------------------------------------------------------------------*/
 /* App Logo Settings
@@ -220,6 +220,115 @@ a {
 }
 
 /*-----------------------------------------------------------------------------------*/
+/*	Secondary Menu Settings
+/*-----------------------------------------------------------------------------------*/
+
+.secondary_menu {
+	left: 0px;
+	position: absolute;
+	width: 100%;
+	float: left;
+	position: relative;
+	z-index: 1000;
+}
+
+.secondary_menu ul {
+	width: 100%;
+	float:left;
+	background:#000;
+}
+.secondary_menu ul li{
+	width:33.3%;
+	float:left;
+}
+.secondary_menu ul li a {
+	float: left;
+	width: 100%;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+	color: #fff !important;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 40px;
+	height: 40px;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+	background: #000;
+	}
+
+.secondary_menu ul li:first-child a {
+	border-left: 0px;
+}
+
+.secondary_menu ul li:last-child a {
+	border-right: 0px;
+}
+
+.secondary_menu ul li a.active {
+	color: #fff !important;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+.secondary_menu ul li a:hover{
+		}
+.secondary_menu ul li a#abtnFilter{
+	background: #000 url(images/search.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnFilter:hover,
+.secondary_menu ul li a#abtnFilter.active{
+	background: #363636 url(images/search.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnMap{
+	background: #000 url(images/mapmarker.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnMap:hover,
+.secondary_menu ul li a#abtnMap.active{
+	background: #363636 url(images/mapmarker.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnList{
+ 	background: #000 url(images/list2.png) no-repeat;
+	background-position: 10px;	
+}
+.secondary_menu ul li a#abtnList:hover,
+.secondary_menu ul li a#abtnList.active{
+ 	background: #363636 url(images/list2.png) no-repeat;
+ 	background-position: 10px;
+}
+
+/**/
+
+.secondary_menu ul li a#abtnFilter2{
+	background: #000 url(images/search.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnFilter2:hover,
+.secondary_menu ul li a#abtnFilter2.active{
+	background: #363636 url(images/search.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnMap2{
+	background: #000 url(images/mapmarker.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnMap2:hover,
+.secondary_menu ul li a#abtnMap2.active{
+	background: #363636 url(images/mapmarker.png) no-repeat;
+	background-position: 10px;
+}
+.secondary_menu ul li a#abtnList2{
+ 	background: #000 url(images/list2.png) no-repeat;
+	background-position: 10px;	
+}
+.secondary_menu ul li a#abtnList2:hover,
+.secondary_menu ul li a#abtnList2.active{
+ 	background: #363636 url(images/list2.png) no-repeat;
+ 	background-position: 10px;
+}
+
+/*-----------------------------------------------------------------------------------*/
 /*	Options Settings
 /*-----------------------------------------------------------------------------------*/
 
@@ -256,6 +365,35 @@ a {
 	color: #ffffff;
 	display: none;
 }
+
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Filter Categories Settings
+/*-----------------------------------------------------------------------------------*/
+
+.filtercategories {
+	width: 100%;
+	float: left;
+	margin:0px;
+	background-color: #353535;
+	color: #ffffff;
+	display: none;
+}
+
+input#search_box {
+	border: solid 1px #229EE6 !important;
+	font-size: 1.3em;
+}
+
+#music_select, #era_select, #cuisine_select, #hotel_select
+{
+	width: 80%;
+	padding: 3px;
+	font-size: 1.2em;
+	
+}
+
 
 /*-----------------------------------------------------------------------------------*/
 /*	Inputs Settings
@@ -399,6 +537,7 @@ small {
 	background: -webkit-gradient(linear, left top, left bottom, from(#f49426),
  to(#b56911));
 }
+
 .button.grey a {
 	background: -moz-linear-gradient(top, #918F87 0%, #6B6963);
 	background: -webkit-gradient(linear, left top, left bottom, from(#918F87),
@@ -437,6 +576,32 @@ small {
 	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
 		rgba(255, 255, 255, 0.5);
 }
+/*
+.secondary_menu {
+	background: -moz-linear-gradient(top, #e8e8e8 0%, #cacaca);
+	background: -webkit-gradient(linear, left top, left bottom, from(#e8e8e8),
+		to(#cacaca));
+	border-color: #c2c2c2;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}*/
+
+.button.dark_grey a,.secondary_menu ul li a.active {
+	background: -moz-linear-gradient(top, #494949 0%, #1e1e1e);
+	background: -webkit-gradient(linear, left top, left bottom, from(#494949),
+		to(#1e1e1e));
+	border-color: #1e1e1e;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
 
 .button.orange a {
 	background: -moz-linear-gradient(top, #ffa200 0%, #ff8c00);
@@ -459,8 +624,6 @@ small {
 	margin: 0px 20px 0px 0px;
 	width: 100%
 }
-
-
 
 /*-----------------------------------------------------------------------------------*/
 /*	Devider Settings
@@ -508,7 +671,7 @@ small {
 	z-index: 100;
 	float: left;
 	position: relative;
-	background-image: url('images/map.png');
+	background-image: url('images/kos_map.png');
 	/*background: #e8e8e8 url('images/map.jpg');*/
 }
 /*
@@ -559,6 +722,19 @@ small {
 }
 
 /*-----------------------------------------------------------------------------------*/
+/*	OrderPlaces page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#orderplacesHeader {
+	margin: 20px 10px;
+	padding: 5px 0px;
+	background-color: #F8F8F8;
+	border: 2px 66FFFF;
+	box-shadow: 10px 10px 10px #888888;
+	opacity: 0.9;
+}
+
+/*-----------------------------------------------------------------------------------*/
 /*	Map Preview Settings
 /*-----------------------------------------------------------------------------------*/
 #map {
@@ -568,7 +744,7 @@ small {
 	height:350px;*/
 }
 .inner_wrap {
-	z-index: 9999;
+	z-index: 9990;
 	position: absolute;
 	top: 0;
 	right:0;
@@ -625,11 +801,35 @@ small {
 	overflow-y:scroll !important;
 }
 
+#inner3 {
+	background-color: #FFFFFF;
+	position: absolute;
+	width:90%;
+	height:90%;
+	max-height:400px;
+	top:5%;
+	bottom:5%;
+	left:5%;
+	right:5%;
+	color: #777777;
+	text-align: center;
+	padding: 10px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border: 4px solid rgba(0, 0, 0, 0.3);
+	overflow-y:scroll !important;
+}
+
 #inner .description {
 	font-size: 10px;
 }
 
 #inner2 .description {
+	font-size: 10px;
+}
+
+#inner3 .description {
 	font-size: 10px;
 }
 
@@ -667,12 +867,28 @@ small {
 	margin-top: -15px;
 	margin-right: -15px;
 }
+
+#inner3 .close_btn {
+	background-image: url('images/close_btn_white.png');
+	background-color: #777;
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin-top: -15px;
+	margin-right: -15px;
+}
+
 .markers_icons {
 	width: 110px;
 	display: block;
 	margin: 0px auto;
 }
-
+/*
 .marker_icon {
 	width: 30px;
 	height: 30px;
@@ -681,8 +897,8 @@ small {
 	position: absolute;
 	top: 50%;
 	left: -100%;
-	z-index: 9999;
-}
+	z-index: 50;
+}*/
 
 .button_list {
 	border: 1px solid #ccc !important;
@@ -801,9 +1017,11 @@ small {
 	bottom:80px;
 	z-index:9999;
 }*/
+
 /*-----------------------------------------------------------------------------------*/
 /*	Loader
 /*-----------------------------------------------------------------------------------*/
+
 .loading_gif {
 	position: absolute;
 	top: 0;
@@ -863,6 +1081,13 @@ small {
    opacity:0;
   }
 }
+
+#hotel_select img{
+	width: 50px;
+	heigth: 10px;
+}
+
+
 
 /*.loading_gif {
 	position: absolute;

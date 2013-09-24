@@ -3,6 +3,7 @@ var firstTime = true;
 //var basemap;
 var screenHeight;
 //var fulldescription='';
+var dbExistis = false;
 var screenWidth;
 var currentTimestamp = [];
 var currentLat;
@@ -15,14 +16,18 @@ var cuisine = false;
 var era  = false;
 var music = false;
 //var currentVersionCode;
-var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
-var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPoiid = [];
+var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerPlace = [], markerSSubCat = [];
+var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], 
+	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 var subsubEn = [], subsubGr = [];
+var reOrdered = false;
 var currentVersionName;
 //var testname, testdescr, testwebsite, testaddress,testplace,testphone,testemail;
 var platformName;
-var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], slidePlace= [], slidePhone= [], slideEmail= [];
-var slideIdgr = [], slideCatgr = [], slideNamegr = [], slideDescrgr= [], slideWebsitegr= [], slideAddressgr= [], slidePlacegr= [], slidePhonegr= [], slideEmailgr= [];
+var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], 
+	slidePlace= [], slidePhone= [], slideEmail= [], slideImage = [];
+var slideIdgr = [], slideCatgr = [], slideNamegr = [], slideDescrgr= [], slideWebsitegr= [], slideAddressgr= [], 
+	slidePlacegr= [], slidePhonegr= [], slideEmailgr= [], slideImagegr = [];
 var watchClear = false;
 var marker1;
 var cancelBackButton = false;
@@ -78,9 +83,18 @@ var MarkerSights = new LeafIcon({iconUrl: 'dist/images/list2.png'}),
 	MarkerActivities = new LeafIcon({iconUrl: 'dist/images/list14.png'}),
 	MarkerSea = new LeafIcon({iconUrl: 'dist/images/list3.png'}),
 	MarkerTransport = new LeafIcon({iconUrl: 'dist/images/list13.png'}),
-	MarkerEntertainment = new LeafIcon({iconUrl: 'dist/images/list11.png'}),
+	MarkerInfo = new LeafIcon({iconUrl: 'dist/images/list15_0_default.png'}),
 	MarkerFood = new LeafIcon({iconUrl: 'dist/images/list12.png'});
 	MarkerShopping = new LeafIcon({iconUrl: 'dist/images/shopping.png'});
+	PublicServices = new LeafIcon({iconUrl: 'dist/images/list15_0_default.png'});
+	HealthClinics = new LeafIcon({iconUrl: 'dist/images/list15_1_default.png'});
+	Dispensaries = new LeafIcon({iconUrl: 'dist/images/list15_2_default.png'});
+	Pharmacies = new LeafIcon({iconUrl: 'dist/images/list15_3_default.png'});
+	CurrencyExchange = new LeafIcon({iconUrl: 'dist/images/list15_4_default.png'});
+	Banks = new LeafIcon({iconUrl: 'dist/images/list15_5_default.png'});
+	Parking = new LeafIcon({iconUrl: 'dist/images/list15_6_default.png'});
+	GasStations = new LeafIcon({iconUrl: 'dist/images/list15_7_default.png'});
+	Courier = new LeafIcon({iconUrl: 'dist/images/list15_8_default.png'});
 
 function onDeviceReady() {
 	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 6000000);
@@ -95,24 +109,24 @@ function onDeviceReady() {
 	platformName = device.platform;
 	deviceOSVersion = device.version;
 	deviceOSVersion = parseInt(deviceOSVersion);
-	console.log("device.version "+device.version);
+	////console.log("device.version "+device.version);
 //	alert("platformName "+platformName);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
 	}
 	window.plugins.version.getVersionName(
 		    function(version_name) {		        //do something with version_name
-		        console.log(version_name);
+		        ////console.log(version_name);
 		        currentVersionName = version_name;
 		        checkAppVersion();
 		    },
 		    function(errorMessage) {		        //do something with errorMessage
-		        console.log(errorMessage);
+		        ////console.log(errorMessage);
 		    }
 		);
 
 	setInterval(function(){
-		console.log("Checking Internet Connection...");
+		////console.log("Checking Internet Connection...");
 		if(navigator.network && navigator.connection.type != Connection.NONE){
 			isOffline = false;
 		}
@@ -146,10 +160,9 @@ function checkLanguageSettings()
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SETTINGS', [], function (tx, results) {
 			len = results.rows.length;
-			console.log("SETTINGS.length= "+len);
+			////console.log("SETTINGS.length= "+len);
 			if ((len == null) || (len == 0)){
-				console.log("okook");
-				switchToSecondPage();
+				////console.log("okook");
 				showPlacesInfo = true;
 //				createDb();
 				populateDB();
@@ -157,12 +170,13 @@ function checkLanguageSettings()
 			else{
 //				langstr = language = results.rows.item(0).data;
 				language = results.rows.item(0).data;
-				console.log("langstr: "+langstr);
+				////console.log("langstr: "+langstr);
 				checkForLanguage();
 				cancelBackButton = true;
 				if (isOffline == false){
 //					sync();
 				}
+				dbExistis = true;
 				createCatArraysEn();
 				createSubCatArraysEn();
 				createPoiArraysEn();
@@ -193,7 +207,7 @@ function createCuisineArrayEn(){
 	$(xmlCuisine).find("Cuisine").each(function(){
 		cuisineEn.push($(this).text());
 	});
-	console.log(cuisineEn.length);
+	//console.log(cuisineEn.length);
 }
 
 function createCuisineArrayGr(){
@@ -209,14 +223,14 @@ function createCuisineArrayGr(){
 	$(xmlCuisinegr).find("Cuisine").each(function(){
 		cuisineGr.push($(this).text());
 	});
-	console.log(cuisineGr.length);
+	//console.log(cuisineGr.length);
 }*/
 
 function populateDB(tx)
 {
-	console.log("IN POPULATE DB");
+	////console.log("IN POPULATE DB");
 	db.transaction(function (tx) {
-		console.log("populateDB(tx)");
+		////console.log("populateDB(tx)");
 		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
 //		tx.executeSql('DROP TABLE IF EXISTS POINTS');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
@@ -238,11 +252,11 @@ function populateDB(tx)
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id, name, catid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id, name, catid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
 //		tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
-		console.log("populateDB()2");
+		////console.log("populateDB()2");
 		populateDatabases();
 	});
 }
@@ -250,11 +264,11 @@ function populateDB(tx)
 function createCatArraysEn(){
 	catNameEn = [];
 	catGuid = [];
-	console.log("in createCatArraysEn()");
+	////console.log("in createCatArraysEn()");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
 			for (var i = 0; i < results.rows.length; i++){
-//				console.log("catName1111: "+results.rows.item(i).name);
+//				//console.log("catName1111: "+results.rows.item(i).name);
 				catNameEn.push(results.rows.item(i).name);
 				catGuid.push(results.rows.item(i).id);
 			}
@@ -306,7 +320,7 @@ function createPoiArraysEn(){
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM POIEN', [], function (tx, results) {
 			var k = results.rows.length;
-			console.log("POIEN LENGTH"+ k);
+			////console.log("POIEN LENGTH"+ k);
 			for (var p =0;p<k; p++){
 				slideId.push(results.rows.item(p).siteid); 
 				slideCat.push(results.rows.item(p).category);
@@ -316,9 +330,14 @@ function createPoiArraysEn(){
 				slideAddress.push(results.rows.item(p).address); 
 				slidePlace.push(results.rows.item(p).place); 
 				slidePhone.push(results.rows.item(p).phone); 
-				slideEmail.push(results.rows.item(p).email);
+				slideEmail.push(results.rows.item(p).email);				
+				var str = results.rows.item(p).image;
+				str = str.replace('src="','src="http://www.kos.gr');
+				str = str.replace('style="border-width: 0px;','height="auto" width="80%'); 
+//				console.log(str); 
+				slideImage.push(str);
 //				subsubEn.push(results.rows.item(p).ssubcat);
-//				console.log("09 "+results.rows.item(p).ssubcat);
+//				//console.log("09 "+results.rows.item(p).ssubcat);
 			}
 		});
 	});
@@ -326,11 +345,11 @@ function createPoiArraysEn(){
 }
 
 function createPoiArraysGr(){
-	console.log("in createPOIArraysEn()");
+	////console.log("in createPOIArraysEn()");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
 			var k = results.rows.length;
-			console.log("POIGR LENGTH"+ k);
+			////console.log("POIGR LENGTH"+ k);
 			for (var p =0;p<k; p++){
 				slideIdgr.push(results.rows.item(p).siteid); 
 				slideCatgr.push(results.rows.item(p).category);
@@ -341,15 +360,22 @@ function createPoiArraysGr(){
 				slidePlacegr.push(results.rows.item(p).place); 
 				slidePhonegr.push(results.rows.item(p).phone); 
 				slideEmailgr.push(results.rows.item(p).email);
+				var str = results.rows.item(p).image;
+				str = str.replace('src="','src="http://www.kos.gr');
+//				str = str.replace('style="border-width: 0px;','');
+				str = str.replace('style="border-width: 0px;','height="auto" width="80%');
+//				console.log(n);
+				slideImagegr.push(str);
 //				subsubGr.push(results.rows.item(p).ssubcat);
-//				console.log("21 "+results.rows.item(p).ssubcat);
+//				//console.log("21 "+results.rows.item(p).ssubcat);
 			}
 		});
+		switchToSecondPage();
 	});
 }
 
 function errorCB(err) {
-    console.log("Error processing SQL: "+err.code);
+    ////console.log("Error processing SQL: "+err.code);
 }
 
 function successCB() {
@@ -358,30 +384,35 @@ function successCB() {
 
 function switchToSecondPage()
 {
-	$( ".loading_gif" ).css( "display", "none" );
-	$('#secondpage').trigger("create");
-	$.mobile.changePage($('#secondpage'), 'pop');
+	if (dbExistis){
+		//do Nothing
+	}
+	else{
+		$( ".loading_gif" ).css( "display", "none" );
+		$('#secondpage').trigger("create");
+		$.mobile.changePage($('#secondpage'), 'pop');
+	}
 }
 
 function success13CB(){
 	populateDB();
-	console.log("success13CB");
+	//console.log("success13CB");
 	setTimeout(function(){
-		switchToSecondPage();
+//		switchToSecondPage();
 	},4000);
 	showPlacesInfo = true;
 //	createDb();
 }
 
 function error13CB(){
-	console.log("error13CB");
+	////console.log("error13CB");
 }
 
 function onBackKeyDown(e) {
-	console.log("cancelBackButton "+cancelBackButton);
+	////console.log("cancelBackButton "+cancelBackButton);
 	if (cancelBackButton == true){
 //		Do Nothing!
-		console.log("doing nothing..");
+		////console.log("doing nothing..");
 	}
 	else{
 		if ($.mobile.activePage.is('#firstpage')) {
@@ -400,7 +431,7 @@ function onBackKeyDown(e) {
 }
 
 function sync(){
-	console.log("in sync");
+	////console.log("in sync");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM TIMESTAMP', [], function (tx, results){
 			var len = results.rows.length, i;
@@ -410,7 +441,7 @@ function sync(){
 			popNewTimestampDb();
 		}, errorCB);
 	});
-	console.log("in sync2");
+	////console.log("in sync2");
 	downloadXmlFiles();
 }
 
@@ -427,12 +458,12 @@ function checkAppVersion(){
 			var y = data.indexOf("AppLinkAndroid"); 
 			var newVersion = data.slice(k,y-3);
 			var update;
-			console.log("newVersion ="+newVersion);
+			////console.log("newVersion ="+newVersion);
 //			var newerVersion = function compareVersionNumbers(newVersion, currentVersionName){
 			var v1parts = newVersion.split('.');
 			var v2parts = currentVersionName.split('.');
-			console.log(v1parts);
-			console.log(v2parts);
+			////console.log(v1parts);
+			////console.log(v2parts);
 			for (var i = 0; i < v1parts.length; ++i) {
 				if (v2parts.length === i) {
 					update = 1;
@@ -448,16 +479,16 @@ function checkAppVersion(){
 				update = -1;
 			}
 			if (update == 1){
-				console.log("newerVersion 1");
+				////console.log("newerVersion 1");
 				udpateApp();
 			}
 			else if (update == -1){
-				console.log("newerVersion -1");
+				////console.log("newerVersion -1");
 			}
 
 		},
 		error: function () {
-			console.log("Could NOT get new Version");
+			////console.log("Could NOT get new Version");
 		}
 	});
 }
@@ -488,7 +519,7 @@ function udpateApp(){
 }
 
 function checkDb(){
-//	console.log("in CheckDb");
+//	//console.log("in CheckDb");
 //	var len;
 //	db.transaction(function (tx) {
 //		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
@@ -507,7 +538,7 @@ function error0CB(){
 }
 
 function success0CB(){
-	console.log("success0CB");
+	////console.log("success0CB");
 }
 
 function checkItinerariesDb(){
@@ -533,7 +564,7 @@ function createItDb(){
 
 
 function populateDatabases(){
-	console.log("in populateDatabases");
+	////console.log("in populateDatabases");
 	loadXmlCat(1);
 //	popCategoriesEnDb();
 	popSubCategoriesEnDb();
@@ -546,19 +577,19 @@ function populateDatabases(){
 //	popPoiGrDb();
 	popTimestampDb();
 //	setTimeout(function(){sync();},1000);
-	setTimeout(function(){
-		createCatArraysEn();
-	},1000);
-	setTimeout(function(){
-		createSubCatArraysEn();
-	},1000);
-	setTimeout(function(){
-		createPoiArraysEn();
-	},1000);
+//	setTimeout(function(){
+//		createCatArraysEn();
+//	},500);
+//	setTimeout(function(){
+//		createSubCatArraysEn();
+//	},500);
+//	setTimeout(function(){
+//		createPoiArraysEn();
+//	},500);
 }
 
 function popCategoriesEnDb(){
-	console.log("in popCategoriesEnDb()");
+	////console.log("in popCategoriesEnDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc.getElementsByTagName("Category");
 		var  guid, catName;
@@ -567,7 +598,7 @@ function popCategoriesEnDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
 			catName = xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
-			console.log("catName: "+catName);
+			////console.log("catName: "+catName);
 			guid = xmlDoc.getElementsByTagName("Category")[i].getAttribute('guid');
 //			alert(catId+ " "+ guid+" "+catName+" "+timestamp);
 			tx.executeSql('INSERT INTO CATEGORIESEN (id, name, guid) VALUES (?,?,?)',[catId,catName,guid], success3CB, error3CB);
@@ -581,7 +612,7 @@ function success3CB(){
 }
 
 function popSubCategoriesEnDb(){
-	console.log("in popSubCategoriesEnDb()");
+	////console.log("in popSubCategoriesEnDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc.getElementsByTagName("Category");
 		var sub, subId, subName;
@@ -614,7 +645,7 @@ function success4CB(){
 }
 
 function popCategoriesGrDb(){
-	console.log("in popCategoriesGrDb()");
+	////console.log("in popCategoriesGrDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc1.getElementsByTagName("Category");
 		var  guid, catName;
@@ -636,11 +667,11 @@ function success5CB(){
 }
 
 function error5CB(){
-	console.log("error5CB");
+	////console.log("error5CB");
 }
 
 function popSubCategoriesGrDb(){
-	console.log("in popSubCategoriesGrDb()");
+	////console.log("in popSubCategoriesGrDb()");
 	db.transaction(function(tx) {
 		var cat =  xmlDoc1.getElementsByTagName("Category");
 		var sub, subId, subName;
@@ -670,12 +701,12 @@ function popSubCategoriesGrDb(){
 		}
 
 function popPoiEnDb(){
-	console.log("in popPoiEnDb");
+	//console.log("in popPoiEnDb");
 	db.transaction(function(tx) {
 		var LenCat =  xmlDoc2.getElementsByTagName("Poi").length;
 //		alert('LenCat: '+LenCat);
 //		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat, pois;
-		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub2;
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub2, img;
 //		pois = xmlDoc.getElementsByTagName("Pois")[0];
 		timestampc = $(xmlDoc2).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	
@@ -693,6 +724,7 @@ function popPoiEnDb(){
 			place = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Place")[0].textContent;
 			phone = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Phone")[0].textContent;
 			email = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Email")[0].textContent;
+			img = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("ImgLink")[0].textContent;
 			ssub2 = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("SubSucategories")[0].textContent;
 			if ((ssub2 == null) || (ssub2 == '') || (ssub2 == undefined)){
 				ssub2 = "none";
@@ -700,14 +732,14 @@ function popPoiEnDb(){
 			else {
 				ssub2 = ssub2.trim();
 			}
-//			console.log("222 "+ssub2);
+//			//console.log("222 "+ssub2);
 			for(var x = 0; x < poiSubCat.length; x++) 		//creating list of places
 			{
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
-//			console.log(poiId+" || "+poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
-			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'
-					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub2], successCB, error2CB);
+//			//console.log(poiId+" || "+poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
+			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub2, img], successCB, error2CB);
 		}
 //		alert("5: "+poiName);
 	});	
@@ -718,14 +750,14 @@ function success6CB(){
 }
 
 function error6CB(){
-	console.log("error6CB");
+	//console.log("error6CB");
 }
 
 function popPoiGrDb(){
-	console.log("popPoiGrDb");
+	//console.log("popPoiGrDb");
 	db.transaction(function(tx) {
 		var LenCat =  xmlDoc3.getElementsByTagName("Poi").length;
-		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub;
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub, img;
 		timestampd = $(xmlDoc3).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	{
 			ssub = '';
@@ -742,6 +774,7 @@ function popPoiGrDb(){
 			place = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Place")[0].textContent;
 			phone = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Phone")[0].textContent;
 			email = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Email")[0].textContent;
+			img = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("ImgLink")[0].textContent;
 			ssub = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("SubSucategories")[0].textContent;
 			if ((ssub == null) || (ssub == '') || (ssub == undefined)){
 				ssub = "none";
@@ -749,25 +782,32 @@ function popPoiGrDb(){
 			else {
 				ssub = ssub.trim();
 			}
-//			console.log("333 "+ssub);
+//			//console.log("333 "+ssub);
 			for(var x = 0; x < poiSubCat.length; x++) 		//creating list of places
 			{
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
-//			console.log(poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
-			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'
-					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub], successCB, error2CB);
+//			//console.log(poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
+			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub, img], sccssCB, error2CB);
 		}
 //		alert("6: "+poiName);
+		createCatArraysEn();
+		createSubCatArraysEn();
+		createPoiArraysEn();
 	});
 }
 
+function sccssCB(){
+
+}
+
 function error2CB(){
-	console.log('error2CB');
+	//console.log('error2CB');
 }
 
 function popTimestampDb(){
-	console.log("in popTimestampDb");
+	//console.log("in popTimestampDb");
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[1,timestampa],successCB,error7CB);
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[2,timestampb],successCB,error7CB);
@@ -777,7 +817,7 @@ function popTimestampDb(){
 }
 
 function popNewTimestampDb(){
-	console.log("in popNewTimestampDb");
+	//console.log("in popNewTimestampDb");
 	db.transaction(function(tx) {
 		tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
@@ -789,28 +829,28 @@ function popNewTimestampDb(){
 }
 
 function error9CB(){
-	console.log("error9CB!");
+	//console.log("error9CB!");
 }
 
 function error7CB(err){
-	console.log("error7CB"+err.code);
+	//console.log("error7CB"+err.code);
 }
 
 function error3CB(){
-	console.log('error db 3');
+	//console.log('error db 3');
 }
 
 function error4CB(){
-	console.log('error db 4');
+	//console.log('error db 4');
 }
 
 function onSearchKeyDown()
 {
-	console.log('button search');
+	//console.log('button search');
 }
 
 function downloadXmlFiles(){
-	console.log('in downloadXmlFiles');
+	//console.log('in downloadXmlFiles');
 	var data;
 	$.ajax({ 
 		dataType: "json",
@@ -848,7 +888,7 @@ function getTimestamp(data){
 			popNewPoiGrDb(data);
 		}
 	}
-	console.log("po= "+po);
+	//console.log("po= "+po);
 	po++;
 }
 
@@ -881,7 +921,7 @@ function success8CB(){
 }
 
 function error8CB(){
-	console.log("error8CB!");
+	//console.log("error8CB!");
 }
 
 function popNewSubCategoriesGrDb(data)
@@ -915,7 +955,7 @@ function success9CB(){
 
 
 //function error9CB(){
-//	console.log("error9CB!");
+//	//console.log("error9CB!");
 //}
 //	db.transaction(function(tx) {
 //	tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',[subId,subName,catId], successCB, error4CB);
@@ -924,7 +964,7 @@ function success9CB(){
 //	});
 
 function popNewPoiGrDb(data){
-	console.log("inpopNewPoiGrDb");
+	//console.log("inpopNewPoiGrDb");
 //	alert(data);
 	var namePoi = [];
 	var descrPoi = [];
@@ -972,9 +1012,9 @@ function popNewCategoriesEnDb(data){
 //			catId = $(this).attr("id");
 //			guid = $(this).attr("guid");
 //		});
-		console.log(data);
+		//console.log(data);
 		$(data).find("category subcategories subcategory name").each(function (){
-			 console.log($(this).text());
+			 //console.log($(this).text());
 		});
 //		catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
 			catName = xmlDoc.getElementsByTagName("Category")[i].getElementsByTagName("Name")[0].textContent;
@@ -1033,7 +1073,7 @@ function createXmlString(xmlString){
 	var xmlStart = xmlString.search('<?xml version') - 2;
 	var xmlEnd = xmlString.length -14;
 	xmlString = xmlString.substring( xmlStart, xmlEnd);
-	console.log("newXmlFileName: "+newXmlFileName); 
+	//console.log("newXmlFileName: "+newXmlFileName); 
 	getTimestamp(xmlString);
 }
 
@@ -1069,7 +1109,7 @@ function drawPlacesPageEn(len){
 	var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.placesPageHeader+'</span>';
 	len = catNameEn.length;
 	for (var k=0; k <catNameEn.length ; k++){
-//		console.log("wwwww "+catNameEn[k]);
+//		//console.log("wwwww "+catNameEn[k]);
 		fillhtml += "<fieldset data-role='collapsible' data-theme='g' data-content-theme='g'>";
 		fillhtml += "<legend>" + catNameEn[k] + "</legend>";
 		fillhtml += "<div data-role='controlgroup'>";
@@ -1098,12 +1138,12 @@ function drawPlacesPageEn(len){
 	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 //	setLabelsForMainPage();
 	var email = $('#emailaccountchange2').val();
-	console.log("2222 email: "+email);
+	//console.log("2222 email: "+email);
 	if ( email == null || email == ""){
 		var cm = "";
 		if (currentEmail!=undefined) cm=currentEmail;
 		$('#emailaccountchange2').val(cm);
-		console.log(cm);
+		//console.log(cm);
 	}
 }
 
@@ -1142,7 +1182,7 @@ function drawPlacesPageGr(len){
 	var email = $('#emailaccountchange2').val();
 	if ( email == null || email == ""){
 		$('#emailaccountchange2').val(currentEmail);
-		console.log(currentEmail);
+		//console.log(currentEmail);
 	}
 	$('#abtnTour2').removeClass("active");
 	$('#abtnPlaces2').addClass("active");
@@ -1351,17 +1391,38 @@ function onClickbtnCurrent()
 
 function onSuccess(position)
 {
-	console.log("in geolocation Success");
+	//console.log("in geolocation Success");
 	currentLat = position.coords.latitude;
-	console.log("currentLat: "+currentLat);
+	//console.log("currentLat: "+currentLat);
 	currentLong = position.coords.longitude;
-	console.log("currentLong: "+currentLong);
+	//console.log("currentLong: "+currentLong);
 	if (fromLoadCoords == true){
 		fromLoadCoords = false;
 		getDirections();
 	}
 	else if (fromOrderPlaces == true){
-		
+		reOrdered = true;
+		$( ".loading_gif" ).css( "display", "block" );
+		var fillhtml = '';
+		document.getElementById('orderedPlaces').innerHTML='';
+		document.getElementById('showingInfo').innerHTML='';
+		tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPlace = [], tempmarkerSScat = [];;
+		//console.log("inReadSlider");
+		var radius = $("#slider-fill").val();
+		//console.log("adadsa "+$("#slider-fill").val());
+		for (var i=0; i<markerName.length; i++){
+			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i], markerPlace[i], markerSSubCat[i] );
+		}
+		for (var j=0; j<tempmarkerName.length; j++){
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
+			if (j == 30){
+				break;
+			}
+		}
+		document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
+		$( ".loading_gif" ).css( "display", "none" );
+		$("#orderedPlaces").html(fillhtml);
+		$('#orderedPlaces').trigger('create');
 	}
 	else{
 		if ((currentLat < 36.65) || (currentLat > 36.91) || (currentLong < 26.90) || (currentLong > 27.35)){
@@ -1384,13 +1445,14 @@ function onSuccess(position)
 		}
 	}
 }
+
 function onError(error)
 {
 //	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 	alert(MyApp.resources.NoLocation);
 }
 
-function addGroupMarker(x, y, name, descr, categ, index)
+function addGroupMarker(x, y, name, descr, categ, place, sscat, index)
 {
 	x = x.replace(x.charAt(2), ".");
 	y = y.replace(y.charAt(2), ".");
@@ -1401,8 +1463,13 @@ function addGroupMarker(x, y, name, descr, categ, index)
 	}
 	var marker;
 	var markerLocation = new L.LatLng(x, y);
+//	console.log(categ);
 	categ = $.trim(categ);
-//	console.log("inAddGroupMarker");
+	if (categ.indexOf("8_") == -1 ){
+		categ = categ.slice(0,1);
+//		console.log(categ);
+	}
+//	console.log(categ);
 	switch (categ)
 	{
 	case "1":
@@ -1429,12 +1496,44 @@ function addGroupMarker(x, y, name, descr, categ, index)
 		marker = new L.Marker(markerLocation, {icon: MarkerTransport}).addTo(map)
 		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
-	case "8":
+	case "7":
 		marker = new L.Marker(markerLocation, {icon: MarkerFood}).addTo(map)
 		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
-	case "10":
-		marker = new L.Marker(markerLocation, {icon: MarkerEntertainment}).addTo(map)
+	case "8_1":
+		marker = new L.Marker(markerLocation, {icon: PublicServices}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_2":
+		marker = new L.Marker(markerLocation, {icon: HealthClinics}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_3":
+		marker = new L.Marker(markerLocation, {icon: Dispensaries}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_4":
+		marker = new L.Marker(markerLocation, {icon: Pharmacies}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_5":
+		marker = new L.Marker(markerLocation, {icon: CurrencyExchange}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_6":
+		marker = new L.Marker(markerLocation, {icon: Banks}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_7":
+		marker = new L.Marker(markerLocation, {icon: Parking}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_8":
+		marker = new L.Marker(markerLocation, {icon: GasStations}).addTo(map)
+		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
+		break;
+	case "8_9":
+		marker = new L.Marker(markerLocation, {icon: Courier}).addTo(map)
 		.bindPopup("<b>" + name + "</b>" + "</br><p>" + descr + "</p>", {maxWidth: 250});
 		break;
 	default:
@@ -1446,9 +1545,11 @@ function addGroupMarker(x, y, name, descr, categ, index)
 		markerLat.push(x);
 		markerCat.push(categ);
 		markerName.push(name);
+		markerSSubCat.push(sscat);
+		markerPlace.push(place);
 		markerDescr.push(descr);
-		map.addLayer(marker);
 	}
+	map.addLayer(marker);
 	currentMarkers.push(marker);
 }
 
@@ -1474,7 +1575,7 @@ function switchToEmailPage(langid)
 	langstr = langid.toLowerCase();
     db.transaction(function(tx) {
     	tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[1,langstr],successCB, errorCB);
-    	console.log("inserted Into settings: "+langstr);
+    	//console.log("inserted Into settings: "+langstr);
     });
     
     checkForLanguage();
@@ -1568,7 +1669,7 @@ function backToMainPage()
     {
     	language = newLanguage;
     	langchanged = true;
-    	console.log(language);
+    	//console.log(language);
     	db.transaction(function(tx) {
     		tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
     		});
@@ -1618,7 +1719,7 @@ function reloadPlacesPage(){
 	{
 		language = newLanguage;
 		langchanged = true;
-		console.log(language);
+		//console.log(language);
 		db.transaction(function(tx) {
 			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
 		});
@@ -1640,13 +1741,13 @@ function reloadItinerariesPage(){
 	var newlangstr = $("#language_select3").val();
 	var settingsChanged = false;
 //	langstr = newlangstr.toLowerCase();
-	console.log(langstr);
+	//console.log(langstr);
 	fromselectedplaces = false;
 	if (language != newLanguage)
 	{
 		language = newLanguage;
 		langchanged = true;
-		console.log(language);
+		//console.log(language);
 		db.transaction(function(tx) {
 			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
 		});
@@ -1662,7 +1763,7 @@ function reloadItinerariesPage(){
 }
 
 function firstSwitchToMainPage(email){
-//	console.log("in first switch... email: "+email);
+//	//console.log("in first switch... email: "+email);
 	if (fromMainPage == false){
 		generateMap();
 	}
@@ -1687,7 +1788,7 @@ function switchToMainPage(email)
 		map.invalidateSize();
 	},1500);
 	email = $('#emailaccountchange').val();
-	console.log("123email: "+email);
+	//console.log("123email: "+email);
 	if ( email == null || email == ''){
 		$('#emailaccountchange').val(currentEmail);
 	}
@@ -1718,21 +1819,21 @@ function switchToFirstPage()
 function onClickbtnPlaces()
 {
 	clearWatch();
-	console.log("currentMarkers.length "+currentMarkers.length);
+	//console.log("currentMarkers.length "+currentMarkers.length);
 	if (currentMarkers != null)// && (firstTime == false))
 	{
-		console.log("in here!");
+		//console.log("in here!");
 		for(var i = 0; i < currentMarkers.length; ++i){
 			map.addLayer(currentMarkers[i]);
-//			console.log("in here2!");
-//			console.log("Current marker "+currentMarkers[i]);
+//			//console.log("in here2!");
+//			//console.log("Current marker "+currentMarkers[i]);
 		}
 	}
 //	}
 	if (track != null)
 	{
-		console.log(track);
-		console.log("track not null!");
+		//console.log(track);
+		//console.log("track not null!");
 		map.removeLayer(track);
 //		map.removeControl(control);
 	}
@@ -1740,26 +1841,27 @@ function onClickbtnPlaces()
     $("#abtnFilterTour").hide();
     $('#abtnPlaces').addClass("active");
     $('#abtnTour').removeClass("active");
+    $( ".secondary_menu" ).css( "display", "block" );
     $('#abtnCurrentPosition').removeClass("active");
 }
 
 function onClickbtnPlaces2()
 {
 	clearWatch();
-	console.log("currentMarkers.length "+currentMarkers.length);
+	//console.log("currentMarkers.length "+currentMarkers.length);
 	if (currentMarkers != null)// && (firstTime == false))
 	{
-		console.log("in here!");
+		//console.log("in here!");
 		for(var i = 0; i < currentMarkers.length; ++i){
 			map.addLayer(currentMarkers[i]);
-			console.log("in here2!");
-			console.log("Current marker "+currentMarkers[i]);
+			//console.log("in here2!");
+			//console.log("Current marker "+currentMarkers[i]);
 		}
 	}
 	if (track != null)
 	{
-		console.log(track);
-		console.log("track not null!");
+		//console.log(track);
+		//console.log("track not null!");
 		map.removeLayer(track);
 //		map.removeControl(control);
 	}
@@ -1783,6 +1885,7 @@ function onClickbtnTour()
 	$("#abtnFilterPlaces").hide();
     $("#abtnFilterTour").show();
     $('#abtnPlaces').removeClass("active");
+    $( ".secondary_menu" ).css( "display", "none" );
     $('#abtnTour').addClass("active");
     $('#abtnCurrentPosition').removeClass("active");
 //    enableTourButton = true;
@@ -1790,7 +1893,7 @@ function onClickbtnTour()
 	{
     	map.addLayer(track);
 	}
-    else
+    else 
     {
 //    	createItDb();	
     }
@@ -1807,8 +1910,8 @@ function onClickbtnTour()
 function submitSelectedPlaces()
 {
 	checked = [];
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
-	subsubGr = [];
+	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
+//	subsubGr = [];
 	hotel = false; cusine = false; music = false; era = false;
 //	document.getElementById("loading_gif").style.display = "block";
 //	$( ".loading_gif" ).css( "display", "block" );
@@ -1833,15 +1936,17 @@ function submitSelectedPlaces()
 
 function submitSelectedPlacesEn(){
 	$('input[type="checkbox"]').each(function(){
-//		console.log("name: "+this.name);
+//		//console.log("name: "+this.name);
 		if(this.checked || $(this).attr("checked") || $(this).is(':checked')) {
 			checked.push(this.name);		//push checked items into values list
-			console.log("name222: "+this.name);
+			//console.log("name222: "+this.name);
 		}
 	});
-	checked.push("Restaurants");
+//	checked.push("Sites of Interest");
+	
 //	checked.push("Archaelogical Sites and Monuments");
 	for (var l=0; l<checked.length; l++){
+		
 		if (checked[l] == "Hotels"){
 			hotel = true;
 		}
@@ -1855,20 +1960,27 @@ function submitSelectedPlacesEn(){
 			music = true;
 		}
 	}
-	console.log("checked.length= "+checked.length);
+//	//console.log("checked.length= "+checked.length);
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
 			var len = results.rows.length, subNew;
 			for (var j=0; j<checked.length; j++){
 //				alert("("+checked[j]+")");
 				for (var i = 0; i < len; i++){
-//					console.log("in SubmitSelected En2");
+//					//console.log("in SubmitSelected En2");
 					subNew = $.trim(results.rows.item(i).name);
-//					console.log("_"+subNew+"_");
+//					//console.log("_"+subNew+"_");
 					if (checked[j] == subNew){
+						
 						checked[j] = results.rows.item(i).id;
+						if (results.rows.item(i).id == '2_3'){
+							checked.push('2_5');
+						}
+						if (results.rows.item(i).id == '4_1'){
+							checked.push('4_2');
+						}
 						currentSubcategories.push(results.rows.item(i).id);
-						console.log("!!#!!"+results.rows.item(i).id);
+//						//console.log("!!#!!"+results.rows.item(i).id);
 					}
 				}
 			}
@@ -1879,7 +1991,7 @@ function submitSelectedPlacesEn(){
 					for (var j=0; j<checked.length; j++){
 //						alert("@: "+checked[j]);
 						for (var i = 0; i < len; i++){
-//							console.log("POIEN: "+results.rows.item(i).subcategory);
+//							//console.log("POIEN: "+results.rows.item(i).subcategory);
 							if (checked[j] == results.rows.item(i).subcategory){
 								var descr = results.rows.item(i).descr;
 								if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -1891,24 +2003,16 @@ function submitSelectedPlacesEn(){
 								var poicat = results.rows.item(i).category;
 								var x = results.rows.item(i).lat;
 								var y = results.rows.item(i).long;
-//								x = x.replace(x.charAt(2), ".");
-//								y = y.replace(y.charAt(2), ".");
-//								if (x < 35){
-//									var temp = x;
-//									x = y;
-//									y = temp;
-//								}
 								descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 //								descr += '<a href="#popupBasic" data-rel="popup">'+MyApp.resources.MoreInfo+'</a>';			
 								descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-//								//console.log("in SubmitSelected En3");
+//								////console.log("in SubmitSelected En3");
 								lat2 = results.rows.item(i).lat;
 								if ( lat2.indexOf("\n") == -1){
+									//console.log(results.rows.item(i).subcategory);
 									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-											results.rows.item(i).name, descr, results.rows.item(i).category ,1);
-//									//console.log(results.rows.item(i).name);markerDescr.push(descr)
-//									subsubEn.push(results.rows.item(i).ssubcat);
-//									console.log(results.rows.item(i).ssubcat);
+											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
+											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
 								}
 							}
 						}
@@ -1937,7 +2041,7 @@ function submitSelectedPlacesEn(){
 			});
 		}, errorCB);
 	});
-//	//console.log("in SubmitSelected En4");
+//	////console.log("in SubmitSelected En4");
 //	}
 //	})(checked);
 
@@ -1951,78 +2055,91 @@ function submitSelectedPlacesGr(){
 			checked.push(this.name);		//push checked items into values list
 		}
 	});
-	setTimeout(function(){
-		db.transaction(function (tx) {
-			tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
-				var len = results.rows.length, subNew;
-				//console.log("!!!! "+len);
-				for (var j=0; j<checked.length; j++){
-//					alert("("+checked[j]+")");
-					for (var i = 0; i < len; i++){
-						subNew = $.trim(results.rows.item(i).name);
-//						alert("_"+subNew+"_");
-						if (checked[j] == subNew){
-							checked[j] = results.rows.item(i).id;
-//							alert("#"+checked[j]);
+	for (var l=0; l<checked.length; l++){
+		
+		if (checked[l] == "Ξενοδοχεία"){
+			hotel = true;
+		}
+		if (checked[l] == "Εστιατόρια"){
+			cuisine = true;
+		}
+		if (checked[l].indexOf("Αρχαιολογικοί") != -1){
+			era = true;
+		}
+		if (checked[l] == "Νυχτερινά Κέντρα"){
+			music = true;
+		}
+	}
+	
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
+			var len = results.rows.length, subNew;
+			////console.log("!!!! "+len);
+			for (var j=0; j<checked.length; j++){
+//				alert("("+checked[j]+")");
+				for (var i = 0; i < len; i++){
+					subNew = $.trim(results.rows.item(i).name);
+					if (checked[j] == subNew){
+						checked[j] = results.rows.item(i).id;
+//						alert("#"+checked[j]);
+						if (results.rows.item(i).id == '2_3'){
+							checked.push('2_5');
 						}
+						if (results.rows.item(i).id == '4_1'){
+							checked.push('4_2');
+						}
+						currentSubcategories.push(results.rows.item(i).id);
 					}
 				}
-				db.transaction(function (tx) {
-					tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
-						var lat2;
-						var len = results.rows.length;
-						for (var j=0; j<checked.length; j++){
-//							alert("@: "+checked[j]);
-							for (var i = 0; i < len; i++){
-								if (checked[j] == results.rows.item(i).subcategory){
-									var descr = results.rows.item(i).descr;
-									////console.log(descr);
-									if (descr.length > 140){			//slicing the description to the first 140 charactes.
-										descr = descr.slice(0,140);
-										descr += "...";
-										descr += "<br>";
-//										//console.log("1231231: "+descr);
-									}
-									var poiid = results.rows.item(i).siteid;
-									var poicat = results.rows.item(i).category;
-									var x = results.rows.item(i).lat;
-									var y = results.rows.item(i).long;
-//									x = x.replace(x.charAt(2), ".");
-//									y = y.replace(y.charAt(2), ".");
-//									if (x < 35){
-//										var temp = x;
-//										x = y;
-//										y = temp;
-//									}
-									descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-									descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-									lat2 = results.rows.item(i).lat;
-									if ( lat2.indexOf("\n") == -1){
-										addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-												results.rows.item(i).name, descr, results.rows.item(i).category, 1);
-										subsubGr.push(results.rows.item(p).ssubcat);
-									}
+			}
+			db.transaction(function (tx) {
+				tx.executeSql('SELECT * FROM POIGR', [], function (tx, results) {
+					var lat2;
+					var len = results.rows.length;
+					for (var j=0; j<checked.length; j++){
+//						alert("@: "+checked[j]);
+						for (var i = 0; i < len; i++){
+							if (checked[j] == results.rows.item(i).subcategory){
+								var descr = results.rows.item(i).descr;
+								//////console.log(descr);
+								if (descr.length > 140){			//slicing the description to the first 140 charactes.
+									descr = descr.slice(0,140);
+									descr += "...";
+									descr += "<br>";
+//									////console.log("1231231: "+descr);
+								}
+								var poiid = results.rows.item(i).siteid;
+								var poicat = results.rows.item(i).category;
+								var x = results.rows.item(i).lat;
+								var y = results.rows.item(i).long;
+								descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+								descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+								lat2 = results.rows.item(i).lat;
+								if ( lat2.indexOf("\n") == -1){
+									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
+											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
+											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
+//									subsubGr.push(results.rows.item(i).ssubcat);
 								}
 							}
 						}
-//						document.getElementById("loading_gif").style.display = "none";
-						$( ".loading_gif" ).css( "display", "none" );
-						$.mobile.changePage($('#mainpage'), 'pop');
-//						map.invalidateSize();
-						$('#abtnPlaces').addClass("active");
-						$("#abtnFilterTour").hide();
-						$("#abtnFilterPlaces").show();
-						setTimeout(function(){
-							map.invalidateSize();
-						},2500);
-						setLabelsForMainPage();
-						$('.options').css({'display':'none'});
-					}, errorCB);
-				});
-			}, errorCB);
-		});
-//		}
-	},3500);
+					}
+//					document.getElementById("loading_gif").style.display = "none";
+					$( ".loading_gif" ).css( "display", "none" );
+					$.mobile.changePage($('#mainpage'), 'pop');
+//					map.invalidateSize();
+					$('#abtnPlaces').addClass("active");
+					$("#abtnFilterTour").hide();
+					$("#abtnFilterPlaces").show();
+					setTimeout(function(){
+						map.invalidateSize();
+					},2500);
+					setLabelsForMainPage();
+					$('.options').css({'display':'none'});
+				}, errorCB);
+			});
+		}, errorCB);
+	});
 }
 
 function checkForLanguage()
@@ -2030,20 +2147,20 @@ function checkForLanguage()
 	if  (language == 'EN')
 	{
 		langstr = 'en';
-		//console.log(langstr);
+		////console.log(langstr);
 		$.extend(MyApp.resources, enResources);
 	}
 	else if (language =='GR')
 	{
 		langstr = 'gr';
-		//console.log(langstr);
+		////console.log(langstr);
 		$.extend(MyApp.resources, grResources);
 	}
 }
 
 function showKmlFile()
 {
-	//console.log("in showkmlFile");
+	////console.log("in showkmlFile");
 	if (track != null)
 	{
 		map.removeLayer(track);
@@ -2059,7 +2176,7 @@ function showKmlFile()
 	}
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
 
-		//console.log("itId "+itId+" dd "+dd);
+		////console.log("itId "+itId+" dd "+dd);
 		var localtour;
 		var kmlPath;
 //		kmlPath = 'kml/itinerary_'+itId+'_'+dd+'.kml';
@@ -2068,7 +2185,7 @@ function showKmlFile()
 		kmlPath += '/itinerary_'+itId+'_'+dd+'.kml';
 //		kmlPath = '//mnt/sdcard/itinerary_38_1.kml';
 		//	kmlPath = 'kml/itinerary_35_1.kml';
-		//console.log("kmlPath: "+kmlPath);
+		////console.log("kmlPath: "+kmlPath);
 		//	var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 		track = new L.KML(kmlPath, {async: false});
 		track.on("loaded", function(e) {
@@ -2122,7 +2239,7 @@ function loadItinerariesfromPortal()
 	if (currentEmail != 'undefined' || currentEmail != '') {
 		if (email == null || email == ""){
 			$('#emailaccountchange5').val(currentEmail);
-			//console.log(currentEmail);
+			////console.log(currentEmail);
 		}
 	}
 }
@@ -2134,19 +2251,19 @@ function reloadItineraryPortalPage()
 	var newlangstr = $("#language_select5").val();
 	var settingsChanged = false;
 	langstr = newlangstr.toLowerCase();
-	//console.log(langstr);
+	////console.log(langstr);
 	fromselectedplaces = false;
 	if (language != newLanguage)
 	{
 		language = newLanguage;
 		langchanged = true;
-		//console.log(language);
+		////console.log(language);
 		db.transaction(function(tx) {
 			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
 		});
 		settingsChanged = true;
 	}
-//	console.log("111");
+//	//console.log("111");
 	checkForLanguage();
 	saveEmail(newEmail);
 //	checkForLanguage();
@@ -2175,9 +2292,9 @@ function popItinerariesDb(xmlDoc){
 //			pointName.push(($(this).text()));
 			pointName = $(this).text();
 //			duration.push(($(this).parent().parent().text()).slice(2,10));
-			//console.log("1 "+duration);
+			////console.log("1 "+duration);
 			duration = $(this).parent().parent().text().slice(0,10);
-			//console.log("2 "+duration);
+			////console.log("2 "+duration);
 			itActive = 0;
 			itCompleted = 0;
 			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
@@ -2201,7 +2318,7 @@ function popItinerariesDb(xmlDoc){
 //}
 
 function error12CB(){
-	console.log("error12CB");
+	//console.log("error12CB");
 }
 
 function loadItineraryXml(x){
@@ -2266,10 +2383,10 @@ function popItinerariesDb2(xmlDoc5){
 			pointCode = $(this).attr("Code");
 			pointName = $(this).find("Title").text();
 			coords = $(this).find("Coordinates").text();
-			//console.log("Title: "+pointName);
-			//console.log("1 "+duration);
+			////console.log("Title: "+pointName);
+			////console.log("1 "+duration);
 			duration = $(this).parent().parent().text().trim().slice(0,10);
-			//console.log("2 "+duration);
+			////console.log("2 "+duration);
 //			alert(duration);
 			itActive = 0;
 			itCompleted = 0;
@@ -2298,11 +2415,11 @@ function loadItineraries()
 	var fillhtml = '';
 	document.getElementById('availableFiles').innerHTML='';
 	var itineraryPageHeader ='';
-	//console.log("in availableFiles");
+	////console.log("in availableFiles");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
 			var len = results.rows.length;
-			//console.log("==="+len);
+			////console.log("==="+len);
 			if (len == 0){
 				itineraryPageHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.ItineraryPageHeaderNull+'</span>';
 			}
@@ -2343,7 +2460,7 @@ function loadItineraries()
 			var email = $('#emailaccountchange3').val();
 			if ( email == null || email == ""){
 				$('#emailaccountchange3').val(currentEmail);
-				//console.log(currentEmail);
+				////console.log(currentEmail);
 			}
 		});
 	});
@@ -2364,7 +2481,7 @@ function loadFromPortal(email)
 //	$('#abtnLoadSelected').addClass('ui-disabled');
 	$( ".loading_gif" ).css( "display", "block" );
 	db.transaction(function (tx) {
-		console.log("Dropping Table ITINERARIES");
+		//console.log("Dropping Table ITINERARIES");
 		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, coordinates, duration, isActive, completed)');
 	});
@@ -2386,7 +2503,7 @@ function loadFromPortal(email)
 				{
 					$(jQuery.parseJSON(JSON.stringify(data))).each(function() { 
 				         var ID = this.ItineraryId;
-				         //console.log("ID "+ID);
+				         ////console.log("ID "+ID);
 				         itinerariesId.push(ID);
 					});
 					createXmlDb();
@@ -2414,7 +2531,7 @@ function loadFromPortal(email)
 function createXmlDb(){
 	for (var l=0; l<itinerariesId.length ; l++){
 		var r = itinerariesId[l];
-		//console.log("createXMLDB " +r);
+		////console.log("createXMLDB " +r);
 		$.ajax({
 			url: baseapiurl+'/itinerary/'+ r,
 			contentType: "application/json; charset=utf-8",
@@ -2426,18 +2543,18 @@ function createXmlDb(){
 				var xmlFile;
 				xmlFile = JSON.stringify(data);
 				var o = xmlFile.indexOf("<?xml");
-//				console.log("o "+o);
+//				//console.log("o "+o);
 				var n = xmlFile.indexOf('","Kmlfiles"');
-//				console.log("n "+n);
+//				//console.log("n "+n);
 				xmlFile = xmlFile.substring(o,n); 
 //				kmlFile2 = kmlFile2.substring(o+12, n);
 //				xmlFile = xmlFile.substring(o+5,n+5);
 				xmlFile = xmlFile.replace(/\\r\\n/g," ");
 				xmlFile = xmlFile.replace(/\\/g,"");
 				xmlFile = xmlFile.replace(/Title/g,"NewTitle");
-				//console.log("createXMLDB12 " +r);
-				console.log(xmlFile);
-				//console.log("start");
+				////console.log("createXMLDB12 " +r);
+				//console.log(xmlFile);
+				////console.log("start");
 				var title;
 				var user;
 				var id;
@@ -2451,11 +2568,11 @@ function createXmlDb(){
 				user = $(xmlFile).find("User").text();
 //				id = $(xmlDoc).find("Itinerary").attr("id");
 				id = r;
-//				console.log("--1 "+id+user+title);
+//				//console.log("--1 "+id+user+title);
 //				$(xmlFile).find("Point").each(function(){
 //					pointCode = $(this).attr("Code");
 //					day = $(this).parent().parent().attr("Kml");
-////					console.log("popItinerariesDB22 id "+id);
+////					//console.log("popItinerariesDB22 id "+id);
 ////					$(this).find('Title').each(function(){
 //					pointName = $(this).text();
 ////					});
@@ -2470,25 +2587,25 @@ function createXmlDb(){
 //					pointName = $(this).find("Title").text();
 					pointName = $(this).find("NewTitle").text();
 					coords = $(this).find("Coordinates").text();
-					//console.log("Title: "+title);
-					//console.log("1 "+duration);
-					//console.log(pointName);
+					////console.log("Title: "+title);
+					////console.log("1 "+duration);
+					////console.log(pointName);
 					duration = $(this).parent().parent().text().trim().slice(0,10);
-					//console.log("2 "+duration);
+					////console.log("2 "+duration);
 //					$(this).find('Title').each(function(){
 //						pointName = $(this).text();
-//						console.log(pointName);
+//						//console.log(pointName);
 //					});
 //					alert(duration);
-//					console.log(pointName);
+//					//console.log(pointName);
 					itActive = 0;
 					itCompleted = 0;
 //						tx.executeSql('INSERT INTO XMLDB(id, xmlstring) VALUES (?,?)',[r,xmlFile], successCB, error12CB);
-						//console.log("--- "+id+title+" "+user+" "+day+" "+pointCode+" "+pointName+" "+coords+" "+duration+" "+itActive+" "+itCompleted);
+						////console.log("--- "+id+title+" "+user+" "+day+" "+pointCode+" "+pointName+" "+coords+" "+duration+" "+itActive+" "+itCompleted);
 						tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
 								,[id,title,user,day,pointCode,pointName,coords,duration,itActive,itCompleted], successCB, error12CB);
 					});
-					//console.log("done");
+					////console.log("done");
 				});
 			},
 			error: function () {
@@ -2497,9 +2614,9 @@ function createXmlDb(){
 		});
 	}
 	getFilesFromPortal();
-	//console.log("9999");
+	////console.log("9999");
 //	setTimeout(function(){
-//	console.log("4444");
+//	//console.log("4444");
 //	},9000);
 }
 
@@ -2507,8 +2624,8 @@ function checkXMLDB(){
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM XMLDB', [], function (tx, results){
 			for (var k=0; k<results.rows.lenth; k++){
-				//console.log(results.rows.item(k).id);
-				//console.log(results.rows.item(k).xmlstring);
+				////console.log(results.rows.item(k).id);
+				////console.log(results.rows.item(k).xmlstring);
 			}
 		},error12CB);
 	});
@@ -2525,7 +2642,7 @@ function loadXmlFromPortal(){
 function getFilesFromPortal(id)
 {
 	for (var l=0; l<itinerariesId.length ; l++){
-		//console.log("in getFilesFromPortal11111");
+		////console.log("in getFilesFromPortal11111");
 		var r = itinerariesId[l];
 		$.ajax({
 			url: baseapiurl+'/itinerary/'+ r,
@@ -2542,28 +2659,28 @@ function getFilesFromPortal(id)
 				for (i in data.Kmlfiles)
 				{
 					var kmlFile = data.Kmlfiles[i];
-//					console.log("kmlFile "+kmlFile.toString());
-//					console.log("kmlFile2 "+kmlFile.valueOf());
+//					//console.log("kmlFile "+kmlFile.toString());
+//					//console.log("kmlFile2 "+kmlFile.valueOf());
 					var kmlFile2;
 					kmlFile2 = JSON.stringify(kmlFile);
-//					console.log("json2.js1: "+kmlFile2);
+//					//console.log("json2.js1: "+kmlFile2);
 					var o=kmlFile2.indexOf("mlconten");
-//					console.log("o "+o);
+//					//console.log("o "+o);
 					var n=kmlFile2.indexOf("/kml>");
-//					console.log("n "+n);
+//					//console.log("n "+n);
 //					kmlFile2 = kmlFile2.substring(o+12, n);
 					kmlFile2 = kmlFile2.substring(o+12,n+5);
 					kmlFile2 = kmlFile2.replace(/\\r\\n/g," ");
 					kmlFile2 = kmlFile2.replace(/\\/g,"");
 //					kmlFile2 = kmlFile2.replace(/\r/g," ");
-//					console.log("json2.js: "+kmlFile2);
+//					//console.log("json2.js: "+kmlFile2);
 					filename =  data.Kmlfiles[i].Kmlfilename;
 					fileWrite(filename, kmlFile2);
 				}
-//				console.log("123 "+xmlFile);
+//				//console.log("123 "+xmlFile);
 //				checkItDb();
 //				popItinerariesDb3(xmlFile,id);
-//				console.log("345 "+kmlFile);
+//				//console.log("345 "+kmlFile);
 			},
 			error: function () {
 				alert(MyApp.resources.CouldNotGetFilesFromPortal);
@@ -2621,17 +2738,17 @@ function popItinerariesDb3(xmlDoc,id2){
 	var duration;
 	var day;
 	var coords;
-	//console.log("popItinerariesDB11");
+	////console.log("popItinerariesDB11");
 	db.transaction(function(tx){
 		title = $(xmlDoc).find("It_Title").text();
 		user = $(xmlDoc).find("User").text();
 //		id = $(xmlDoc).find("Itinerary").attr("id");
 		id = id2;
-//		console.log("--1 "+id+user+title);
+//		//console.log("--1 "+id+user+title);
 		$(xmlDoc).find("Point").each(function(){
 //			day.push($(this).parent().parent().attr("Kml"));
 			day = $(this).parent().parent().attr("Kml");
-			//console.log("popItinerariesDB22");
+			////console.log("popItinerariesDB22");
 //			pointCode.push(($(this).attr("Code")));
 			pointCode = $(this).attr("Code");
 //			pointName.push(($(this).text()));
@@ -2640,12 +2757,12 @@ function popItinerariesDb3(xmlDoc,id2){
 			});
 //			pointName = $(this).children().text();
 //			duration.push(($(this).parent().parent().text()).slice(2,10));
-//			console.log("1 "+duration);
+//			//console.log("1 "+duration);
 			duration = $(this).parent().parent().text().slice(0,10);
-//			console.log("2 "+duration);
+//			//console.log("2 "+duration);
 			itActive = 0;
 			itCompleted = 0;
-//			console.log("--- "+id+title+user+day+pointCode+pointName+coords+duration+itActive+itCompleted);
+//			//console.log("--- "+id+title+user+day+pointCode+pointName+coords+duration+itActive+itCompleted);
 			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
 					,[id,title,user,day,pointCode,pointName,coords,duration,itActive,itCompleted], successCB, error12CB);
 		});
@@ -2655,11 +2772,11 @@ function popItinerariesDb3(xmlDoc,id2){
 
 function loadEachItineraryPage(id)
 {
-	console.log("in loadEachItineraryPage");
-	console.log(id);
+	//console.log("in loadEachItineraryPage");
+	//console.log(id);
 	id = id.trim();
 	id = parseInt(id);
-	console.log(id);
+	//console.log(id);
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results){
 			var len = results.rows.length;
@@ -2709,7 +2826,7 @@ function showAvailableDays(id)
 	//$('#availablePois').text('');
 	document.getElementById('availablePois').innerHTML='';
 	$('#availableDays').text('');
-	//console.log("in showAvailableDays");
+	////console.log("in showAvailableDays");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
 //			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed)
@@ -2719,18 +2836,18 @@ function showAvailableDays(id)
 					day.push(results.rows.item(k).day);
 					pointCode.push(results.rows.item(k).pointcode);
 					pointName.push(results.rows.item(k).pointname);
-//					console.log("kkk "+day[0]+ " "+pointCode[k]+" "+pointName[k]);
+//					//console.log("kkk "+day[0]+ " "+pointCode[k]+" "+pointName[k]);
 				}
 				duration.push(results.rows.item(k).duration);
-//				console.log(day[k]);
-//				console.log(pointCode[k]);
-//				console.log(pointName[k]);
+//				//console.log(day[k]);
+//				//console.log(pointCode[k]);
+//				//console.log(pointName[k]);
 			}
 			for (var j=1 ; j < day.length ; j++){
 				if (day[j] != day[j-1]){
 					$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'
 							+day[j-1]+'" value="'+day[j-1]+'"/><label for="'+day[j-1]+'">'+"Day "+day[j-1]+'</label>');
-					//console.log("day[j-1] "+day[j-1]);
+					////console.log("day[j-1] "+day[j-1]);
 				}
 			}
 			$('#availableDays').append('<input type="radio" class="days" name="day-choice" id="'+day[j-1]+
@@ -2743,7 +2860,7 @@ function showAvailableDays(id)
 				for (var k=0; k < m; k++){
 					if ((day[k] == dd) ){//&& (results.rows.item(k).id == id)){
 //						var name = pointName[k];
-//						console.log("999 "+pointCode[k]+" "+pointName[k]);
+//						//console.log("999 "+pointCode[k]+" "+pointName[k]);
 //						fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" onclick = "loadEachItineraryPage(this.id)" rel="external" id="'+idis[j-1]+'" >'+titles[j-1]+'</a>';
 						fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo2(this.text)" rel="external" id="'+pointCode[k]+'" >'+pointName[k]+'</a>';
 //						$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right"id="'
@@ -2763,7 +2880,7 @@ function showAvailableDays(id)
 //				$('#'+$(this).attr("Code")+'').attr("checked",false).checkboxradio("refresh");
 			}).first().click();
 //			$("#btnCallMap").click(function(){
-//				console.log("btnCallMap clicked");
+//				//console.log("btnCallMap clicked");
 //				inGetDirections = true;
 //				geolocationControl(HelloWorldFunction);
 //			});
@@ -2783,7 +2900,7 @@ function showAvailableDays(id)
 			var email = $('#emailaccountchange4').val();
 			if ( email == null || email == ""){
 				$('#emailaccountchange4').val(currentEmail);
-				//console.log(currentEmail);
+				////console.log(currentEmail);
 			}
 		});
 	});
@@ -2796,8 +2913,8 @@ function loadCoordinates(k)
 	var z = k.indexOf(',0');
 	var long = k.slice(x+1,y);
 	var lat = k.slice(y+1,z);
-	////console.log("lat: "+lat);
-	////console.log("long: "+long);
+	//////console.log("lat: "+lat);
+	//////console.log("long: "+long);
 	fromLoadCoords = true;
 //	geolocationControl(HelloWorldFunction);
 	getDirections(lat,long);
@@ -2818,7 +2935,7 @@ function checkSettingsDB(){
 //				dbtext = dbtext + ifVisited[i];
 //				dbtext = dbtext + '\n';
 //				alert('pointsDb['+i+']: '+placesVisited[i]+", "+ifVisited[i]);
-				//console.log(results.rows.item(i).data);
+				////console.log(results.rows.item(i).data);
 			}
 //			alert(dbtext);
 		}, errorCB);
@@ -2833,11 +2950,11 @@ function onClickSettings(){
 	
 	if(appopts.hasClass('no_active')){
 		appopts.removeClass('no_active');
-		//console.log("inactive");
+		////console.log("inactive");
 		opts.slideDown();
 	}
 	else {
-		//console.log("active");
+		////console.log("active");
 		appopts.addClass('no_active');
 		opts.slideUp();
 	}
@@ -2866,7 +2983,7 @@ clearControl = function(clearAllMarkers){
 };
 
 function clearMap(){
-	console.log("888");
+	//console.log("888");
 	onClickbtnFilterPlaces();
 }
 
@@ -2899,20 +3016,20 @@ HelloWorldFunction = function () {
 	if (watchID != null) {
 		navigator.geolocation.clearWatch(watchID);
 		watchID = null;
-		//console.log("geolocation terminated");    
+		////console.log("geolocation terminated");    
 	}
 	else{
 		watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true
 		});
-		//console.log("geolocation activated");
+		////console.log("geolocation activated");
 	}
 };
 
 function SetElementHeight(){
 	screenHeight=$('.ui-mobile').outerHeight(true);
 	screenWidth=$('.ui-mobile').outerWidth(true);
-	//console.log("outerHeight= "+ screenHeight);
-	//console.log("outerWidth= "+ screenWidth);
+	////console.log("outerHeight= "+ screenHeight);
+	////console.log("outerWidth= "+ screenWidth);
 	$('#map').css('height',screenHeight-85);
 	$('#map').css('width',screenWidth);
 }
@@ -2922,9 +3039,9 @@ function SetElementHeight(){
 
 function getDirections(x,y)
 {
-//	console.log("inGetDirections");
-//	console.log("x: "+x);
-//	console.log("y: "+y);
+//	//console.log("inGetDirections");
+//	//console.log("x: "+x);
+//	//console.log("y: "+y);
 	if (isOffline){
 		alert(MyApp.resources.UserMustBeOnLine);
 	}
@@ -2944,25 +3061,60 @@ function getDirections(x,y)
 
 function getMoreInfo2(poiName){
 	var k;
-	//console.log("getMoreInfo2 "+poiName);
+	////console.log("getMoreInfo2 "+poiName);
 	poiName = poiName.trim();
 	if (langstr == 'en'){
 		for (var c =0; c < slideId.length ; c++){
-			//console.log("inslideen222"+slideName[c]);
+			////console.log("inslideen222"+slideName[c]);
 			if (poiName == slideName[c]){
-				//console.log("inslideen333");
-				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], slidePhone[c], slideEmail[c]);
+				////console.log("inslideen333");
+				slideen2(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+						slidePhone[c], slideEmail[c], slideImage[c]);
 				break;
 			}
 		}
 	}
 	else{
-		//console.log("..."+slideId.length);
+		////console.log("..."+slideId.length);
 		for (var c =0; c < slideId.length ; c++){
-//			console.log("inslideen222"+slideNamegr[c]);
+//			//console.log("inslideen222"+slideNamegr[c]);
 			if (poiName == slideName[c]){
-				//console.log("inslideen333");
-				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], slidePhonegr[c], slideEmailgr[c]);
+				////console.log("inslideen333");
+				slidegr2(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
+				break;
+			}
+		}
+	}
+}
+
+function getMoreInfo3(poiName){
+	var k;
+	console.log("getMoreInfo3 "+poiName);
+	poiName = poiName.trim();
+	var k = poiName.indexOf("\n");
+	poiName = poiName.slice(0,k);
+	poiName = poiName.trim();
+	console.log(poiName);
+	if (langstr == 'en'){
+		for (var c =0; c < slideId.length ; c++){
+			////console.log("inslideen222"+slideName[c]);
+			if (poiName == slideName[c]){
+				////console.log("inslideen333");
+				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+						slidePhone[c], slideEmail[c], slideImage[c]);
+				break;
+			}
+		}
+	}
+	else{
+		////console.log("..."+slideId.length);
+		for (var c =0; c < slideId.length ; c++){
+//			//console.log("inslideen222"+slideNamegr[c]);
+			if (poiName == slideName[c]){
+				////console.log("inslideen333");
+				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 				break;
 			}
 		}
@@ -2974,9 +3126,10 @@ function getMoreInfo(poiid, categid)
 	if (langstr == 'en'){
 		for (var b =0; b < slideId.length ; b++){
 			if ((poiid == slideId[b]) && (categid == slideCat[b])){
-				//console.log("FOUND");
-//				console.log(slideDescr[b]);
-				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], slidePhone[b],slideEmail[b]);
+				////console.log("FOUND");
+//				//console.log(slideDescr[b]);
+				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], 
+						slidePhone[b], slideEmail[b], slideImage[b]);
 				break;
 			}
 		}
@@ -2984,7 +3137,8 @@ function getMoreInfo(poiid, categid)
 	else{
 		for (var b =0; b < slideId.length ; b++){
 			if ((poiid == slideIdgr[b]) && (categid == slideCatgr[b])){
-				slidegr(slideNamegr[b], slideDescrgr[b], slideWebsitegr[b], slideAddressgr[b], slidePlacegr[b], slidePhonegr[b],slideEmailgr[b]);
+				slidegr(slideNamegr[b], slideDescrgr[b], slideWebsitegr[b], slideAddressgr[b], slidePlacegr[b], 
+						slidePhonegr[b], slideEmailgr[b], slideImagegr[b]);
 				break;
 			}
 		}
@@ -2992,14 +3146,14 @@ function getMoreInfo(poiid, categid)
 }
 
 function errorCCB(err){
-	console.log("error errorCCB ");
+	//console.log("error errorCCB ");
 }
 
-function slideen(name, descr, web, add, place, phone, email)
+function slideen(name, descr, web, add, place, phone, email, img)
 {
-	//console.log("in Slideen");
+	////console.log("in Slideen");
 	if (deviceOSVersion < 4){
-		//console.log("in Slideen1");	
+		////console.log("in Slideen1");	
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3009,19 +3163,21 @@ function slideen(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
+			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>'+
-			'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>'+img;//+'<br>'+
+//			'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
-			//console.log("inSlide "+fillhtml);
+			console.log("inSlide "+img);
+			////console.log("inSlide "+fillhtml);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
 		});
 	}
 	else{
-		//console.log("in Slideen2");
+		////console.log("in Slideen2");
 		var fillhtml ='';
 		if ( descr.indexOf('<div class="360cities">') != -1){
 			var k = descr.indexOf('<div class="360cities">');
@@ -3031,20 +3187,21 @@ function slideen(name, descr, web, add, place, phone, email)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>'+
-		'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>'+img;//+'<br>'+
+//		'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
+		console.log("inSlide "+img);
 		//console.log("inSlide "+fillhtml);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slidegr(name, descr, web, add, place, phone, email)
+function slidegr(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
-		//console.log("in Slideen1");	
+		////console.log("in Slideen1");	
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3054,12 +3211,14 @@ function slidegr(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
+			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>"+img;
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
-			//console.log("inSlide");
+			////console.log("inSlide");
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner").niceScroll({cursorcolor:"#484848"});
 		});
@@ -3074,20 +3233,21 @@ function slidegr(name, descr, web, add, place, phone, email)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>"+img;
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
-		//console.log("inSlide");
+		////console.log("inSlide");
+		console.log("inSlide "+img);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slideen3(name, descr, web, add, place, phone, email)
+function slideen2(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
-		//console.log("in Slideen1");
-		console.log("in Slideen");
+		////console.log("in Slideen1");
+		//console.log("in Slideen");
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3097,18 +3257,19 @@ function slideen3(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
+			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
-			console.log("inSlide "+fillhtml);
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner2").niceScroll({cursorcolor:"#484848"});
 		});
 	}
 	else{
-		console.log("in Slideen2");
+		//console.log("in Slideen2");
 		var fillhtml ='';
 		if ( descr.indexOf('<div class="360cities">') != -1){
 			var k = descr.indexOf('<div class="360cities">');
@@ -3118,20 +3279,110 @@ function slideen3(name, descr, web, add, place, phone, email)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
-		console.log("inSlide "+fillhtml);
+		console.log("inSlide "+img);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slidegr3(name, descr, web, add, place, phone, email)
+function slideen3(name, descr, web, add, place, phone, email,img)
 {
-	console.log("in Slideen");
 	if (deviceOSVersion < 4){
-		console.log("in Slideen1");	
+		////console.log("in Slideen1");
+		//console.log("in Slideen");
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+						MyApp.resources.Hide+'</span></a></div>';
+			$("#inner3").html(fillhtml);
+			console.log("inSlide "+img);
+			$( ".inner_wrap" ).css( "display", "block" );
+			$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+					MyApp.resources.Hide+'</span></a></div>';
+		$("#inner3").html(fillhtml);
+		console.log("inSlide "+img);
+		$( ".inner_wrap" ).css( "display", "block" );
+	}
+}
+
+function slidegr3(name, descr, web, add, place, phone, email,img)
+{
+	if (deviceOSVersion < 4){
+		////console.log("in Slideen1");
+		//console.log("in Slideen");
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+						MyApp.resources.Hide+'</span></a></div>';
+			$("#inner3").html(fillhtml);
+			console.log("inSlide "+img);
+			$( ".inner_wrap" ).css( "display", "block" );
+			$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+					MyApp.resources.Hide+'</span></a></div>';
+		$("#inner3").html(fillhtml);
+		console.log("inSlide "+img);
+		$( ".inner_wrap" ).css( "display", "block" );
+	}
+}
+
+function slidegr2(name, descr, web, add, place, phone, email, img)
+{
+	//console.log("in Slideen");
+	if (deviceOSVersion < 4){
+		//console.log("in Slideen1");	
 		$(document).ready(function () {
 //			$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
 			var fillhtml ='';
@@ -3142,12 +3393,14 @@ function slidegr3(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
+			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>'+img;
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
-			console.log("inSlide "+fillhtml);
+			console.log("inSlide "+img);
+			//console.log("inSlide "+fillhtml);
 //			var objDiv = document.getElementById("innner");
 //			objDiv.scrollTop = objDiv.scrollHeight;
 			$( ".inner_wrap" ).css( "display", "block" );
@@ -3155,7 +3408,7 @@ function slidegr3(name, descr, web, add, place, phone, email)
 		});
 	}
 	else{
-		console.log("in Slideen2");
+		//console.log("in Slideen2");
 		var fillhtml ='';
 		if ( descr.indexOf('<div class="360cities">') != -1){
 			var k = descr.indexOf('<div class="360cities">');
@@ -3165,11 +3418,12 @@ function slidegr3(name, descr, web, add, place, phone, email)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>'+img;
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
-		console.log("inSlide");
+		console.log("inSlide "+img);
+		//console.log("inSlide");
 //		objDiv.scrollTop = objDiv.scrollHeight;
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
@@ -3179,13 +3433,13 @@ function slideBack()
 {
 	var fillhtml ='';
 	$("#inner").html(fillhtml);
-	console.log("inSlideBack");
+	//console.log("inSlideBack");
 	$( ".inner_wrap" ).css( "display", "none" );
 //	$('.inner_wrap').removeClass('active');
 }
 
 function clearWatch() {
-	console.log("in clearWatch");
+	//console.log("in clearWatch");
     if (watchID != null) {
         navigator.geolocation.clearWatch(watchID);
         watchID = null;
@@ -3214,7 +3468,6 @@ function exitApplication()
 
 function clearCache(){
 	db.transaction(function (tx) {
-		console.log("in ClearCache!");
 		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
@@ -3231,56 +3484,88 @@ function clearCache(){
 function orderPlaces(i)
 {
 //	if (isOffline){
+	reOrdered = false;
 	fromOrderPlaces = true;
 	var fillhtml = '';
-//	var options = { timeout: 10000, enableHighAccuracy: true };
-//	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
 	var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.orderPlacesHeader+'<p></span>';
-	console.log("inOrderPlaces");
+	//console.log("inOrderPlaces");
 	document.getElementById('orderedPlaces').innerHTML='';
 	document.getElementById('showingInfo').innerHTML='';
 	for (i=0; i < markerName.length; i++){
-		switch (markerCat[i])
+		var categ = $.trim(markerCat[i]);
+		if (categ.indexOf("8_") == -1 ){
+			categ = categ.slice(0,1);
+			//console.log(categ);		
+		}
+		switch (categ)
 		{
 		case "1":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/shopping_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/shopping_0.png" alt="options">'+"  "+markerName[i]+'<br><h6>'+markerPlace[i]+'</h6></a>';
 			break;
 		case "2":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list2_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list2_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
 		case "3":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/hotels.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/hotels.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
 		case "4":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list14_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list14_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "5":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "6":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list3_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list3_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "7":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list12_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list12_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
-		case "8":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+		case "8_1":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
-		case "10":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+		case "8_2":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_3":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_2.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_4":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_3.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_5":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_4.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_6":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_5.png" alt="options">'+"  "+markerName[i]+'<br><h6>  '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_7":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_6.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_8":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_7.png" alt="options">'+"  "+markerName[i]+'<br><h6>'+markerPlace[i]+'</h6></a>';
+			break;
+		case "8_9":
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_8.png" alt="options">'+"  "+markerName[i]+' <br><h6>'+markerPlace[i]+'</h6></a>';
 			break;
 		default:
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br></h6>'+markerPlace[i]+'</h6></a>';
 		}
 		if (i == 50){
 			break;
@@ -3311,48 +3596,61 @@ function orderPlaces(i)
 	document.getElementById('btnList2').innerHTML= MyApp.resources.List;
 	document.getElementById('btnMap2').innerHTML= MyApp.resources.Map;
 	document.getElementById('btnFilter2').innerHTML= MyApp.resources.Filter;
-//	}
-//	else{
-//		alert(MyApp.resources.rrr);
-//	}
 }
 
 function readSlider(){
-	$( ".loading_gif" ).css( "display", "block" );
-	var fillhtml = '';
-	document.getElementById('orderedPlaces').innerHTML='';
-	document.getElementById('showingInfo').innerHTML='';
-	tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [];
-	console.log("inReadSlider");
-	var radius = $("#slider-fill").val();
-	console.log("adadsa "+$("#slider-fill").val());
-	for (var i=0; i<markerName.length; i++){
-		reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i] );
-	}
-	for (var j=0; j<tempmarkerName.length; j++){
-		fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
-		if (j == 30){
-			break;
-		}
-	}
-	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
-	$( ".loading_gif" ).css( "display", "none" );
-	$("#orderedPlaces").html(fillhtml);
-	$('#orderedPlaces').trigger('create');
+	var options = { timeout: 10000, enableHighAccuracy: true };
+	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+//	reOrdered = true;
+//	$( ".loading_gif" ).css( "display", "block" );
+//	var fillhtml = '';
+//	document.getElementById('orderedPlaces').innerHTML='';
+//	document.getElementById('showingInfo').innerHTML='';
+//	tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [];
+//	//console.log("inReadSlider");
+//	var radius = $("#slider-fill").val();
+//	//console.log("adadsa "+$("#slider-fill").val());
+//	for (var i=0; i<markerName.length; i++){
+//		reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i] );
+//	}
+//	for (var j=0; j<tempmarkerName.length; j++){
+//		fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
+//		if (j == 30){
+//			break;
+//		}
+//	}
+//	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
+//	$( ".loading_gif" ).css( "display", "none" );
+//	$("#orderedPlaces").html(fillhtml);
+//	$('#orderedPlaces').trigger('create');
 }
 
 function showOrderedPlacesOnMap(){
 	$( ".loading_gif" ).css( "display", "block" );
 	var descr;
-	if (currentMarkers != null)
-	{
-		for(var i = 0; i < currentMarkers.length; ++i){
-			map.removeLayer(currentMarkers[i]);
+	fromOrderPlaces = false;
+	if (reOrdered){
+		if (currentMarkers != null)
+		{
+			for(var i = 0; i < currentMarkers.length; ++i){
+				map.removeLayer(currentMarkers[i]);
+			}
+			currentMarkers = [];
 		}
-		currentMarkers = [];
+		for (var j=0; j<tempmarkerName.length; j++){
+			addGroupMarker(tempmarkerLat[j], tempmarkerLong[j], tempmarkerName[j], tempmarkerDescr[j], tempmarkerCat[j], tempmarkerPlace[j], tempmarkerSScat[j], 0);
+		}
 	}
-	for (var j=0; j<tempmarkerName.length; j++){
-		addGroupMarker(tempmarkerLat[j], tempmarkerLong[j], tempmarkerName[j], tempmarkerDescr[j], tempmarkerCat[j], 0);
+	else{
+		if (currentMarkers != null)// && (firstTime == false))
+		{
+			//console.log("in here!");
+			for(var i = 0; i < currentMarkers.length; ++i){
+				map.addLayer(currentMarkers[i]);
+				//console.log("in here2!");
+				//console.log("Current marker "+currentMarkers[i]);
+			}
+		}
 	}
 	$( ".loading_gif" ).css( "display", "none" );
 	$.mobile.changePage($('#mainpage'), 'pop');
@@ -3366,20 +3664,22 @@ function showOrderedPlacesOnMap(){
 	$('.options').css({'display':'none'});
 }
 
-function reOrder(radius,x,y, cat, name, descr){
-	console.log("in reOrder");
+function reOrder(radius,x,y, cat, name, descr, place, sscat){
+	//console.log("in reOrder");
 //	currentLat = position.coords.latitude;
 	currentLat = 36.87636;
 	currentLong = 27.20536;
 //	currentLong = position.coords.longitude;
 	var dist = distance(currentLat, currentLong,x,y);
-	console.log("distance "+dist);
+	//console.log("distance "+dist);
 	if (dist < radius){
 		tempmarkerCat.push(cat);
 		tempmarkerName.push(name);
 		tempmarkerDescr.push(descr);
 		tempmarkerLat.push(x);
 		tempmarkerLong.push(y);
+		tempmarkerPlace.push(place);
+		tempmarkerSScat.push(sscat);
 	}
 }
 
@@ -3394,7 +3694,7 @@ function reloadOrderPlaces(){
 	{
 		language = newLanguage;
 		langchanged = true;
-		console.log(language);
+		//console.log(language);
 		db.transaction(function(tx) {
 			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
 		});
@@ -3443,6 +3743,7 @@ function showFilterCategories(q){
 	if (hotel == true){
 		hotelHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.HotelStars+'</legend>';
 		hotelHtml += '<div data-role="fieldcontain"><label for="hotel_select" id="hotelselect"></label><select name="hotel_select" id="hotel_select">';
+		hotelHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		hotelHtml += '<option value="1">1 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="2">2 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="3">3 '+MyApp.resources.Stars+'</option>';
@@ -3456,13 +3757,16 @@ function showFilterCategories(q){
 	if (cuisine == true){
 		restaurantHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.RestaurantCuisine+'</legend>';
 		restaurantHtml +='<div data-role="fieldcontain"><label for="cuisine_select" id="cuisineselect"></label><select name="cuisine_select" id="cuisine_select">';
+		restaurantHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    restaurantHtml += '<option value="-1" selected="selected">Όλες</option>';
 			for (g=0; g<cuisineGr.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineGr[g]+'</option>';
 			}
 			restaurantHtml += '</select></div>';
 		}
 		else{
+//		    restaurantHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<cuisineEn.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineEn[g]+'</option>';
 			}
@@ -3473,13 +3777,16 @@ function showFilterCategories(q){
 	if (era == true){
 		eraHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.ArchaiologicalEra+'</legend>';
 		eraHtml +='<div data-role="fieldcontain"><label for="era_select" id="eraselect"></label><select name="era_select" id="era_select">';
+		eraHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    eraHtml += '<option value="-1" selected="selected">Όλες</option>';
 			for (g=0; g<eraGr.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraGr[g]+'</option>';
 			}
 			eraHtml += '</select></div>';
 		}
 		else{
+//		    eraHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<eraEn.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraEn[g]+'</option>';
 			}
@@ -3490,16 +3797,19 @@ function showFilterCategories(q){
 	if (music == true){
 		musicHtml = '<fieldset data-role="controlgroup"><legend>'+MyApp.resources.NightClubMusic+'</legend>';
 		musicHtml +='<div data-role="fieldcontain"><label for="music_select" id="musicelect"></label><select name="music_select" id="music_select">';
+		musicHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    musicHtml += '<option value="-1" selected="selected">Όλα</option>';
 			for (g=0; g<musicGr.length; g++){
-				console.log(musicGr[g]);
+				//console.log(musicGr[g]);
 				musicHtml += '<option value="'+musicGr[g]+'">'+musicGr[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
 		else{
+//		    musicHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<musicEn.length; g++){
-				console.log(musicEn[g]);
+				//console.log(musicEn[g]);
 				musicHtml += '<option value="'+musicEn[g]+'">'+musicEn[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
@@ -3507,10 +3817,12 @@ function showFilterCategories(q){
 		$("#musicContent").html(musicHtml);
 	}
 	var fillhtml ='';
-	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.FilterPopUpHeader+'</span>';
+	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><h2>'+MyApp.resources.SearchPopUpHeader+'</h2>';
 	fillhtml += '<p></p>';
-	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox"></label>';
+	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox">'+MyApp.resources.FreeTextSearchLabel+'</label>';
 	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" />	</div>';
+	fillhtml += '<h3>'+MyApp.resources.FilterPopUpHeader+'</h3>';
+	fillhtml += '<p></p>';
 	fillhtml += '<p></p>';
 	fillhtml += hotelHtml;
 	fillhtml += '<p></p>';
@@ -3546,39 +3858,152 @@ function filterPlaces(x){
 	}
 	var text = $('#search_box').val();
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
-	console.log(poiDB);
+	//console.log(poiDB);
 	var newHotelFilter = '';
 	var newCuisineSelect = '';
 	var newEraSelect = '';
 	var newMusicSelect = '';
 	if (hotel == true){
 		userFilters.hotel = $("#hotel_select").val();
-//		newHotelFilter = $("#hotel_select").val();
+		console.log(userFilters.hotel);
 	}
 	if (cuisine == true){
-//		userFilters.cuisine = $("#cuisine_select").val();
-//		newCuisineSelect = $("#cuisine_select").val();
-		userFilters.cuisine = cuisineGr[$("#cuisine_select").val()];
-//		newCuisineSelect = cuisineGr[newCuisineSelect];
+		if ($("#cuisine_select").val() == -1){
+			userFilters.cuisine = $("#cuisine_select").val();
+		}
+		else{
+			userFilters.cuisine = cuisineGr[$("#cuisine_select").val()];
+		}
+		console.log(userFilters.cuisine);
 	}
 	if (era == true){
-		userFilters.era = eraGr[$("#era_select").val()];
-//		newEraSelect = $("#era_select").val();
-//		newEraSelect = eraGr[newEraSelect];
+		if ($("#era_select").val() == -1){
+			userFilters.era = $("#era_select").val();
+		}
+		else{
+			userFilters.era = eraGr[$("#era_select").val()];
+		}
+		console.log(userFilters.era);
 	}
 	if (music == true){
-		userFilters.music = musicGr[$("#music_select").val()];
-//		newMusicSelect = $("#music_select").val();
-//		newMusicSelect = musicGr[newMusicSelect];
+		if ($("#music_select").val() == -1){
+			userFilters.music = $("#music_select").val();
+		}
+		else{
+			userFilters.music = $("#music_select").val();
+		}
+		console.log(userFilters.music);
 	}
-	console.log(userFilters.hotel+"_"+userFilters.cuisine+"-"+userFilters.era+"_"+userFilters.music);
+	//console.log(userFilters.hotel+"_"+userFilters.cuisine+"-"+userFilters.era+"_"+userFilters.music);
+	//WHERE title=? AND author=?", ["Ulysses", "James Joyce"]);
+	if (userFilters.hotel == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.cuisine == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["7_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.era == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["2_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.music == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["7_5"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM '+poiDB+'', [], function (tx, results) {
 			var len = results.rows.length;
 			var lat2;
 			for (var j=0; j<len; j++){
-//				console.log(results.rows.item(j).ssubcat);
-//				console.log(results.rows.item(j).ssubcat.indexOf(newHotelFilter));
+//				//console.log(results.rows.item(j).ssubcat);
+//				//console.log(results.rows.item(j).ssubcat.indexOf(newHotelFilter));
+				if (userFilters.hotel == -1){
+					userFilters.hotel = "12345";
+				}
+				
+				
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
@@ -3586,7 +4011,7 @@ function filterPlaces(x){
 					)
 				{
 //					if (userFilters.radius)
-//					console.log("in in ");
+//					//console.log("in in ");
 //					var descr = results.rows.item(j).descr;
 //					if (descr.length > 200){			//slicing the description to the first 200 charactes.
 //						descr = descr.slice(0,200);
@@ -3608,8 +4033,9 @@ function filterPlaces(x){
 //					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 					lat2 = results.rows.item(j).lat;
 					if ( lat2.indexOf("\n") == -1){
-						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
-								results.rows.item(j).descr, results.rows.item(j).category, poiid, poicat , x, y);
+//						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
+//								results.rows.item(j).descr, results.rows.item(j).category, poiid, poicat , x, y);
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
 					}
 				}
 			}
@@ -3629,20 +4055,20 @@ function filterPlaces(x){
 	});
 }
 
-function addTempMarker(x, y, name, descr, categ, poiid){
-	console.log(categ);
+function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
+	//console.log(categ);
 	tempmarkerCat.push(categ); tempmarkerName.push(name); tempmarkerDescr.push(descr); tempmarkerLong.push(y); 
-	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid);
+	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid); tempmarkerPlace.push(place); tempmarkerSScat.push(sscat);
 }
 
 function searchText(text,k){
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
-	console.log("in searchText");
+	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
+	//console.log("in searchText");
 	if (k==1){
-		console.log(text);
+		//console.log(text);
 		for (var x=0 ; x <tempmarkerName.length ; x++){
-//			console.log(tempmarkerName[x]);
-//			console.log(tempmarkerDescr[x]);
+//			//console.log(tempmarkerName[x]);
+//			//console.log(tempmarkerDescr[x]);
 			if ((tempmarkerName[x].indexOf(text) != -1) || (tempmarkerDescr[x].indexOf(text) != -1)){
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -3652,12 +4078,12 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x] ,1);
+				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
 			}
 		}
 	}
 	else if (k==2){
-		console.log("in searchText2");
+		//console.log("in searchText2");
 		for (var x=0 ; x <tempmarkerName.length ; x++){
 			var descr = tempmarkerDescr[x];
 			if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -3667,7 +4093,7 @@ function searchText(text,k){
 			}
 			descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 			descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x] ,1);
+			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
 		}
 	}
 }

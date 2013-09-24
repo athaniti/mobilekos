@@ -47,19 +47,19 @@
   <Category id="6" guid="cc773226-381b-4c54-9d6f-02ccf4ded8d6">
     <Name>Μετακίνηση</Name>
     <Subcategories>
-      <Subcategory id="6_1">
+      <Subcategory id="6_4">
         <Name>Ενοικίαση Αυτοκινήτων</Name>
       </Subcategory>
-      <Subcategory id="6_2">
+      <Subcategory id="6_5">
         <Name>Ενοικίαση Μοτοσυκλετών</Name>
       </Subcategory>
-      <Subcategory id="6_3">
+      <Subcategory id="6_5">
         <Name>Ενοικίαση Ποδηλάτων</Name>
       </Subcategory>
-	  <Subcategory id="6_4">
+	  <Subcategory id="6_8">
         <Name>TAXI</Name>
       </Subcategory>
-	  <Subcategory id="6_5">
+	  <Subcategory id="6_3">
         <Name>Γραφεία Τουρισμού</Name>
       </Subcategory>
     </Subcategories>
@@ -71,29 +71,26 @@
         <Name>Αρχαιολογικοί Χώροι και Μνημεία</Name>
       </Subcategory>
       <Subcategory id="2_2">
-        <Name>Μουσεία</Name>
+        <Name>Μουσεία και χώροι πολιτισμού</Name>
       </Subcategory>
       <Subcategory id="2_3">
-        <Name>Εκκλησίες και Μοναστήρια​</Name>
+        <Name>Τόποι ενδιαφέροντος</Name>
       </Subcategory>
       <Subcategory id="2_4">
-        <Name>Χώροι Πολιτισμού​</Name>
-      </Subcategory>
-      <Subcategory id="2_5">
-        <Name>Περιοχές Ενδιαφέροντος​</Name>
+        <Name>Φυσικές ομορφιές</Name>
       </Subcategory>
 	</Subcategories>
   </Category>
-  <Category id="8" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
+  <Category id="7" guid="059b7c24-c1c5-4736-9f0c-a6547c3624a5">
     <Name>Φαγητό και Διασκέδαση</Name>
     <Subcategories>
-      <Subcategory id="8_1">
+      <Subcategory id="7_1">
         <Name>Εστιατόρια</Name>
       </Subcategory>
-      <Subcategory id="8_2">
+      <Subcategory id="7_2">
         <Name>Καφετέριες</Name>
       </Subcategory>
-      <Subcategory id="8_3">
+      <Subcategory id="7_5">
         <Name>Νυχτερινά Κέντρα</Name>
       </Subcategory>
     </Subcategories>
@@ -102,30 +99,24 @@
     <Name>Δραστηριότητες</Name>
     <Subcategories>
       <Subcategory id="4_1">
-        <Name>Πεζοπορία</Name>
-      </Subcategory>
-      <Subcategory id="4_2">
-        <Name>Ποδηλασία</Name>
+        <Name>Πεζοπορία και Ποδηλασία</Name>
       </Subcategory>
 	  <Subcategory id="4_3">
-        <Name>Κέντρα Χαλάρωσης​</Name>
+        <Name>Κέντρα Χαλάρωσης και Spa​</Name>
       </Subcategory>
 	  <Subcategory id="4_4">
-        <Name>Γυμναστήρια</Name>
-      </Subcategory>
-	  <Subcategory id="4_5">
-        <Name>Αθλητικά Κέντρα​​</Name>
+        <Name>Αθλητικά Κέντρα​​ και Γυμναστήρια</Name>
       </Subcategory>
     </Subcategories>
   </Category>
   <Category id="1" guid="7c8dfb8f-a160-459f-965f-8fd5c209db80">
     <Name>Shopping</Name>
     <Subcategories>
-      <Subcategory id="1_1">
-        <Name>Καταστήματα Αναμνηστικών</Name>
-      </Subcategory>
-	  <Subcategory id="1_2">
+   	  <Subcategory id="1_2">
         <Name>Τοπικά Προϊόντα​​​​​</Name>
+      </Subcategory>
+      <Subcategory id="1_1">
+        <Name>Λαϊκή τέχνη - Αναμνηστικά</Name>
       </Subcategory>
 	  <Subcategory id="1_3">
         <Name>Αρτοποιεία​​​​​</Name>
@@ -138,34 +129,34 @@
       </Subcategory>
     </Subcategories>
   </Category>
-  <Category id="9" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
-    <Name>Χρήσιμες Πληροφορίες</Name>
+  <Category id="8" guid="3c9ece94-8ec4-4ba6-89dd-873e5ea8ea50">
+    <Name>Χρήσιμες Διευθύνσεις</Name>
     <Subcategories>
-      <Subcategory id="9_1">
+      <Subcategory id="8_1">
         <Name>Δημόσιες Υπηρεσίες</Name>
       </Subcategory>
-	  <Subcategory id="9_2">
+	  <Subcategory id="8_2">
         <Name>Κέντρα Υγείας</Name>
       </Subcategory>
-	  <Subcategory id="9_3">
+	  <Subcategory id="8_3">
         <Name>Ιατρεία</Name>
       </Subcategory>
-	  <Subcategory id="9_4">
+	  <Subcategory id="8_4">
         <Name>Φαρμακεία</Name>
       </Subcategory>
-	  <Subcategory id="9_5">
+	  <Subcategory id="8_5">
         <Name>Υπηρεσίες Συναλλάγματος</Name>
       </Subcategory>
-	  <Subcategory id="9_6">
+	  <Subcategory id="8_6">
         <Name>Τράπεζες</Name>
       </Subcategory>
-	  <Subcategory id="9_7">
+	  <Subcategory id="8_7">
         <Name>Χώροι Στάθμευσης</Name>
       </Subcategory>
-	  <Subcategory id="9_8">
+	  <Subcategory id="8_8">
         <Name>Πρατήρια Καυσίμων</Name>
       </Subcategory>
-	  <Subcategory id="9_9">
+	  <Subcategory id="8_9">
         <Name>Ταχυμεταφορές</Name>
       </Subcategory>
     </Subcategories>
