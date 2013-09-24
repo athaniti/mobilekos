@@ -3151,9 +3151,7 @@ function errorCCB(err){
 
 function slideen(name, descr, web, add, place, phone, email, img)
 {
-	////console.log("in Slideen");
 	if (deviceOSVersion < 4){
-		////console.log("in Slideen1");	
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3165,7 +3163,10 @@ function slideen(name, descr, web, add, place, phone, email, img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>'+img;//+'<br>'+
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 //			'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
@@ -3187,8 +3188,10 @@ function slideen(name, descr, web, add, place, phone, email, img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>'+img;//+'<br>'+
-//		'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
@@ -3213,7 +3216,10 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>"+img;
+			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
@@ -3233,7 +3239,10 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>"+img;
+		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
@@ -3259,7 +3268,10 @@ function slideen2(name, descr, web, add, place, phone, email,img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
@@ -3279,7 +3291,10 @@ function slideen2(name, descr, web, add, place, phone, email,img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
@@ -3291,8 +3306,6 @@ function slideen2(name, descr, web, add, place, phone, email,img)
 function slideen3(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
-		////console.log("in Slideen1");
-		//console.log("in Slideen");
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3304,7 +3317,10 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner3").html(fillhtml);
@@ -3324,7 +3340,10 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner3").html(fillhtml);
@@ -3336,8 +3355,6 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 function slidegr3(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
-		////console.log("in Slideen1");
-		//console.log("in Slideen");
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3349,7 +3366,10 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner3").html(fillhtml);
@@ -3369,7 +3389,10 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>'+img;
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner3").html(fillhtml);
@@ -3395,14 +3418,14 @@ function slidegr2(name, descr, web, add, place, phone, email, img)
 			}
 			img = img.replace('height="auto"','height="50%"');
 			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>'+img;
+						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			} 
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
 			console.log("inSlide "+img);
-			//console.log("inSlide "+fillhtml);
-//			var objDiv = document.getElementById("innner");
-//			objDiv.scrollTop = objDiv.scrollHeight;
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner2").niceScroll({cursorcolor:"#484848"});
 		});
@@ -3418,13 +3441,14 @@ function slidegr2(name, descr, web, add, place, phone, email, img)
 			descr = m.concat(n);
 		}
 		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>'+img;
+					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		} 
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
 		console.log("inSlide "+img);
-		//console.log("inSlide");
-//		objDiv.scrollTop = objDiv.scrollHeight;
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
