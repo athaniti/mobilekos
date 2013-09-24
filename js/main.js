@@ -1327,7 +1327,7 @@ function generateMap()
 		map.addLayer(osm);
 		map._layersMaxZoom=16;
 		map._layersMinZoom=12;
-		document.getElementById('map').style.display = 'block';
+//		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
 //		map.addControl(clearControl(orderPlaces));
@@ -3729,7 +3729,7 @@ function showFilterCategories(q){
 		hotelHtml += '<option value="5">5 '+MyApp.resources.Stars+'</option>';
 //		hotelHtml += '<option value="6">'+MyApp.resources.ShowAll+'</option>';
 		hotelHtml += '</select></div>';
-		$("#hotelContent").html(hotelHtml);
+//		$("#hotelContent").html(hotelHtml);
 //		$("#hotel_select").msDropDown();
 	}
 	if (cuisine == true){
@@ -3750,7 +3750,7 @@ function showFilterCategories(q){
 			}
 			restaurantHtml += '</select></div>';
 		}
-		$("#restaurantContent").html(restaurantHtml);
+//		$("#restaurantContent").html(restaurantHtml);
 	}	
 	if (era == true){
 		eraHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.ArchaiologicalEra+'</legend>';
@@ -3761,7 +3761,7 @@ function showFilterCategories(q){
 			for (g=0; g<eraGr.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraGr[g]+'</option>';
 			}
-			eraHtml += '</select></div>';
+//			eraHtml += '</select></div>';
 		}
 		else{
 //		    eraHtml += '<option value="-1" selected="selected">All</option>';
@@ -3770,7 +3770,7 @@ function showFilterCategories(q){
 			}
 			eraHtml += '</select></div>';
 		}
-		$("#archaiologicalContent").html(eraHtml);
+//		$("#archaiologicalContent").html(eraHtml);
 	}
 	if (music == true){
 		musicHtml = '<fieldset data-role="controlgroup"><legend>'+MyApp.resources.NightClubMusic+'</legend>';
@@ -3792,7 +3792,7 @@ function showFilterCategories(q){
 			}
 			musicHtml += '</select></div>';
 		}
-		$("#musicContent").html(musicHtml);
+//		$("#musicContent").html(musicHtml);
 	}
 	var fillhtml ='';
 	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><h2>'+MyApp.resources.SearchPopUpHeader+'</h2>';
@@ -3813,12 +3813,38 @@ function showFilterCategories(q){
 				MyApp.resources.Apply+'</span></a></div>';
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "cancel();"><span id="btnSlideBack">'+
 				MyApp.resources.Cancel+'</span></a></div>';
-	if (q==2){
-		slideGr2(fillhtml);
+	$.mobile.changePage($('#filterplaces'), 'pop');
+	customHeader(7);
+	checkForLanguage();
+//	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + i + MyApp.resources.From + markerName.length;
+//	$("#orderplacesHeader").html(fillHeader);
+	$('#abtnTour7').removeClass("active");
+	$('#abtnCurrentPosition7').removeClass("active");
+	$('#abtnPlaces7').addClass("active");
+	document.getElementById('btnSaveChanges7').innerHTML= MyApp.resources.SaveChanges;
+	$('#abtnMap3').removeClass("active");
+	$('#abtnList3').removeClass("active");
+	$('#abtnFilter3').addClass("active");
+	$('.options').css({'display':'none'});
+	var email = $('#emailaccountchange7').val();
+	if (currentEmail != 'undefined' || currentEmail != '') {
+		if (email == null || email == ""){
+			$('#emailaccountchange7').val(currentEmail);
+		}
 	}
-	else {
-		slideEn2(fillhtml);
-	}
+	$("#filteredPlaces").html(fillhtml);
+	$('#filterplaces').trigger('create');
+	document.getElementById('btnList3').innerHTML= MyApp.resources.List;
+	document.getElementById('btnMap3').innerHTML= MyApp.resources.Map;
+	document.getElementById('btnFilter3').innerHTML= MyApp.resources.Filter;
+	
+	
+//	if (q==2){
+//		slideGr2(fillhtml);
+//	}
+//	else {
+//		slideEn2(fillhtml);
+//	}
 }
 
 function cancel(){
