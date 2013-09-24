@@ -101,6 +101,10 @@ function onDeviceReady() {
 //	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
+	document.addEventListener("abtnList", orderPlaces, false);
+	document.addEventListener("abtnMap", onClickbtnPlaces, false);
+	document.addEventListener("abtnFilter", function(){showFilterCategories(0);}, false);
+	
 	document.addEventListener("offline", function() {isOffline = true;}, false);
 	document.addEventListener("online", function() {isOffline = false;}, false);
 	$.mobile.defaultPageTransition = 'none';
@@ -125,12 +129,7 @@ function onDeviceReady() {
 		    }
 		);
 
-	setInterval(function(){
-		////console.log("Checking Internet Connection...");
-		if(navigator.network && navigator.connection.type != Connection.NONE){
-			isOffline = false;
-		}
-	},180000);
+	
 	
 	setTimeout(function(){
 		checkLanguageSettings();
@@ -155,12 +154,25 @@ function filters(hotel, cuisine, music, era, radius){
 	//The Filters Object to store users' specific filters//
 }
 
+
+function checkForLanguage()
+{
+    langstr = 'en';
+	if (language =='GR'  || language == 'gr')
+	{
+		langstr = 'gr';
+		////console.log("langstr: "+langstr);
+		$.extend(MyApp.resources, grResources);
+	}
+}
+
+
 function checkLanguageSettings()
 {
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SETTINGS', [], function (tx, results) {
 			len = results.rows.length;
-			////console.log("SETTINGS.length= "+len);
+			//console.log("SETTINGS.length= "+len);
 			if ((len == null) || (len == 0)){
 				////console.log("okook");
 				showPlacesInfo = true;
@@ -170,7 +182,7 @@ function checkLanguageSettings()
 			else{
 //				langstr = language = results.rows.item(0).data;
 				language = results.rows.item(0).data;
-				////console.log("langstr: "+langstr);
+				console.log("langstr: "+language);
 				checkForLanguage();
 				cancelBackButton = true;
 				if (isOffline == false){
@@ -193,38 +205,7 @@ function checkLanguageSettings()
 //		populateDB();
 	});
 }
-/*
-function createCuisineArrayEn(){
-	xmlpathcat = 'xml/cuisine.en.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	var xmlCuisine = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	$(xmlCuisine).find("Cuisine").each(function(){
-		cuisineEn.push($(this).text());
-	});
-	//console.log(cuisineEn.length);
-}
 
-function createCuisineArrayGr(){
-	xmlpathcat = 'xml/cuisine.gr.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	var xmlCuisinegr = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	$(xmlCuisinegr).find("Cuisine").each(function(){
-		cuisineGr.push($(this).text());
-	});
-	//console.log(cuisineGr.length);
-}*/
 
 function populateDB(tx)
 {
@@ -333,7 +314,7 @@ function createPoiArraysEn(){
 				slideEmail.push(results.rows.item(p).email);				
 				var str = results.rows.item(p).image;
 				str = str.replace('src="','src="http://www.kos.gr');
-				str = str.replace('style="border-width: 0px;','height="auto" width="80%'); 
+				str = str.replace('style="border-width: 0px;','height="auto" width="100%'); 
 //				console.log(str); 
 				slideImage.push(str);
 //				subsubEn.push(results.rows.item(p).ssubcat);
@@ -363,7 +344,7 @@ function createPoiArraysGr(){
 				var str = results.rows.item(p).image;
 				str = str.replace('src="','src="http://www.kos.gr');
 //				str = str.replace('style="border-width: 0px;','');
-				str = str.replace('style="border-width: 0px;','height="auto" width="80%');
+				str = str.replace('style="border-width: 0px;','height="auto" width="100%');
 //				console.log(n);
 				slideImagegr.push(str);
 //				subsubGr.push(results.rows.item(p).ssubcat);
@@ -518,19 +499,7 @@ function udpateApp(){
 	}
 }
 
-function checkDb(){
-//	//console.log("in CheckDb");
-//	var len;
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
-//			len = results.rows.length;
-//			if ((len == null) || (len == 0)){
-//				createDb();
-//			}
-//		},success0CB, error0CB);
-//		populateDB();
-//	});
-}
+
 
 function error0CB(){
 //	alert("error0CB");
@@ -2142,21 +2111,6 @@ function submitSelectedPlacesGr(){
 	});
 }
 
-function checkForLanguage()
-{
-	if  (language == 'EN')
-	{
-		langstr = 'en';
-		////console.log(langstr);
-		$.extend(MyApp.resources, enResources);
-	}
-	else if (language =='GR')
-	{
-		langstr = 'gr';
-		////console.log(langstr);
-		$.extend(MyApp.resources, grResources);
-	}
-}
 
 function showKmlFile()
 {
