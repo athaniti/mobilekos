@@ -3,8 +3,10 @@ var firstTime = true;
 //var basemap;
 var screenHeight;
 //var fulldescription='';
+var dbExistis = false;
 var screenWidth;
 var currentTimestamp = [];
+var startPoint;
 var currentLat;
 var currentLong;
 var deviceOSVersion;
@@ -15,15 +17,18 @@ var cuisine = false;
 var era  = false;
 var music = false;
 //var currentVersionCode;
-var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
-var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPoiid = [];
+var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerPlace = [], markerSSubCat = [];
+var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], 
+	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 var subsubEn = [], subsubGr = [];
 var reOrdered = false;
 var currentVersionName;
 //var testname, testdescr, testwebsite, testaddress,testplace,testphone,testemail;
 var platformName;
-var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], slidePlace= [], slidePhone= [], slideEmail= [];
-var slideIdgr = [], slideCatgr = [], slideNamegr = [], slideDescrgr= [], slideWebsitegr= [], slideAddressgr= [], slidePlacegr= [], slidePhonegr= [], slideEmailgr= [];
+var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], 
+	slidePlace= [], slidePhone= [], slideEmail= [], slideImage = [];
+var slideIdgr = [], slideCatgr = [], slideNamegr = [], slideDescrgr= [], slideWebsitegr= [], slideAddressgr= [], 
+	slidePlacegr= [], slidePhonegr= [], slideEmailgr= [], slideImagegr = [];
 var watchClear = false;
 var marker1;
 var cancelBackButton = false;
@@ -97,6 +102,10 @@ function onDeviceReady() {
 //	db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
+//	document.addEventListener("abtnList", orderPlaces, false);
+//	document.addEventListener("abtnMap", onClickbtnPlaces, false);
+//	document.addEventListener("abtnFilter", function(){showFilterCategories(0);}, false);
+	
 	document.addEventListener("offline", function() {isOffline = true;}, false);
 	document.addEventListener("online", function() {isOffline = false;}, false);
 	$.mobile.defaultPageTransition = 'none';
@@ -121,12 +130,7 @@ function onDeviceReady() {
 		    }
 		);
 
-	setInterval(function(){
-		////console.log("Checking Internet Connection...");
-		if(navigator.network && navigator.connection.type != Connection.NONE){
-			isOffline = false;
-		}
-	},180000);
+	
 	
 	setTimeout(function(){
 		checkLanguageSettings();
@@ -151,15 +155,27 @@ function filters(hotel, cuisine, music, era, radius){
 	//The Filters Object to store users' specific filters//
 }
 
+
+function checkForLanguage()
+{
+    langstr = 'en';
+	if (language =='GR'  || language == 'gr')
+	{
+		langstr = 'gr';
+		////console.log("langstr: "+langstr);
+		$.extend(MyApp.resources, grResources);
+	}
+}
+
+
 function checkLanguageSettings()
 {
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SETTINGS', [], function (tx, results) {
 			len = results.rows.length;
-			////console.log("SETTINGS.length= "+len);
+			//console.log("SETTINGS.length= "+len);
 			if ((len == null) || (len == 0)){
 				////console.log("okook");
-				
 				showPlacesInfo = true;
 //				createDb();
 				populateDB();
@@ -167,12 +183,13 @@ function checkLanguageSettings()
 			else{
 //				langstr = language = results.rows.item(0).data;
 				language = results.rows.item(0).data;
-				////console.log("langstr: "+langstr);
+				console.log("langstr: "+language);
 				checkForLanguage();
 				cancelBackButton = true;
 				if (isOffline == false){
 //					sync();
 				}
+				dbExistis = true;
 				createCatArraysEn();
 				createSubCatArraysEn();
 				createPoiArraysEn();
@@ -189,38 +206,7 @@ function checkLanguageSettings()
 //		populateDB();
 	});
 }
-/*
-function createCuisineArrayEn(){
-	xmlpathcat = 'xml/cuisine.en.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	var xmlCuisine = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	$(xmlCuisine).find("Cuisine").each(function(){
-		cuisineEn.push($(this).text());
-	});
-	//console.log(cuisineEn.length);
-}
 
-function createCuisineArrayGr(){
-	xmlpathcat = 'xml/cuisine.gr.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	var xmlCuisinegr = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	$(xmlCuisinegr).find("Cuisine").each(function(){
-		cuisineGr.push($(this).text());
-	});
-	//console.log(cuisineGr.length);
-}*/
 
 function populateDB(tx)
 {
@@ -248,8 +234,8 @@ function populateDB(tx)
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id, name, catid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id, name, catid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
 //		tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
 		////console.log("populateDB()2");
@@ -326,7 +312,12 @@ function createPoiArraysEn(){
 				slideAddress.push(results.rows.item(p).address); 
 				slidePlace.push(results.rows.item(p).place); 
 				slidePhone.push(results.rows.item(p).phone); 
-				slideEmail.push(results.rows.item(p).email);
+				slideEmail.push(results.rows.item(p).email);				
+				var str = results.rows.item(p).image;
+				str = str.replace('src="','src="http://www.kos.gr');
+				str = str.replace('style="border-width: 0px;','height="auto" width="100%'); 
+//				console.log(str); 
+				slideImage.push(str);
 //				subsubEn.push(results.rows.item(p).ssubcat);
 //				//console.log("09 "+results.rows.item(p).ssubcat);
 			}
@@ -351,6 +342,12 @@ function createPoiArraysGr(){
 				slidePlacegr.push(results.rows.item(p).place); 
 				slidePhonegr.push(results.rows.item(p).phone); 
 				slideEmailgr.push(results.rows.item(p).email);
+				var str = results.rows.item(p).image;
+				str = str.replace('src="','src="http://www.kos.gr');
+//				str = str.replace('style="border-width: 0px;','');
+				str = str.replace('style="border-width: 0px;','height="auto" width="100%');
+//				console.log(n);
+				slideImagegr.push(str);
 //				subsubGr.push(results.rows.item(p).ssubcat);
 //				//console.log("21 "+results.rows.item(p).ssubcat);
 			}
@@ -369,9 +366,14 @@ function successCB() {
 
 function switchToSecondPage()
 {
-	$( ".loading_gif" ).css( "display", "none" );
-	$('#secondpage').trigger("create");
-	$.mobile.changePage($('#secondpage'), 'pop');
+	if (dbExistis){
+		//do Nothing
+	}
+	else{
+		$( ".loading_gif" ).css( "display", "none" );
+		$('#secondpage').trigger("create");
+		$.mobile.changePage($('#secondpage'), 'pop');
+	}
 }
 
 function success13CB(){
@@ -498,19 +500,7 @@ function udpateApp(){
 	}
 }
 
-function checkDb(){
-//	//console.log("in CheckDb");
-//	var len;
-//	db.transaction(function (tx) {
-//		tx.executeSql('SELECT * FROM CATEGORIESEN', [], function (tx, results) {
-//			len = results.rows.length;
-//			if ((len == null) || (len == 0)){
-//				createDb();
-//			}
-//		},success0CB, error0CB);
-//		populateDB();
-//	});
-}
+
 
 function error0CB(){
 //	alert("error0CB");
@@ -686,7 +676,7 @@ function popPoiEnDb(){
 		var LenCat =  xmlDoc2.getElementsByTagName("Poi").length;
 //		alert('LenCat: '+LenCat);
 //		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat, pois;
-		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub2;
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub2, img;
 //		pois = xmlDoc.getElementsByTagName("Pois")[0];
 		timestampc = $(xmlDoc2).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	
@@ -704,6 +694,7 @@ function popPoiEnDb(){
 			place = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Place")[0].textContent;
 			phone = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Phone")[0].textContent;
 			email = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("Email")[0].textContent;
+			img = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("ImgLink")[0].textContent;
 			ssub2 = xmlDoc2.getElementsByTagName("Poi")[i].getElementsByTagName("SubSucategories")[0].textContent;
 			if ((ssub2 == null) || (ssub2 == '') || (ssub2 == undefined)){
 				ssub2 = "none";
@@ -717,8 +708,8 @@ function popPoiEnDb(){
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
 //			//console.log(poiId+" || "+poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
-			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'
-					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub2], successCB, error2CB);
+			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub2, img], successCB, error2CB);
 		}
 //		alert("5: "+poiName);
 	});	
@@ -736,7 +727,7 @@ function popPoiGrDb(){
 	//console.log("popPoiGrDb");
 	db.transaction(function(tx) {
 		var LenCat =  xmlDoc3.getElementsByTagName("Poi").length;
-		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub;
+		var subCatId, poiName, poiDescr, poiLong, poiLat, timestamp, poiCat, poiSubCat , pois, web, address, place, phone, email, ssub, img;
 		timestampd = $(xmlDoc3).find("timestamp").text();
 		for(var i = 0; i < LenCat; i++)	{
 			ssub = '';
@@ -753,6 +744,7 @@ function popPoiGrDb(){
 			place = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Place")[0].textContent;
 			phone = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Phone")[0].textContent;
 			email = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("Email")[0].textContent;
+			img = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("ImgLink")[0].textContent;
 			ssub = xmlDoc3.getElementsByTagName("Poi")[i].getElementsByTagName("SubSucategories")[0].textContent;
 			if ((ssub == null) || (ssub == '') || (ssub == undefined)){
 				ssub = "none";
@@ -766,8 +758,8 @@ function popPoiGrDb(){
 				subCatId =  poiSubCat[0].getElementsByTagName("Sucategory")[x].textContent;
 			}
 //			//console.log(poiName+" "+poiLong+" "+poiLat+" "+poiCat+" "+" time: "+timestampc+" "+web+ " "+address+ " "+place+ " "+phone+ " "+email);
-			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'
-					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub], sccssCB, error2CB);
+			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub, img], sccssCB, error2CB);
 		}
 //		alert("6: "+poiName);
 		createCatArraysEn();
@@ -1100,11 +1092,14 @@ function drawPlacesPageEn(len){
 		fillhtml += "</div>";
 		fillhtml += "</fieldset>";
 	}
+	
+	createPageHeader(2);
+	
 	$("#placesContent").html(fillhtml);
+//	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 	$('#placespage').trigger("create");
+	
 	$("#placesPageHeader").html(fillHeader);
-//	$.mobile.changePage($('#placespage'), 'slideup(1000)');
-//	document.getElementById("loading_gif").style.display = "none";
 	$( ".loading_gif" ).css( "display", "none" );
 	$.mobile.changePage($('#placespage'), 'pop');
 	customHeader(2);
@@ -1113,8 +1108,7 @@ function drawPlacesPageEn(len){
 	$('#abtnCurrentPosition2').removeClass("active");
 //	$('#abtnExit2').removeClass("active");
 	$('.options').css({'display':'none'});
-	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
-//	setLabelsForMainPage();
+	setLabelsForMainPage();
 	var email = $('#emailaccountchange2').val();
 	//console.log("2222 email: "+email);
 	if ( email == null || email == ""){
@@ -1129,6 +1123,7 @@ function customHeader(x){
 	document.getElementById('btnPlaces'+x).innerText= MyApp.resources.Places;
 	document.getElementById('abtnCurrentPosition'+x).innerText= MyApp.resources.CurrentPosition;
 	document.getElementById('btnTour'+x).innerHTML= MyApp.resources.Tour;
+//	document.getElementById('btnSaveChanges'+x).innerHTML= MyApp.resources.SaveChanges;
 //	document.getElementById('btnExit'+x).innerHTML= MyApp.resources.Exit;
 }
 
@@ -1150,6 +1145,7 @@ function drawPlacesPageGr(len){
 		fillhtml += "</div>";
 		fillhtml += "</fieldset>";
 	}
+	createPageHeader(2);
 	$("#placesContent").html(fillhtml);
 	$('#placespage').trigger("create");
 	$("#placesPageHeader").html(fillHeader);
@@ -1167,7 +1163,7 @@ function drawPlacesPageGr(len){
 	$('#abtnCurrentPosition2').removeClass("active");
 //	$('#abtnExit2').removeClass("active");
 	$('.options').css({'display':'none'});
-	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
+//	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 //	setLabelsForMainPage();
 }
 
@@ -1332,11 +1328,11 @@ function generateMap()
 { 
 		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
 //		var loadingControl = L.Control.loading({separate: true});
-		var osm = new L.TileLayer('map/{z}/{x}/{y}.png');
+		var osm = new L.TileLayer('map/{z}/{x}/{y}.png', {unloadInvisibleTiles: true, reuseTiles: true});
 		map.addLayer(osm);
 		map._layersMaxZoom=16;
 		map._layersMinZoom=12;
-		document.getElementById('map').style.display = 'block';
+//		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
 		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
 //		map.addControl(clearControl(orderPlaces));
@@ -1384,12 +1380,12 @@ function onSuccess(position)
 		var fillhtml = '';
 		document.getElementById('orderedPlaces').innerHTML='';
 		document.getElementById('showingInfo').innerHTML='';
-		tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [];
+		tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPlace = [], tempmarkerSScat = [];;
 		//console.log("inReadSlider");
 		var radius = $("#slider-fill").val();
 		//console.log("adadsa "+$("#slider-fill").val());
 		for (var i=0; i<markerName.length; i++){
-			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i] );
+			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i], markerPlace[i], markerSSubCat[i] );
 		}
 		for (var j=0; j<tempmarkerName.length; j++){
 			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
@@ -1430,7 +1426,7 @@ function onError(error)
 	alert(MyApp.resources.NoLocation);
 }
 
-function addGroupMarker(x, y, name, descr, categ, index)
+function addGroupMarker(x, y, name, descr, categ, place, sscat, index)
 {
 	x = x.replace(x.charAt(2), ".");
 	y = y.replace(y.charAt(2), ".");
@@ -1441,12 +1437,13 @@ function addGroupMarker(x, y, name, descr, categ, index)
 	}
 	var marker;
 	var markerLocation = new L.LatLng(x, y);
-	//console.log(categ);
+//	console.log(categ);
 	categ = $.trim(categ);
 	if (categ.indexOf("8_") == -1 ){
 		categ = categ.slice(0,1);
-		//console.log(categ);		
+//		console.log(categ);
 	}
+//	console.log(categ);
 	switch (categ)
 	{
 	case "1":
@@ -1522,6 +1519,8 @@ function addGroupMarker(x, y, name, descr, categ, index)
 		markerLat.push(x);
 		markerCat.push(categ);
 		markerName.push(name);
+		markerSSubCat.push(sscat);
+		markerPlace.push(place);
 		markerDescr.push(descr);
 	}
 	map.addLayer(marker);
@@ -1565,7 +1564,9 @@ function switchToEmailPage(langid)
 
 function firstSwitchToPlacesPage()
 {
+	console.log("in firstSwitchToPlacesPage()");
 	generateMap();
+	createPageHeader(2);
 	if (isOffline == true)
 	{
 		alert(MyApp.resources.NoInternetAccess);
@@ -1574,7 +1575,7 @@ function firstSwitchToPlacesPage()
 //	setTimeout(function(){
 //		map.invalidateSize();
 //	},2300);
-	setLabelsForMainPage();
+//	setLabelsForMainPage();
 	onClickbtnFilterPlaces();
 }
 
@@ -1603,10 +1604,10 @@ function setLabelsForMainPage()
 	document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;
 	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;
 //	document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
-	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
+//	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
 //	document.getElementById('lblslider').innerHTML= MyApp.resources.Slider;
 	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
-	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
+//	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
 	document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;    
 	document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;
 //	document.getElementById('btnSlideBack').innerHTML= MyApp.resources.Close;
@@ -1619,7 +1620,7 @@ function setLabelsForMainPage()
 //	document.getElementById('itineraryportalpageheader').innerHTML= MyApp.resources.LoadPortalTour;  
 	document.getElementById('btnClearAll').innerHTML= MyApp.resources.ClearAll;
 	document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
-	document.getElementById('btnSaveChanges').innerHTML= MyApp.resources.SaveChanges;
+//	document.getElementById('btnSaveChanges').innerHTML= MyApp.resources.SaveChanges;
 //	document.getElementById('btnShowPlacesPage').innerHTML= MyApp.resources.ShowPlaces;
 }
 
@@ -1630,7 +1631,9 @@ function setHeaderLabels(){
 //	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;
 }
 
-function setSettingsLabels(){}
+function setSettingsLabels(){
+	
+}
 
 function backToMainPage()
 {
@@ -1737,6 +1740,7 @@ function reloadItinerariesPage(){
 //	}
 }
 
+/*
 function firstSwitchToMainPage(email){
 //	//console.log("in first switch... email: "+email);
 	if (fromMainPage == false){
@@ -1754,7 +1758,7 @@ function firstSwitchToMainPage(email){
 	if (firstTime == true){
 		onClickbtnCurrent();
 	}
-}
+}*/
 
 function switchToMainPage(email)
 {
@@ -1835,12 +1839,25 @@ function onClickbtnPlaces2()
 	}
 	if (track != null)
 	{
-		//console.log(track);
-		//console.log("track not null!");
 		map.removeLayer(track);
 //		map.removeControl(control);
 	}
+	createPageHeader(1);
+	$.mobile.changePage($('#mainpage'), 'pop');
+	$( ".secondary_menu" ).css( "display", "block" );
+	$('#abtnPlaces').addClass("active");
+    $('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
+    $('#abtnFilter').removeClass("active");
+    $('#abtnTour').removeClass("active");
+	$("#abtnFilterTour").hide();
+	$("#abtnFilterPlaces").show();
+	setTimeout(function(){
+		map.invalidateSize();
+	},2500);
 	setLabelsForMainPage();
+	$('.options').css({'display':'none'});
+	/*setLabelsForMainPage();
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
 		map.invalidateSize();
@@ -1849,7 +1866,7 @@ function onClickbtnPlaces2()
     $("#abtnFilterTour").hide();
     $('#abtnPlaces').addClass("active");
     $('#abtnTour').removeClass("active");
-    $('#abtnCurrentPosition').removeClass("active");
+    $('#abtnCurrentPosition').removeClass("active");*/
 }
 
 function onClickbtnTour()
@@ -1863,30 +1880,31 @@ function onClickbtnTour()
     $( ".secondary_menu" ).css( "display", "none" );
     $('#abtnTour').addClass("active");
     $('#abtnCurrentPosition').removeClass("active");
-//    enableTourButton = true;
+//  enableTourButton = true;
     if (track != null)
 	{
     	map.addLayer(track);
+    	if (currentMarkers != null)
+    	{
+    		for(var i = 0; i < currentMarkers.length; ++i)
+    		{
+    			map.removeLayer(currentMarkers[i]);
+    		}
+//    		currentMarkers = [];
+    	}
 	}
-    else 
+    else
     {
-//    	createItDb();	
+    	loadItineraries();
     }
-    if (currentMarkers != null)
-	{
-		for(var i = 0; i < currentMarkers.length; ++i)
-		{
-			map.removeLayer(currentMarkers[i]);
-		}
-//		currentMarkers = [];
-	}
+    
 }    
 
 function submitSelectedPlaces()
 {
 	checked = [];
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
-	subsubGr = [];
+	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
+//	subsubGr = [];
 	hotel = false; cusine = false; music = false; era = false;
 //	document.getElementById("loading_gif").style.display = "block";
 //	$( ".loading_gif" ).css( "display", "block" );
@@ -1917,9 +1935,9 @@ function submitSelectedPlacesEn(){
 			//console.log("name222: "+this.name);
 		}
 	});
-//	checked.push("Sites of Interest");
-	
-//	checked.push("Archaelogical Sites and Monuments");
+	checked.push("Sites of Interest");
+	checked.push("Hotels");
+	checked.push("Archaelogical Sites and Monuments");
 	for (var l=0; l<checked.length; l++){
 		
 		if (checked[l] == "Hotels"){
@@ -1986,13 +2004,15 @@ function submitSelectedPlacesEn(){
 								if ( lat2.indexOf("\n") == -1){
 									//console.log(results.rows.item(i).subcategory);
 									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-											results.rows.item(i).name, descr, results.rows.item(i).subcategory ,1);
+											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
+											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
 								}
 							}
 						}
 					}
 //					document.getElementById("loading_gif").style.display = "none";
 					$( ".loading_gif" ).css( "display", "none" );
+					createPageHeader(1);
 					$.mobile.changePage($('#mainpage'), 'pop');
 					$('#abtnPlaces').addClass("active");
 				    $('#abtnList').removeClass("active");
@@ -2091,16 +2111,21 @@ function submitSelectedPlacesGr(){
 								lat2 = results.rows.item(i).lat;
 								if ( lat2.indexOf("\n") == -1){
 									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
-											results.rows.item(i).name, descr, results.rows.item(i).subcategory, 1);
-									subsubGr.push(results.rows.item(i).ssubcat);
+											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
+											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
+//									subsubGr.push(results.rows.item(i).ssubcat);
 								}
 							}
 						}
 					}
 //					document.getElementById("loading_gif").style.display = "none";
 					$( ".loading_gif" ).css( "display", "none" );
+					createPageHeader(1);
 					$.mobile.changePage($('#mainpage'), 'pop');
 //					map.invalidateSize();
+					$('#abtnList').removeClass("active");
+				    $('#abtnMap').addClass("active");
+				    $('#abtnFilter').removeClass("active");
 					$('#abtnPlaces').addClass("active");
 					$("#abtnFilterTour").hide();
 					$("#abtnFilterPlaces").show();
@@ -2115,21 +2140,6 @@ function submitSelectedPlacesGr(){
 	});
 }
 
-function checkForLanguage()
-{
-	if  (language == 'EN')
-	{
-		langstr = 'en';
-		////console.log(langstr);
-		$.extend(MyApp.resources, enResources);
-	}
-	else if (language =='GR')
-	{
-		langstr = 'gr';
-		////console.log(langstr);
-		$.extend(MyApp.resources, grResources);
-	}
-}
 
 function showKmlFile()
 {
@@ -2195,6 +2205,7 @@ function loadItinerariesfromPortal()
 	}
 	document.getElementById('portalItineraries').innerHTML='';
 	$.mobile.changePage($('#itineraryportalpage'), 'pop'); 
+	createPageHeader(5);
 	document.getElementById('emailaccountitinerary').placeholder= MyApp.resources.EmailAccountPlaceholder;
 	customHeader(5);
 	checkForLanguage();
@@ -2203,7 +2214,7 @@ function loadItinerariesfromPortal()
     $('#abtnPlaces5').removeClass("active");
 //    $('#abtnExit5').removeClass("active");
     $('.options').css({'display':'none'});
-	document.getElementById('btnSaveChanges5').innerHTML= MyApp.resources.SaveChanges;
+//	document.getElementById('btnSaveChanges5').innerHTML= MyApp.resources.SaveChanges;
 //	document.getElementById('btnLoad5').innerHTML= MyApp.resources.Load;
 //	document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
@@ -2418,7 +2429,9 @@ function loadItineraries()
 //				loadEachItineraryPage(m); }).appendTo($('#availableFiles'));
 				fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "loadEachItineraryPage(this.id)" rel="external" id="'+idis[j-1]+'" >'+titles[j-1]+'</a>';
 			}
+			
 			$("#availableFiles").html(fillhtml);
+			createPageHeader(3);
 			$.mobile.changePage($('#itinerarypage'), 'pop');
 			$('#itinerarypage').trigger('pagecreate');
 			$("#itinerarypageHeader").html(itineraryPageHeader);
@@ -2427,7 +2440,7 @@ function loadItineraries()
 			$('#abtnPlaces3').removeClass("active");
 			$('#abtnCurrentPosition3').removeClass("active");
 			$('.options').css({'display':'none'});
-			document.getElementById('btnSaveChanges3').innerHTML= MyApp.resources.SaveChanges;
+//			document.getElementById('btnSaveChanges3').innerHTML= MyApp.resources.SaveChanges;
 			document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;
 			document.getElementById('btnLoadfromportal').innerHTML= MyApp.resources.LoadFromPortal;
 			var email = $('#emailaccountchange3').val();
@@ -2851,6 +2864,8 @@ function showAvailableDays(id)
 				document.getElementById('divItineraryInfo').innerHTML = "<p>"+ results.rows.item(y).title 
 					+" | " +"Day " + dd + "</p>" + "<p>Duration: "+ duration[y] +"</p>";
 //				$('#'+$(this).attr("Code")+'').attr("checked",false).checkboxradio("refresh");
+				startPoint = this.first();
+				console.log(startPoint);
 			}).first().click();
 //			$("#btnCallMap").click(function(){
 //				//console.log("btnCallMap clicked");
@@ -2858,6 +2873,7 @@ function showAvailableDays(id)
 //				geolocationControl(HelloWorldFunction);
 //			});
 			$("#availablePois").html(fillhtml);
+			createPageHeader(4);
 			$.mobile.changePage($('#eachitinerarypage'), 'pop');
 			$('#eachitinerarypage').trigger('pagecreate');
 			customHeader(4);
@@ -2867,7 +2883,7 @@ function showAvailableDays(id)
 //		    $('#abtnExit4').removeClass("active");
 			$('#availablePois').trigger('create');
 			$('#availableDays').trigger('create');
-			document.getElementById('btnSaveChanges4').innerHTML= MyApp.resources.SaveChanges;
+//			document.getElementById('btnSaveChanges4').innerHTML= MyApp.resources.SaveChanges;
 			document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
 			document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;
 			var email = $('#emailaccountchange4').val();
@@ -2920,15 +2936,17 @@ function onClickSettings(){
 	var appopts = $('.app_options');
 	var opts = $('.options');
 	//var settings = opts.next();
-	
+	console.log("in onClickSettings");
 	if(appopts.hasClass('no_active')){
 		appopts.removeClass('no_active');
 		////console.log("inactive");
+		console.log("in onClickSettings slideDown");
 		opts.slideDown();
 	}
 	else {
 		////console.log("active");
 		appopts.addClass('no_active');
+		console.log("in onClickSettings slideUp");
 		opts.slideUp();
 	}
 }
@@ -3041,7 +3059,8 @@ function getMoreInfo2(poiName){
 			////console.log("inslideen222"+slideName[c]);
 			if (poiName == slideName[c]){
 				////console.log("inslideen333");
-				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], slidePhone[c], slideEmail[c]);
+				slideen2(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+						slidePhone[c], slideEmail[c], slideImage[c]);
 				break;
 			}
 		}
@@ -3052,7 +3071,41 @@ function getMoreInfo2(poiName){
 //			//console.log("inslideen222"+slideNamegr[c]);
 			if (poiName == slideName[c]){
 				////console.log("inslideen333");
-				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], slidePhonegr[c], slideEmailgr[c]);
+				slidegr2(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
+				break;
+			}
+		}
+	}
+}
+
+function getMoreInfo3(poiName){
+	var k;
+	console.log("getMoreInfo3 "+poiName);
+	poiName = poiName.trim();
+	var k = poiName.indexOf("\n");
+	poiName = poiName.slice(0,k);
+	poiName = poiName.trim();
+	console.log(poiName);
+	if (langstr == 'en'){
+		for (var c =0; c < slideId.length ; c++){
+			////console.log("inslideen222"+slideName[c]);
+			if (poiName == slideName[c]){
+				////console.log("inslideen333");
+				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+						slidePhone[c], slideEmail[c], slideImage[c]);
+				break;
+			}
+		}
+	}
+	else{
+		////console.log("..."+slideId.length);
+		for (var c =0; c < slideId.length ; c++){
+//			//console.log("inslideen222"+slideNamegr[c]);
+			if (poiName == slideName[c]){
+				////console.log("inslideen333");
+				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 				break;
 			}
 		}
@@ -3066,7 +3119,8 @@ function getMoreInfo(poiid, categid)
 			if ((poiid == slideId[b]) && (categid == slideCat[b])){
 				////console.log("FOUND");
 //				//console.log(slideDescr[b]);
-				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], slidePhone[b],slideEmail[b]);
+				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], 
+						slidePhone[b], slideEmail[b], slideImage[b]);
 				break;
 			}
 		}
@@ -3074,7 +3128,8 @@ function getMoreInfo(poiid, categid)
 	else{
 		for (var b =0; b < slideId.length ; b++){
 			if ((poiid == slideIdgr[b]) && (categid == slideCatgr[b])){
-				slidegr(slideNamegr[b], slideDescrgr[b], slideWebsitegr[b], slideAddressgr[b], slidePlacegr[b], slidePhonegr[b],slideEmailgr[b]);
+				slidegr(slideNamegr[b], slideDescrgr[b], slideWebsitegr[b], slideAddressgr[b], slidePlacegr[b], 
+						slidePhonegr[b], slideEmailgr[b], slideImagegr[b]);
 				break;
 			}
 		}
@@ -3085,11 +3140,9 @@ function errorCCB(err){
 	//console.log("error errorCCB ");
 }
 
-function slideen(name, descr, web, add, place, phone, email)
+function slideen(name, descr, web, add, place, phone, email, img)
 {
-	////console.log("in Slideen");
 	if (deviceOSVersion < 4){
-		////console.log("in Slideen1");	
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3099,13 +3152,17 @@ function slideen(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
-			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
-			////console.log("inSlide "+fillhtml);
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
 		});
@@ -3120,18 +3177,22 @@ function slideen(name, descr, web, add, place, phone, email)
 			var n = descr.slice(l,-1);
 			descr = m.concat(n);
 		}
-		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
-//		'<img src="http://www.kos.gr/DocLib/a99e20075abd41f3a5aef70bf61a4ad0.jpg" height="60" width="50">';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
-		////console.log("inSlide "+fillhtml);
+		console.log("inSlide "+img);
+		//console.log("inSlide "+fillhtml);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slidegr(name, descr, web, add, place, phone, email)
+function slidegr(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
 		////console.log("in Slideen1");	
@@ -3144,12 +3205,18 @@ function slidegr(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
-			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
+			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
 			////console.log("inSlide");
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner").niceScroll({cursorcolor:"#484848"});
 		});
@@ -3163,21 +3230,24 @@ function slidegr(name, descr, web, add, place, phone, email)
 			var n = descr.slice(l,-1);
 			descr = m.concat(n);
 		}
-		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
+		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
 		////console.log("inSlide");
+		console.log("inSlide "+img);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slideen3(name, descr, web, add, place, phone, email)
+function slideen2(name, descr, web, add, place, phone, email,img)
 {
 	if (deviceOSVersion < 4){
-		////console.log("in Slideen1");
-		//console.log("in Slideen");
 		$(document).ready(function () {
 			var fillhtml ='';
 			if ( descr.indexOf('<div class="360cities">') != -1){
@@ -3187,12 +3257,17 @@ function slideen3(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
-			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
-			//console.log("inSlide "+fillhtml);
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner2").niceScroll({cursorcolor:"#484848"});
 		});
@@ -3207,17 +3282,123 @@ function slideen3(name, descr, web, add, place, phone, email)
 			var n = descr.slice(l,-1);
 			descr = m.concat(n);
 		}
-		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email;
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
-		//console.log("inSlide "+fillhtml);
+		console.log("inSlide "+img);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
 
-function slidegr3(name, descr, web, add, place, phone, email)
+function slideen3(name, descr, web, add, place, phone, email,img)
+{
+	if (deviceOSVersion < 4){
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+						MyApp.resources.Hide+'</span></a></div>';
+			$("#inner3").html(fillhtml);
+			console.log("inSlide "+img);
+			$( ".inner_wrap" ).css( "display", "block" );
+			$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+					MyApp.resources.Hide+'</span></a></div>';
+		$("#inner3").html(fillhtml);
+		console.log("inSlide "+img);
+		$( ".inner_wrap" ).css( "display", "block" );
+	}
+}
+
+function slidegr3(name, descr, web, add, place, phone, email,img)
+{
+	if (deviceOSVersion < 4){
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+						MyApp.resources.Hide+'</span></a></div>';
+			$("#inner3").html(fillhtml);
+			console.log("inSlide "+img);
+			$( ".inner_wrap" ).css( "display", "block" );
+			$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
+		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+					MyApp.resources.Hide+'</span></a></div>';
+		$("#inner3").html(fillhtml);
+		console.log("inSlide "+img);
+		$( ".inner_wrap" ).css( "display", "block" );
+	}
+}
+
+function slidegr2(name, descr, web, add, place, phone, email, img)
 {
 	//console.log("in Slideen");
 	if (deviceOSVersion < 4){
@@ -3232,14 +3413,17 @@ function slidegr3(name, descr, web, add, place, phone, email)
 				var n = descr.slice(l,-1);
 				descr = m.concat(n);
 			}
-			fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
+						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			$("#inner2").html(fillhtml);
-			//console.log("inSlide "+fillhtml);
-//			var objDiv = document.getElementById("innner");
-//			objDiv.scrollTop = objDiv.scrollHeight;
+			console.log("inSlide "+img);
 			$( ".inner_wrap" ).css( "display", "block" );
 			$("#inner2").niceScroll({cursorcolor:"#484848"});
 		});
@@ -3254,13 +3438,16 @@ function slidegr3(name, descr, web, add, place, phone, email)
 			var n = descr.slice(l,-1);
 			descr = m.concat(n);
 		}
-		fillhtml = '<b>'+name+'</b>' +'<br>' +descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email;
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
+					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		$("#inner2").html(fillhtml);
-		//console.log("inSlide");
-//		objDiv.scrollTop = objDiv.scrollHeight;
+		console.log("inSlide "+img);
 		$( ".inner_wrap" ).css( "display", "block" );
 	}
 }
@@ -3336,77 +3523,78 @@ function orderPlaces(i)
 		switch (categ)
 		{
 		case "1":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/shopping_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/shopping_0.png" alt="options">'+"  "+markerName[i]+'<br><h6>'+markerPlace[i]+'</h6></a>';
 			break;
 		case "2":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list2_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list2_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
 		case "3":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/hotels.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/hotels.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
 		case "4":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list14_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list14_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "5":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "6":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list3_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list3_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "7":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list12_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list12_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+' | '+markerSSubCat[i]+'</h6></a>';
 			break;
 		case "8_1":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_0.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_0.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_2":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_3":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_2.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_2.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_4":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_3.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_3.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_5":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_4.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_4.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_6":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_5.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_5.png" alt="options">'+"  "+markerName[i]+'<br><h6>  '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_7":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_6.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_6.png" alt="options">'+"  "+markerName[i]+' <br><h6> '+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_8":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_7.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_7.png" alt="options">'+"  "+markerName[i]+'<br><h6>'+markerPlace[i]+'</h6></a>';
 			break;
 		case "8_9":
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_8.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_8.png" alt="options">'+"  "+markerName[i]+' <br><h6>'+markerPlace[i]+'</h6></a>';
 			break;
 		default:
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'
-						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+'</a>';
+			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+						+i+'" ><img src="images/list15_1.png" alt="options">'+"  "+markerName[i]+' <br></h6>'+markerPlace[i]+'</h6></a>';
 		}
 		if (i == 50){
 			break;
 		}
 	}
+	createPageHeader(6);
 	$.mobile.changePage($('#orderplaces'), 'pop');
 	customHeader(6);
 	checkForLanguage();
@@ -3419,7 +3607,7 @@ function orderPlaces(i)
 	$('#abtnList2').addClass("active");
 	$('#abtnFilter2').removeClass("active");
 	$('.options').css({'display':'none'});
-	document.getElementById('btnSaveChanges6').innerHTML= MyApp.resources.SaveChanges;
+//	document.getElementById('btnSaveChanges6').innerHTML= MyApp.resources.SaveChanges;
 //	document.getElementById('btnPortalBack2').innerHTML= MyApp.resources.Back;
 	var email = $('#emailaccountchange5').val();
 	if (currentEmail != 'undefined' || currentEmail != '') {
@@ -3474,7 +3662,8 @@ function showOrderedPlacesOnMap(){
 			currentMarkers = [];
 		}
 		for (var j=0; j<tempmarkerName.length; j++){
-			addGroupMarker(tempmarkerLat[j], tempmarkerLong[j], tempmarkerName[j], tempmarkerDescr[j], tempmarkerCat[j], 0);
+			addGroupMarker(tempmarkerLat[j], tempmarkerLong[j], tempmarkerName[j], tempmarkerDescr[j], 
+							tempmarkerCat[j], tempmarkerPlace[j], tempmarkerSScat[j], 0);
 		}
 	}
 	else{
@@ -3493,6 +3682,9 @@ function showOrderedPlacesOnMap(){
 	$('#abtnPlaces').addClass("active");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").show();
+	$('#abtnPlaces').addClass("active");
+    $('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
 	setTimeout(function(){
 		map.invalidateSize();
 	},2500);
@@ -3500,7 +3692,7 @@ function showOrderedPlacesOnMap(){
 	$('.options').css({'display':'none'});
 }
 
-function reOrder(radius,x,y, cat, name, descr){
+function reOrder(radius,x,y, cat, name, descr, place, sscat){
 	//console.log("in reOrder");
 //	currentLat = position.coords.latitude;
 	currentLat = 36.87636;
@@ -3514,6 +3706,8 @@ function reOrder(radius,x,y, cat, name, descr){
 		tempmarkerDescr.push(descr);
 		tempmarkerLat.push(x);
 		tempmarkerLong.push(y);
+		tempmarkerPlace.push(place);
+		tempmarkerSScat.push(sscat);
 	}
 }
 
@@ -3577,6 +3771,7 @@ function showFilterCategories(q){
 	if (hotel == true){
 		hotelHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.HotelStars+'</legend>';
 		hotelHtml += '<div data-role="fieldcontain"><label for="hotel_select" id="hotelselect"></label><select name="hotel_select" id="hotel_select">';
+		hotelHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		hotelHtml += '<option value="1">1 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="2">2 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="3">3 '+MyApp.resources.Stars+'</option>';
@@ -3584,47 +3779,55 @@ function showFilterCategories(q){
 		hotelHtml += '<option value="5">5 '+MyApp.resources.Stars+'</option>';
 //		hotelHtml += '<option value="6">'+MyApp.resources.ShowAll+'</option>';
 		hotelHtml += '</select></div>';
-		$("#hotelContent").html(hotelHtml);
+//		$("#hotelContent").html(hotelHtml);
 //		$("#hotel_select").msDropDown();
 	}
 	if (cuisine == true){
 		restaurantHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.RestaurantCuisine+'</legend>';
 		restaurantHtml +='<div data-role="fieldcontain"><label for="cuisine_select" id="cuisineselect"></label><select name="cuisine_select" id="cuisine_select">';
+		restaurantHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    restaurantHtml += '<option value="-1" selected="selected">Όλες</option>';
 			for (g=0; g<cuisineGr.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineGr[g]+'</option>';
 			}
 			restaurantHtml += '</select></div>';
 		}
 		else{
+//		    restaurantHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<cuisineEn.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineEn[g]+'</option>';
 			}
 			restaurantHtml += '</select></div>';
 		}
-		$("#restaurantContent").html(restaurantHtml);
+//		$("#restaurantContent").html(restaurantHtml);
 	}	
 	if (era == true){
 		eraHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.ArchaiologicalEra+'</legend>';
 		eraHtml +='<div data-role="fieldcontain"><label for="era_select" id="eraselect"></label><select name="era_select" id="era_select">';
+		eraHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    eraHtml += '<option value="-1" selected="selected">Όλες</option>';
 			for (g=0; g<eraGr.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraGr[g]+'</option>';
 			}
-			eraHtml += '</select></div>';
+//			eraHtml += '</select></div>';
 		}
 		else{
+//		    eraHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<eraEn.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraEn[g]+'</option>';
 			}
 			eraHtml += '</select></div>';
 		}
-		$("#archaiologicalContent").html(eraHtml);
+//		$("#archaiologicalContent").html(eraHtml);
 	}
 	if (music == true){
 		musicHtml = '<fieldset data-role="controlgroup"><legend>'+MyApp.resources.NightClubMusic+'</legend>';
 		musicHtml +='<div data-role="fieldcontain"><label for="music_select" id="musicelect"></label><select name="music_select" id="music_select">';
+		musicHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
+//		    musicHtml += '<option value="-1" selected="selected">Όλα</option>';
 			for (g=0; g<musicGr.length; g++){
 				//console.log(musicGr[g]);
 				musicHtml += '<option value="'+musicGr[g]+'">'+musicGr[g]+'</option>';
@@ -3632,19 +3835,22 @@ function showFilterCategories(q){
 			musicHtml += '</select></div>';
 		}
 		else{
+//		    musicHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<musicEn.length; g++){
 				//console.log(musicEn[g]);
 				musicHtml += '<option value="'+musicEn[g]+'">'+musicEn[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
-		$("#musicContent").html(musicHtml);
+//		$("#musicContent").html(musicHtml);
 	}
 	var fillhtml ='';
-	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.FilterPopUpHeader+'</span>';
+	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><h2>'+MyApp.resources.SearchPopUpHeader+'</h2>';
 	fillhtml += '<p></p>';
-	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox"></label>';
+	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox">'+MyApp.resources.FreeTextSearchLabel+'</label>';
 	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" />	</div>';
+	fillhtml += '<h3>'+MyApp.resources.FilterPopUpHeader+'</h3>';
+	fillhtml += '<p></p>';
 	fillhtml += '<p></p>';
 	fillhtml += hotelHtml;
 	fillhtml += '<p></p>';
@@ -3657,12 +3863,39 @@ function showFilterCategories(q){
 				MyApp.resources.Apply+'</span></a></div>';
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "cancel();"><span id="btnSlideBack">'+
 				MyApp.resources.Cancel+'</span></a></div>';
-	if (q==2){
-		slideGr2(fillhtml);
+	createPageHeader(7);
+	$.mobile.changePage($('#filterplaces'), 'pop');
+	customHeader(7);
+	checkForLanguage();
+//	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + i + MyApp.resources.From + markerName.length;
+//	$("#orderplacesHeader").html(fillHeader);
+	$('#abtnTour7').removeClass("active");
+	$('#abtnCurrentPosition7').removeClass("active");
+	$('#abtnPlaces7').addClass("active");
+//	document.getElementById('btnSaveChanges7').innerHTML= MyApp.resources.SaveChanges;
+	$('#abtnMap3').removeClass("active");
+	$('#abtnList3').removeClass("active");
+	$('#abtnFilter3').addClass("active");
+	$('.options').css({'display':'none'});
+	var email = $('#emailaccountchange7').val();
+	if (currentEmail != 'undefined' || currentEmail != '') {
+		if (email == null || email == ""){
+			$('#emailaccountchange7').val(currentEmail);
+		}
 	}
-	else {
-		slideEn2(fillhtml);
-	}
+	$("#filteredPlaces").html(fillhtml);
+	$('#filterplaces').trigger('create');
+	document.getElementById('btnList3').innerHTML= MyApp.resources.List;
+	document.getElementById('btnMap3').innerHTML= MyApp.resources.Map;
+	document.getElementById('btnFilter3').innerHTML= MyApp.resources.Filter;
+	
+	
+//	if (q==2){
+//		slideGr2(fillhtml);
+//	}
+//	else {
+//		slideEn2(fillhtml);
+//	}
 }
 
 function cancel(){
@@ -3687,25 +3920,133 @@ function filterPlaces(x){
 	var newMusicSelect = '';
 	if (hotel == true){
 		userFilters.hotel = $("#hotel_select").val();
-//		newHotelFilter = $("#hotel_select").val();
+		console.log(userFilters.hotel);
 	}
 	if (cuisine == true){
-//		userFilters.cuisine = $("#cuisine_select").val();
-//		newCuisineSelect = $("#cuisine_select").val();
-		userFilters.cuisine = cuisineGr[$("#cuisine_select").val()];
-//		newCuisineSelect = cuisineGr[newCuisineSelect];
+		if ($("#cuisine_select").val() == -1){
+			userFilters.cuisine = $("#cuisine_select").val();
+		}
+		else{
+			userFilters.cuisine = cuisineGr[$("#cuisine_select").val()];
+		}
+		console.log(userFilters.cuisine);
 	}
 	if (era == true){
-		userFilters.era = eraGr[$("#era_select").val()];
-//		newEraSelect = $("#era_select").val();
-//		newEraSelect = eraGr[newEraSelect];
+		if ($("#era_select").val() == -1){
+			userFilters.era = $("#era_select").val();
+		}
+		else{
+			userFilters.era = eraGr[$("#era_select").val()];
+		}
+		console.log(userFilters.era);
 	}
 	if (music == true){
-		userFilters.music = musicGr[$("#music_select").val()];
-//		newMusicSelect = $("#music_select").val();
-//		newMusicSelect = musicGr[newMusicSelect];
+		if ($("#music_select").val() == -1){
+			userFilters.music = $("#music_select").val();
+		}
+		else{
+			userFilters.music = $("#music_select").val();
+		}
+		console.log(userFilters.music);
 	}
 	//console.log(userFilters.hotel+"_"+userFilters.cuisine+"-"+userFilters.era+"_"+userFilters.music);
+	//WHERE title=? AND author=?", ["Ulysses", "James Joyce"]);
+	if (userFilters.hotel == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.cuisine == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["7_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.era == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["2_1"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
+	if (userFilters.music == -1){
+		db.transaction(function (tx) {
+			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["7_5"], function (tx, results) {
+				var len = results.rows.length;
+				for (var j=0; j<len; j++){
+					var poiid = results.rows.item(j).siteid;
+					var poicat = results.rows.item(j).category;
+					var x = results.rows.item(j).lat;
+					var y = results.rows.item(j).long;
+					x = x.replace(x.charAt(2), ".");
+					y = y.replace(y.charAt(2), ".");
+					if (x < 35){
+						var temp = x;
+						x = y;
+						y = temp;
+					}
+					lat2 = results.rows.item(j).lat;
+					if ( lat2.indexOf("\n") == -1){
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+					}
+				}
+			}, errorCB);
+		});
+	}
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM '+poiDB+'', [], function (tx, results) {
 			var len = results.rows.length;
@@ -3713,6 +4054,11 @@ function filterPlaces(x){
 			for (var j=0; j<len; j++){
 //				//console.log(results.rows.item(j).ssubcat);
 //				//console.log(results.rows.item(j).ssubcat.indexOf(newHotelFilter));
+				if (userFilters.hotel == -1){
+					userFilters.hotel = "12345";
+				}
+				
+				
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
@@ -3742,8 +4088,9 @@ function filterPlaces(x){
 //					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 					lat2 = results.rows.item(j).lat;
 					if ( lat2.indexOf("\n") == -1){
-						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
-								results.rows.item(j).descr, results.rows.item(j).category, poiid, poicat , x, y);
+//						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
+//								results.rows.item(j).descr, results.rows.item(j).category, poiid, poicat , x, y);
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
 					}
 				}
 			}
@@ -3763,14 +4110,14 @@ function filterPlaces(x){
 	});
 }
 
-function addTempMarker(x, y, name, descr, categ, poiid){
+function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
 	//console.log(categ);
 	tempmarkerCat.push(categ); tempmarkerName.push(name); tempmarkerDescr.push(descr); tempmarkerLong.push(y); 
-	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid);
+	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid); tempmarkerPlace.push(place); tempmarkerSScat.push(sscat);
 }
 
 function searchText(text,k){
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [];
+	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
 	//console.log("in searchText");
 	if (k==1){
 		//console.log(text);
@@ -3786,7 +4133,7 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x] ,1);
+				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
 			}
 		}
 	}
@@ -3801,7 +4148,7 @@ function searchText(text,k){
 			}
 			descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 			descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x] ,1);
+			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
 		}
 	}
 }
@@ -3834,6 +4181,86 @@ function slideGr2(fillhtml){
 	}
 }
 
-
+function createPageHeader(x){
+	var fillHtml = '';
+	fillHtml  = '<div class="container"> <div class="app_logo"> <img src="images/logo_app.png" alt="logo"/></div>';
+	fillHtml +=	'<div class="app_options no_active"><a href="#" onClick = "onClickSettings();">	<img src="images/settings_new.png" alt="options">';
+	fillHtml += '</a></div></div>';
+	var fillHtml2 = '';
+	switch (x)
+	{
+	case "1":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>	';
+		fillHtml2 += '<select name="language_select" id="language_select"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "backToMainPage();"><span id="btnSaveChanges"> </span></a></div>';
+		break;
+	case "2":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>	';
+		fillHtml2 += '<select name="language_select" id="language_select2"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange2" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges2">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		break;
+	case "3":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>';
+		fillHtml2 += '<select name="language_select" id="language_select3"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange3" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges3">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		break;
+	case "4":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>	';
+		fillHtml2 += '<select name="language_select" id="language_select4"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange4" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges4">'
+						+MyApp.resources.SaveChanges+'</span></a>	</div>';
+		break;
+	case "5":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>	';
+		fillHtml2 += '<select name="language_select" id="language_select5"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange5" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItineraryPortalPage();"><span id="btnSaveChanges5">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		break;
+	case "6":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>	';
+		fillHtml2 += '<select name="language_select" id="language_select6"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange6" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges6">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		break;
+	case "7":
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>';
+		fillHtml2 += '<select name="language_select" id="language_select7"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges7">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		break;
+	}
+	$(".header").html(fillHtml);
+	$(".container2").html(fillHtml2);
+}
 
 
