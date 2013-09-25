@@ -367,7 +367,7 @@ a {
 	margin-top: 8px;
 	width: 35px;
 	height: 28px;
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -380,7 +380,7 @@ a {
 	margin-left: 20px;
 	width: 28px;
 	height: 28px;
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -723,7 +723,6 @@ small {
 	opacity: 0.9;
 }
 
-
 #placesPageHeader p {
 	margin: 30px 40px;
 	font-weight: bold;
@@ -737,13 +736,12 @@ small {
 #itinerarypageHeader {
 	/*width: 190px;
 	height: 70px;*/
-	margin: 3px 5px;
+	margin: 5px 5px;
 	background-color: #F8F8F8;
 	border: 2px 66FFFF;
 	box-shadow: 10px 10px 10px #888888;
 	opacity: 0.9;
 }
-
 
 #itinerarypageHeader p {
 	margin: 30px 40px;
@@ -883,9 +881,9 @@ a#inner3{
 	opacity:1;
 	visibility:visible;
 }
-
+/*
 #inner .close_btn {
-	background-image: url('images/close_btn_white.png');
+	background-image: url('images/close_btn.png');
 	background-color: #777;
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
@@ -900,7 +898,7 @@ a#inner3{
 }
 
 #inner2 .close_btn {
-	background-image: url('images/close_btn_white.png');
+	background-image: url('images/close_btn.png');
 	background-color: #777;
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
@@ -915,7 +913,7 @@ a#inner3{
 }
 
 #inner3 .close_btn {
-	background-image: url('images/close_btn_white.png');
+	background-image: url('images/close_btn.png');
 	background-color: #777;
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
@@ -927,12 +925,12 @@ a#inner3{
 	right: 0px;
 	margin-top: -15px;
 	margin-right: -15px;
-}
+}*/
 
 a.boxclose{
     float:right;
-    margin-top:-10px;
-    margin-right:-10px;
+    margin-top:50px;
+    margin-right:50px;
     color: #fff;
     border: 1px solid #AEAEAE;
     border-radius: 30px;

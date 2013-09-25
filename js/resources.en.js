@@ -47,7 +47,7 @@ var enResources = {
 		CouldNotGetFilesFromPortal:"Could not get files from portal",
 		UpdateApp:"There is a new version of Kos.Mobile. Would you like to download it now?",
 		Hide:"Close",
-		ItineraryPageHeaderNull:"No Itineraries found",
+		ItineraryPageHeaderNull:'No Itineraries found in local memory. Use "Load from Portal" option to download tours from Portal',
 		ItineraryPageHeaderOk:"Select from the following itineraries",
 		Slider:"Select distance (km)",
 		orderPlacesHeader:"Slide to filter places by distance",

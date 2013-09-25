@@ -3,7 +3,6 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-7">
 <title>Kos Mobile</title>
-<!-- script window.L_DISABLE_3D=true></script> -->
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" type="text/css" href="css/Control.Loading.css">
 <!--<link href="jquery.mobile/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>-->
@@ -38,20 +37,10 @@
 // <![CDATA[
  document.addEventListener("deviceready", onDeviceReady, false);
 // ]]></script>
- 
 
 </head>
+
 <body>
-<!--<body onload="onDeviceReady()">
-<script type="text/javascript">
-	$(document).ready(function(e) {
-		try {
-		$("#hotelContent").msDropDown();
-		} catch(e) {
-		alert(e.message);
-		}
-	});
-</script>-->
 <form action="#" method="get">
 
 <div data-role="page" id="firstpage">
@@ -86,37 +75,10 @@
 	</div>
 </div>
 
-
 <div data-role="page" id="mainpage">
-	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>
-	</div>
+	<div class="header"></div>
 	<div class="options" style="display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "backToMainPage();"><span id="btnSaveChanges"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
    	<div class="main_menu">
 		<ul>
@@ -134,7 +96,7 @@
 				<ul>
 					<li><a href="#" id="abtnList" onClick = "orderPlaces();"><span id="btnList"></span></a></li>
 					<li><a href="#" id="abtnMap" onClick = "onClickbtnPlaces();"><span id="btnMap"></span></a></li>
-					<li><a href="#" id="abtnFilter" onClick = "showFilterCategories(0);"><span id="btnFilter"></span></a></li>
+					<li><a href="#" id="abtnFilter" onClick = "showFilterCategories();"><span id="btnFilter"></span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -156,33 +118,9 @@
 
 <div data-role="page" id="placespage">
 	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-		 	<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>	
-	</div>
+	</div> 
 	<div class="options" style="display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select2">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange2" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges2"> </span></a>
-			</div>
+		 <div class="container2">
 		</div>
 	</div>
    	<div class="main_menu">
@@ -215,7 +153,6 @@
     </div>
    	<div class="filtercategories" style="display:none; z-index:9999;">
 	 	<div class="container">
-			
 			<div class="button blue small">
 				<a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges"> </span></a>
 			</div>
@@ -224,36 +161,9 @@
 </div>
 
 <div  data-role="page" id="itinerarypage" >
-	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>
-	</div>
+	<div class="header"></div>
 	<div class="options" style= "display:none; z-index:9999;">
-		 <div class="container">
-		 <div id="itinerarypageHeader" style="text-align:center"></div>
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select3">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange3" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges3"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
    	<div class="main_menu">
 		<ul>
@@ -264,9 +174,8 @@
 	</div>
 	<div class="main_content">
 		<div class="container">
-	 		<!-- span id="lblnotavailablefiles"></span-->
-	 		<div id="availableFiles">
-			</div>
+			<div id="itinerarypageHeader" style="text-align:center"></div>
+	 		<div id="availableFiles"></div>
 			<div class="button blue">
 				<a href="#" id="abtnLoadfromportal" onClick="loadItinerariesfromPortal()"><span  id="btnLoadfromportal"></span></a>
 			</div>
@@ -280,34 +189,9 @@
 
 <div  data-role="page" id="eachitinerarypage">
 	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>
 	</div>
 	<div class="options" style= "display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select4">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange4" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges4"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
 	<div class="main_menu">
 		<ul>
@@ -338,41 +222,15 @@
 
 <div  data-role="page" id="itineraryportalpage" >
 	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>	
 	</div>
 	<div class="options" style="display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select5">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange5" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadItineraryPortalPage();"><span id="btnSaveChanges5"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
 	<div class="main_menu">
 		<ul>
 			<li><a href="#" id="abtnPlaces5" onClick = "onClickbtnPlaces2();"><span id="btnPlaces5"></span></a></li>
 			<li><a href="#" id="abtnTour5" onClick = "onClickbtnTour();"><span id="btnTour5"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition5" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition5"></span></a></li>
-			<!-- li><a href="#" id="abtnExit5" onClick = "navigator.app.exitApp();"><span id="btnExit5"></span></a></li-->
 		</ul>
 	</div>
 	<div class="main_content">
@@ -388,7 +246,6 @@
 				<a href="#" id="abtnLoad" onClick="loadFromPortal($('#emailaccountitinerary').val())"><span  id="btnLoadItinerary"></span></a>
 			</div>
 			<div id="portalItineraries"></div>
-			
 			<div class="button blue small">
 				<a href="#" onClick = "loadItineraries();">
 					<span id="btnPortalBack"> </span>
@@ -400,39 +257,14 @@
 
 <div  data-role="page" id="orderplaces" >
 	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>	
 	</div>
 	<div class="options" style="display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select6">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange6" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges6"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
 	<div class="main_menu">
 		<ul>
 			<li><a href="#" id="abtnPlaces6" onClick = "onClickbtnPlaces2();"><span id="btnPlaces6"></span></a></li>
-			<li><a href="#" id="abtnTour6" onClick = "onClickbtnTour();"><span id="btnTour6"></span></a></li>
+			<li><a href="#" id="abtnTour6" onClick = "switchToMainPage2();"><span id="btnTour6"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition6" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition6"></span></a></li>
 		</ul>
 	</div>
@@ -467,36 +299,11 @@
 	</div>
 </div>
 
-<div  data-role="page" id="filterplaces" >
+<div data-role="page" id="filterplaces">
 	<div class="header">
-		<div class="container">
-			<div class="app_logo">
-				<img src="images/logo_app.png" alt="logo"/>
-			</div>
-			<div class="app_options no_active">
-				<a href="#" onClick = "onClickSettings();">
-					<img src="images/settings_new.png" alt="options">
-				</a>
-			</div>
-		</div>	
 	</div>
 	<div class="options" style="display:none; z-index:9999;">
-		 <div class="container">
-			<div data-role="fieldcontain">
-				<label for="language_select" id="lbllanguageselect"></label>
-				<select name="language_select" id="language_select6">
-	    			<option value="GR">Ελληνικά</option>
-	 				<option value="EN">English</option>
-				</select>
-			</div>
-			<div data-role="fieldcontain" >
-				<label for="emailaccount" id="lblemailaccount"></label>
-				<input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" />
-			</div>
-			<div class="button blue small">
-				<a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges7"> </span></a>
-			</div>
-		</div>
+		 <div class="container2"></div>
 	</div>
 	<div class="main_menu">
 		<ul>
@@ -519,12 +326,10 @@
 			<div id="restaurantContent"></div>
 			<div id="archaiologicalContent"></div>
 			<div id="musicContent"></div>
-			
 		</div>
 	</div>
 </div>
 
 </form>
 </body>
-
 </html>
