@@ -1092,9 +1092,7 @@ function drawPlacesPageEn(len){
 		fillhtml += "</div>";
 		fillhtml += "</fieldset>";
 	}
-	
 	createPageHeader(2);
-	
 	$("#placesContent").html(fillhtml);
 //	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 	$('#placespage').trigger("create");
@@ -1163,6 +1161,7 @@ function drawPlacesPageGr(len){
 	$('#abtnCurrentPosition2').removeClass("active");
 //	$('#abtnExit2').removeClass("active");
 	$('.options').css({'display':'none'});
+	setLabelsForMainPage();
 //	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 //	setLabelsForMainPage();
 }
@@ -1692,13 +1691,13 @@ function reloadPlacesPage(){
 	var newlangstr = $("#language_select2").val();
 	var settingsChanged = false;
 	langstr = newlangstr.toLowerCase();
-	// alert(langstr);
+	console.log(langstr);
 	fromselectedplaces = false;
 	if (language != newLanguage)
 	{
 		language = newLanguage;
 		langchanged = true;
-		//console.log(language);
+		console.log(language);
 		db.transaction(function(tx) {
 			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
 		});
@@ -3065,28 +3064,28 @@ function getMoreInfo2(poiName){
 	////console.log("getMoreInfo2 "+poiName);
 	poiName = poiName.trim();
 	if (langstr == 'en'){
-		for (var c =0; c < slideId.length ; c++){
-			////console.log("inslideen222"+slideName[c]);
-			if (poiName == slideName[c]){
-				////console.log("inslideen333");
-				slideen2(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
-						slidePhone[c], slideEmail[c], slideImage[c]);
-				break;
-			}
-		}
+		var c = slideName.indexOf(poiName);
+//		for (var c =0; c < slideId.length ; c++){
+//		////console.log("inslideen222"+slideName[c]);
+//		if (poiName == slideName[c]){
+		////console.log("inslideen333");
+		slideen2(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+				slidePhone[c], slideEmail[c], slideImage[c]);
+//		}
+//		}
 	}
 	else{
 		////console.log("..."+slideId.length);
-		for (var c =0; c < slideId.length ; c++){
-//			//console.log("inslideen222"+slideNamegr[c]);
-			if (poiName == slideName[c]){
-				////console.log("inslideen333");
-				slidegr2(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
-						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
-				break;
-			}
-		}
+//		for (var c =0; c < slideId.length ; c++){
+////		//console.log("inslideen222"+slideNamegr[c]);
+//		if (poiName == slideName[c]){
+		////console.log("inslideen333");
+		var c = slideNamegr.indexOf(poiName);
+		slidegr2(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+				slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 	}
+//	}
+//	}
 }
 
 function getMoreInfo3(poiName){
@@ -3098,28 +3097,16 @@ function getMoreInfo3(poiName){
 	poiName = poiName.trim();
 	console.log(poiName);
 	if (langstr == 'en'){
-//		for (var c =0; c < slideId.length ; c++){
-			////console.log("inslideen222"+slideName[c]);
-//			if (poiName == slideName[c]){
-		 var c = slideName.indexOf(poiName);
-				////console.log("inslideen333");
-				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
-						slidePhone[c], slideEmail[c], slideImage[c]);
-			}
-//		}
-//	}
+		var c = slideName.indexOf(poiName);
+		////console.log("inslideen333");
+		slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
+				slidePhone[c], slideEmail[c], slideImage[c]);
+	}
 	else{
 		var c = slideNamegr.indexOf(poiName);
-		////console.log("..."+slideId.length);
-//		for (var c =0; c < slideId.length ; c++){
-//			//console.log("inslideen222"+slideNamegr[c]);
-//			if (poiName == slideName[c]){
-		var c = slideNamegr.indexOf(poiName);
-				////console.log("inslideen333");
-				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
-						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
-//			}
-//		}
+		////console.log("inslideen333");
+		slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
+				slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 	}
 }
 
@@ -3128,8 +3115,8 @@ function getMoreInfo(poiid, categid)
 	if (langstr == 'en'){
 		for (var b =0; b < slideId.length ; b++){
 			if ((poiid == slideId[b]) && (categid == slideCat[b])){
-				////console.log("FOUND");
-//				//console.log(slideDescr[b]);
+				//console.log("FOUND");
+				//console.log(slideDescr[b]);
 				slideen(slideName[b], slideDescr[b], slideWebsite[b], slideAddress[b], slidePlace[b], 
 						slidePhone[b], slideEmail[b], slideImage[b]);
 				break;
@@ -3172,10 +3159,12 @@ function slideen(name, descr, web, add, place, phone, email, img)
 			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
-			$("#inner").html(fillhtml);
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
+//			$("#inner").html(fillhtml);
+//			console.log("inSlide "+img);
+//			$( ".inner_wrap" ).css( "display", "block" );
+//			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 		});
 	}
 	else{
@@ -3196,10 +3185,12 @@ function slideen(name, descr, web, add, place, phone, email, img)
 		+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
-		$("#inner").html(fillhtml);
-		console.log("inSlide "+img);
-		//console.log("inSlide "+fillhtml);
-		$( ".inner_wrap" ).css( "display", "block" );
+//		$("#inner").html(fillhtml);
+//		console.log("inSlide "+img);
+//		//console.log("inSlide "+fillhtml);
+//		$( ".inner_wrap" ).css( "display", "block" );
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));
 	}
 }
 
@@ -3295,7 +3286,7 @@ function slideen2(name, descr, web, add, place, phone, email,img)
 			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 		$("#detailscontent").html(fillhtml);
-			$.mobile.changePage($('#details'));
+		$.mobile.changePage($('#details'));
 	}
 }
 
@@ -3347,7 +3338,7 @@ function slidegr2(name, descr, web, add, place, phone, email, img)
 			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 		$("#detailscontent").html(fillhtml);
-			$.mobile.changePage($('#details'));
+		$.mobile.changePage($('#details'));
 	}
 }
 
@@ -4214,32 +4205,38 @@ function slideGr2(fillhtml){
 
 function createPageHeader(x){
 	var fillHtml = '';
+	var fillHtml2 = '';
 	fillHtml  = '<div class="container"> <div class="app_logo"> <img src="images/logo_app.png" alt="logo"/></div>';
 	fillHtml +=	'<div class="app_options no_active"><a href="#" onClick = "onClickSettings();">	<img src="images/settings_new.png" alt="options">';
 	fillHtml += '</a></div></div>';
-	var fillHtml2 = '';
 	switch (x)
 	{
-	case "1":
+	case 1:
+		console.log("in 1");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select"><option value="GR">Ελληνικά</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" /></div>';
-		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "backToMainPage();"><span id="btnSaveChanges"> </span></a></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "backToMainPage();"><span id="btnSaveChanges">'
+						+MyApp.resources.SaveChanges+' </span></a></div>';
+		$(".container1").html(fillHtml2);
 		break;
-	case "2":
+	case 2:
+		console.log("in 2");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
-						+MyApp.resources.LanguageSelect+'</label>	';
+						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select2"><option value="GR">Ελληνικά</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange2" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges2">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container2").html(fillHtml2);
 		break;
-	case "3":
+	case 3:
+		console.log("in 3");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select3"><option value="GR">Ελληνικά</option>';
@@ -4248,8 +4245,10 @@ function createPageHeader(x){
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange3" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges3">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container3").html(fillHtml2);
 		break;
-	case "4":
+	case 4:
+		console.log("in 4");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select4"><option value="GR">Ελληνικά</option>';
@@ -4258,8 +4257,9 @@ function createPageHeader(x){
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange4" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItinerariesPage();"><span id="btnSaveChanges4">'
 						+MyApp.resources.SaveChanges+'</span></a>	</div>';
+		$(".container4").html(fillHtml2);
 		break;
-	case "5":
+	case 5:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select5"><option value="GR">Ελληνικά</option>';
@@ -4268,8 +4268,9 @@ function createPageHeader(x){
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange5" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadItineraryPortalPage();"><span id="btnSaveChanges5">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container5").html(fillHtml2);
 		break;
-	case "6":
+	case 6:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select6"><option value="GR">Ελληνικά</option>';
@@ -4278,8 +4279,9 @@ function createPageHeader(x){
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange6" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges6">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container6").html(fillHtml2);
 		break;
-	case "7":
+	case 7:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select7"><option value="GR">Ελληνικά</option>';
@@ -4288,10 +4290,11 @@ function createPageHeader(x){
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" /></div>';
 		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges7">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container7").html(fillHtml2);
 		break;
 	}
 	$(".header").html(fillHtml);
-	$(".container2").html(fillHtml2);
+//	$(".container2").html(fillHtml2);
 }
 
 

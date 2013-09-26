@@ -67,6 +67,37 @@ a {
 	padding: 0px 20px;
 }
 
+.container2 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container3 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container4 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container5 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container6 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container7 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+
 /*-----------------------------------------------------------------------------------*/
 /*	Flags Settings
 /*-----------------------------------------------------------------------------------*/
@@ -421,9 +452,7 @@ input#search_box {
 	width: 80%;
 	padding: 3px;
 	font-size: 1.2em;
-	
 }
- 
 
 /*-----------------------------------------------------------------------------------*/
 /*	Inputs Settings
@@ -704,11 +733,12 @@ small {
 	background-image: url('images/kos_map.png');
 	/*background: #e8e8e8 url('images/map.jpg');*/
 }
-/*
+
 #placesContent {
 	background: transparent;
+	max-width: 60%;
 }
-
+/*
 #checkbox {
 	background: transparent;
 }*/
@@ -716,18 +746,20 @@ small {
 #placesPageHeader {
 	/*width: 190px;
 	height: 70px;*/
-	margin: 3px 5px;
+	margin: 5px 5%;
+	max-width: 70%;
 	background-color: #F8F8F8;
-	border: 2px 66FFFF;
+	border: 2px;
 	box-shadow: 10px 10px 10px #888888;
 	opacity: 0.9;
 }
 
+/*
 #placesPageHeader p {
 	margin: 30px 40px;
 	font-weight: bold;
 	color: #000000;
-}
+}*/
 
 /*-----------------------------------------------------------------------------------*/
 /*	Places page Settings
@@ -1069,11 +1101,6 @@ a.boxclose{
 	background-color: #353535;
 	color: #ffffff;
 	display: none;
-}
-
-.container2 {
-	width: 100%;
-	padding: 0px 20px;
 }
 
 .msg {text-align:center;}
