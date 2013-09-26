@@ -1936,9 +1936,9 @@ function submitSelectedPlacesEn(){
 			//console.log("name222: "+this.name);
 		}
 	});
-	checked.push("Sites of Interest");
-	checked.push("Hotels");
-	checked.push("Archaelogical Sites and Monuments");
+//	checked.push("Sites of Interest");
+//	checked.push("Hotels");
+//	checked.push("Archaelogical Sites and Monuments");
 	for (var l=0; l<checked.length; l++){
 		
 		if (checked[l] == "Hotels"){
