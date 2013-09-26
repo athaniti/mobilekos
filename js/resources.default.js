@@ -66,4 +66,8 @@ MyApp.resources = {
         SearchPopUpHeader:"Search in the results",
 		Cancel:"Cancel",
         FreeTextSearchLabel:"Use this text box for free text search",
+	Website:"Website",
+	Address:"Address",
+	Place:"Place",
+	Phone:"Phone"
 };

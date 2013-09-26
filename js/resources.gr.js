@@ -62,4 +62,8 @@ var grResources = {
         SearchPopUpHeader:"Αναζήτηση στα αποτελέσματα.",
 		Cancel:"Ακύρωση",
         FreeTextSearchLabel:"Χρησιμοποιείστε το παρακάτω πεδίο κειμένου για αναζήτηση με ελεύθερο κείμενο.",
+	Website:"Ιστοσελίδα",
+	Address:"Διεύθυνση",
+	Place:"Τόπος",
+	Phone:"Τηλέφωνο"
 };
