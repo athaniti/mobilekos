@@ -3317,10 +3317,12 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
-			$("#inner3").html(fillhtml);
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner3").niceScroll({cursorcolor:"#484848"});
+			//$("#inner3").html(fillhtml);
+			//console.log("inSlide "+img);
+			//$( ".inner_wrap" ).css( "display", "block" );
+			//$("#inner3").niceScroll({cursorcolor:"#484848"});
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 		});
 	}
 	else{
@@ -3341,9 +3343,11 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
-		$("#inner3").html(fillhtml);
-		console.log("inSlide "+img);
-		$( ".inner_wrap" ).css( "display", "block" );
+		//$("#inner3").html(fillhtml);
+		//console.log("inSlide "+img);
+		//$( ".inner_wrap" ).css( "display", "block" );
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));		
 	}
 }
 
@@ -3368,10 +3372,12 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
-			$("#inner3").html(fillhtml);
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner3").niceScroll({cursorcolor:"#484848"});
+			//$("#inner3").html(fillhtml);
+			//console.log("inSlide "+img);
+			//$( ".inner_wrap" ).css( "display", "block" );
+			//$("#inner3").niceScroll({cursorcolor:"#484848"});
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 		});
 	}
 	else{
@@ -3392,9 +3398,11 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
-		$("#inner3").html(fillhtml);
-		console.log("inSlide "+img);
-		$( ".inner_wrap" ).css( "display", "block" );
+		//$("#inner3").html(fillhtml);
+		//console.log("inSlide "+img);
+		//$( ".inner_wrap" ).css( "display", "block" );
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));
 	}
 }
 
