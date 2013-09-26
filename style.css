@@ -732,11 +732,12 @@ small {
 	position: relative;
 	background-image: url('images/kos_map.png');
 	/*background: #e8e8e8 url('images/map.jpg');*/
+	
 }
 
 #placesContent {
 	background: transparent;
-	max-width: 60%;
+	/*max-width: 60%;*/
 }
 /*
 #checkbox {
