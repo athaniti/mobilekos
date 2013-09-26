@@ -1380,7 +1380,8 @@ function onSuccess(position)
 		var fillhtml = '';
 		document.getElementById('orderedPlaces').innerHTML='';
 		document.getElementById('showingInfo').innerHTML='';
-		tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPlace = [], tempmarkerSScat = [];;
+		tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], tempmarkerPlace = [];
+		tempmarkerSScat = [];
 		//console.log("inReadSlider");
 		var radius = $("#slider-fill").val();
 		//console.log("adadsa "+$("#slider-fill").val());
@@ -1996,6 +1997,8 @@ function submitSelectedPlacesEn(){
 								var poicat = results.rows.item(i).category;
 								var x = results.rows.item(i).lat;
 								var y = results.rows.item(i).long;
+								x = x.replace(x.charAt(2), ".");
+								y = y.replace(y.charAt(2), ".");
 								descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 //								descr += '<a href="#popupBasic" data-rel="popup">'+MyApp.resources.MoreInfo+'</a>';			
 								descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
@@ -2106,6 +2109,8 @@ function submitSelectedPlacesGr(){
 								var poicat = results.rows.item(i).category;
 								var x = results.rows.item(i).lat;
 								var y = results.rows.item(i).long;
+								x = x.replace(x.charAt(2), ".");
+								y = y.replace(y.charAt(2), ".");
 								descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 								descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 								lat2 = results.rows.item(i).lat;
@@ -3040,7 +3045,12 @@ function getDirections(x,y)
 		var url = 'http://maps.google.com/maps?saddr=';
 //		currentLat;
 //		var currentLong;
-		url += currentLat+','+currentLong;// start point
+		if (currentLat==undefined) {
+		    currentLat = '27.102059';
+		}
+		if (currentLong==undefined) {
+		    currentLong = '36.809098';
+		}url += currentLat+','+currentLong;// start point
 //		url += '36.809098,27.102059'; 
 		url += '&daddr='+x+','+y; // end point
 //	    window.location = url;
@@ -3088,27 +3098,28 @@ function getMoreInfo3(poiName){
 	poiName = poiName.trim();
 	console.log(poiName);
 	if (langstr == 'en'){
-		for (var c =0; c < slideId.length ; c++){
+//		for (var c =0; c < slideId.length ; c++){
 			////console.log("inslideen222"+slideName[c]);
-			if (poiName == slideName[c]){
+//			if (poiName == slideName[c]){
+		 var c = slideName.indexOf(poiName);
 				////console.log("inslideen333");
 				slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
 						slidePhone[c], slideEmail[c], slideImage[c]);
-				break;
 			}
-		}
-	}
+//		}
+//	}
 	else{
+		var c = slideNamegr.indexOf(poiName);
 		////console.log("..."+slideId.length);
-		for (var c =0; c < slideId.length ; c++){
+//		for (var c =0; c < slideId.length ; c++){
 //			//console.log("inslideen222"+slideNamegr[c]);
-			if (poiName == slideName[c]){
+//			if (poiName == slideName[c]){
+		var c = slideNamegr.indexOf(poiName);
 				////console.log("inslideen333");
 				slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
 						slidePhonegr[c], slideEmailgr[c], slideImage[c]);
-				break;
-			}
-		}
+//			}
+//		}
 	}
 }
 
@@ -3157,8 +3168,8 @@ function slideen(name, descr, web, add, place, phone, email, img)
 			if (!isOffline){
 				fillhtml += img+'<br>';
 			}
-			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
 			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 			$("#inner").html(fillhtml);
@@ -3181,8 +3192,8 @@ function slideen(name, descr, web, add, place, phone, email, img)
 		if (!isOffline){
 			fillhtml += img+'<br>';
 		}
-		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+		+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
 		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 		$("#inner").html(fillhtml);
@@ -3210,15 +3221,12 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 			if (!isOffline){
 				fillhtml += img+'<br>';
 			}
-			fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-			+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-			$("#inner").html(fillhtml);
-			////console.log("inSlide");
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner").niceScroll({cursorcolor:"#484848"});
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 		});
 	}
 	else{
@@ -3234,14 +3242,12 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 		if (!isOffline){
 			fillhtml += img+'<br>';
 		}
-		fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'+add+'<br>' +'<b>Τοποθεσία: </b>'
-		+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+"<br>";
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-					MyApp.resources.Hide+'</span></a></div>';
-		$("#inner").html(fillhtml);
-		////console.log("inSlide");
-		console.log("inSlide "+img);
-		$( ".inner_wrap" ).css( "display", "block" );
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));
 	}
 }
 
@@ -3262,65 +3268,10 @@ function slideen2(name, descr, web, add, place, phone, email,img)
 			if (!isOffline){
 				fillhtml += img+'<br>';
 			}
-			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-			$("#inner2").html(fillhtml);
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner2").niceScroll({cursorcolor:"#484848"});
-		});
-	}
-	else{
-		//console.log("in Slideen2");
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities">') != -1){
-			var k = descr.indexOf('<div class="360cities">');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-					MyApp.resources.Hide+'</span></a></div>';
-		$("#inner2").html(fillhtml);
-		console.log("inSlide "+img);
-		$( ".inner_wrap" ).css( "display", "block" );
-	}
-}
-
-function slideen3(name, descr, web, add, place, phone, email,img)
-{
-	if (deviceOSVersion < 4){
-		$(document).ready(function () {
-			var fillhtml ='';
-			if ( descr.indexOf('<div class="360cities">') != -1){
-				var k = descr.indexOf('<div class="360cities">');
-				var l = descr.indexOf('</div>');
-				var m = descr.slice(0,k);
-				var n = descr.slice(l,-1);
-				descr = m.concat(n);
-			}
-			img = img.replace('height="auto"','height="50%"');
-			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-			if (!isOffline){
-				fillhtml += img+'<br>';
-			}
-			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
 			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-			//$("#inner3").html(fillhtml);
-			//console.log("inSlide "+img);
-			//$( ".inner_wrap" ).css( "display", "block" );
-			//$("#inner3").niceScroll({cursorcolor:"#484848"});
+							MyApp.resources.Hide+'</span></a></div>';
 			$("#detailscontent").html(fillhtml);
 			$.mobile.changePage($('#details'));
 		});
@@ -3339,72 +3290,15 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 		if (!isOffline){
 			fillhtml += img+'<br>';
 		}
-		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
-					MyApp.resources.Hide+'</span></a></div>';
-		//$("#inner3").html(fillhtml);
-		//console.log("inSlide "+img);
-		//$( ".inner_wrap" ).css( "display", "block" );
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
 		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));		
+			$.mobile.changePage($('#details'));
 	}
 }
 
-function slidegr3(name, descr, web, add, place, phone, email,img)
-{
-	if (deviceOSVersion < 4){
-		$(document).ready(function () {
-			var fillhtml ='';
-			if ( descr.indexOf('<div class="360cities">') != -1){
-				var k = descr.indexOf('<div class="360cities">');
-				var l = descr.indexOf('</div>');
-				var m = descr.slice(0,k);
-				var n = descr.slice(l,-1);
-				descr = m.concat(n);
-			}
-			img = img.replace('height="auto"','height="50%"');
-			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-			if (!isOffline){
-				fillhtml += img+'<br>';
-			}
-			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-			//$("#inner3").html(fillhtml);
-			//console.log("inSlide "+img);
-			//$( ".inner_wrap" ).css( "display", "block" );
-			//$("#inner3").niceScroll({cursorcolor:"#484848"});
-			$("#detailscontent").html(fillhtml);
-			$.mobile.changePage($('#details'));
-		});
-	}
-	else{
-		//console.log("in Slideen2");
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities">') != -1){
-			var k = descr.indexOf('<div class="360cities">');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
-		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
-					MyApp.resources.Hide+'</span></a></div>';
-		//$("#inner3").html(fillhtml);
-		//console.log("inSlide "+img);
-		//$( ".inner_wrap" ).css( "display", "block" );
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
-	}
-}
 
 function slidegr2(name, descr, web, add, place, phone, email, img)
 {
@@ -3426,14 +3320,12 @@ function slidegr2(name, descr, web, add, place, phone, email, img)
 			if (!isOffline){
 				fillhtml += img+'<br>';
 			}
-			fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-						+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-			$("#inner2").html(fillhtml);
-			console.log("inSlide "+img);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner2").niceScroll({cursorcolor:"#484848"});
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 		});
 	}
 	else{
@@ -3450,15 +3342,127 @@ function slidegr2(name, descr, web, add, place, phone, email, img)
 		if (!isOffline){
 			fillhtml += img+'<br>';
 		}
-		fillhtml += descr+'<br>' +'<b>Ιστοσελίδα: </b>'+web+'<br>' +'<b>Διεύθυνση: </b>'
-					+add+'<br>' +'<b>Τοποθεσία: </b>'+place+'<br>' +'<b>Τηλέφωνο: </b>'+phone+'<br>'+'<b>Email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-					MyApp.resources.Hide+'</span></a></div>';
-		$("#inner2").html(fillhtml);
-		console.log("inSlide "+img);
-		$( ".inner_wrap" ).css( "display", "block" );
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+		$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
 	}
 }
+
+function slideen3(name, descr, web, add, place, phone, email,img)
+{
+    
+    console.log("slideen3");
+	if (deviceOSVersion < 4){
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+			//$("#inner3").html(fillhtml);
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
+			//$( ".inner_wrap" ).css( "display", "block" );
+			//$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+		//$("#inner3").html(fillhtml);
+		//console.log("inSlide "+img);
+		//$( ".inner_wrap" ).css( "display", "block" );
+		
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));
+	}
+}
+
+function slidegr3(name, descr, web, add, place, phone, email,img)
+{
+	if (deviceOSVersion < 4){
+		$(document).ready(function () {
+			var fillhtml ='';
+			if ( descr.indexOf('<div class="360cities">') != -1){
+				var k = descr.indexOf('<div class="360cities">');
+				var l = descr.indexOf('</div>');
+				var m = descr.slice(0,k);
+				var n = descr.slice(l,-1);
+				descr = m.concat(n);
+			}
+			img = img.replace('height="auto"','height="50%"');
+			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+			if (!isOffline){
+				fillhtml += img+'<br>';
+			}
+			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+			//$("#inner3").html(fillhtml);
+			$("#detailscontent").html(fillhtml);
+			$.mobile.changePage($('#details'));
+			//$( ".inner_wrap" ).css( "display", "block" );
+			//$("#inner3").niceScroll({cursorcolor:"#484848"});
+		});
+	}
+	else{
+		//console.log("in Slideen2");
+		var fillhtml ='';
+		if ( descr.indexOf('<div class="360cities">') != -1){
+			var k = descr.indexOf('<div class="360cities">');
+			var l = descr.indexOf('</div>');
+			var m = descr.slice(0,k);
+			var n = descr.slice(l,-1);
+			descr = m.concat(n);
+		}
+		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+		if (!isOffline){
+			fillhtml += img+'<br>';
+		}
+		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
+							MyApp.resources.Hide+'</span></a></div>';
+		//$("#inner3").html(fillhtml);
+		//console.log("inSlide "+img);
+		//$( ".inner_wrap" ).css( "display", "block" );
+		
+		$("#detailscontent").html(fillhtml);
+		$.mobile.changePage($('#details'));
+	}
+}
+
 
 function slideBack()
 {
@@ -3911,6 +3915,8 @@ function cancel(){
 }
 
 function filterPlaces(x){
+	tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong = [], tempmarkerLat = [];
+	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 	$( ".loading_gif" ).css( "display", "block" );
 	if (currentMarkers != null)
 	{
@@ -3963,7 +3969,9 @@ function filterPlaces(x){
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
 				var len = results.rows.length;
+				console.log(len);
 				for (var j=0; j<len; j++){
+					console.log("in Select1 "+j);
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -4062,10 +4070,9 @@ function filterPlaces(x){
 			for (var j=0; j<len; j++){
 //				//console.log(results.rows.item(j).ssubcat);
 //				//console.log(results.rows.item(j).ssubcat.indexOf(newHotelFilter));
-				if (userFilters.hotel == -1){
-					userFilters.hotel = "12345";
-				}
-				
+//				if (userFilters.hotel == -1){
+//					userFilters.hotel = "12345";
+//				}
 				
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
@@ -4108,18 +4115,26 @@ function filterPlaces(x){
 			else{
 				searchText(text,1);
 			}
+//			$( ".secondary_menu" ).css( "display", "block" );
+//			$('#abtnPlaces').addClass("active");
+//		    $('#abtnList').removeClass("active");
+//		    $('#abtnMap').addClass("active");
+//		    $('#abtnFilter').removeClass("active");
+//		    $('#abtnTour').removeClass("active");
+//			$("#abtnFilterTour").hide();
+//			$("#abtnFilterPlaces").show();
 			$('#abtnPlaces').addClass("active");
 		    $('#abtnList').removeClass("active");
 		    $('#abtnMap').addClass("active");
 		    $( ".inner_wrap" ).css( "display", "none" );
 		    $( ".loading_gif" ).css( "display", "none" );
-		    
+		    $.mobile.changePage($('#mainpage'), 'pop');
 		}, errorCB);
 	});
 }
 
 function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
-	//console.log(categ);
+	console.log(categ);
 	tempmarkerCat.push(categ); tempmarkerName.push(name); tempmarkerDescr.push(descr); tempmarkerLong.push(y); 
 	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid); tempmarkerPlace.push(place); tempmarkerSScat.push(sscat);
 }
@@ -4127,12 +4142,20 @@ function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
 function searchText(text,k){
 	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
 	//console.log("in searchText");
+	if (currentMarkers != null)
+	{
+		for(var i = 0; i < currentMarkers.length; ++i){
+			map.removeLayer(currentMarkers[i]);
+		}
+		currentMarkers = [];
+	}
 	if (k==1){
 		//console.log(text);
 		for (var x=0 ; x <tempmarkerName.length ; x++){
 //			//console.log(tempmarkerName[x]);
 //			//console.log(tempmarkerDescr[x]);
-			if ((tempmarkerName[x].indexOf(text) != -1) || (tempmarkerDescr[x].indexOf(text) != -1)){
+			var string = new RegExp(text, 'i');
+			if ((tempmarkerName[x].search(string) != -1) || (tempmarkerDescr[x].search(string) != -1)){
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
 					descr = descr.slice(0,200);
