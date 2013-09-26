@@ -3315,7 +3315,7 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 			}
 			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			//$("#inner3").html(fillhtml);
 			//console.log("inSlide "+img);
@@ -3341,7 +3341,7 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 		}
 		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+		fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		//$("#inner3").html(fillhtml);
 		//console.log("inSlide "+img);
@@ -3370,7 +3370,7 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 			}
 			fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 			+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+			fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 			//$("#inner3").html(fillhtml);
 			//console.log("inSlide "+img);
@@ -3396,7 +3396,7 @@ function slidegr3(name, descr, web, add, place, phone, email,img)
 		}
 		fillhtml += descr+'<br>' +'<b>website: </b>'+web+'<br>' +'<b>address: </b>'+add+'<br>' +'<b>place: </b>'
 		+place+'<br>' +'<b>phone: </b>'+phone+'<br>'+'<b>email: </b>' +email+'<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+		fillhtml += '<div class="button blue small"><a href="#" data-rel="back"><span id="btnSlideBack">'+
 					MyApp.resources.Hide+'</span></a></div>';
 		//$("#inner3").html(fillhtml);
 		//console.log("inSlide "+img);
