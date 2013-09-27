@@ -67,5 +67,8 @@ var enResources = {
 	Website:"Website",
 	Address:"Address",
 	Place:"Place",
-	Phone:"Phone"
+	Phone:"Phone",
+	NoPointsNearBy:"No results found in radius less than ",
+	Kilometers:" kilometers",
+        FromYourPosition:" from your position."
 };

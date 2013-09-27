@@ -1387,13 +1387,94 @@ function onSuccess(position)
 		for (var i=0; i<markerName.length; i++){
 			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i], markerPlace[i], markerSSubCat[i] );
 		}
-		for (var j=0; j<tempmarkerName.length; j++){
-			fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
-			if (j == 30){
+		if (tempmarkerName.length==0) {
+		    fillhtml+=MyApp.resources.NoPointsNearBy+radius+MyApp.resources.Kilometers+MyApp.resources.FromYourPosition;
+		}
+		else
+		{
+		    for (var j=0; j<tempmarkerName.length; j++){
+			var categ = $.trim(tempmarkerCat[j]);
+			if (categ.indexOf("8_") == -1 ){
+				categ = categ.slice(0,1);
+				//console.log(categ);		
+			}
+			switch (categ)
+			{
+			    case "1":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/shopping_0.png" alt="options">'+"  "+tempmarkerName[j]+'<br><h6>'+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "2":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list2_0.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+' | '+tempmarkerSScat[j]+'</h6></a>';
+				    break;
+			    case "3":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/hotels.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+' | '+tempmarkerSScat[j]+'</h6></a>';
+				    break;
+			    case "4":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list14_0.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "5":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_1.png" alt="options" />'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "6":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list3_0.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "7":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list12_0.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+' | '+tempmarkerSScat[j]+'</h6></a>';
+				    break;
+			    case "8_1":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_0.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_2":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_1.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_3":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_2.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_4":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_3.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_5":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_4.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_6":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_5.png" alt="options">'+"  "+tempmarkerName[j]+'<br><h6>  '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_7":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_6.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6> '+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_8":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_7.png" alt="options">'+"  "+tempmarkerName[j]+'<br><h6>'+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    case "8_9":
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_8.png" alt="options">'+"  "+tempmarkerName[j]+' <br><h6>'+tempmarkerPlace[j]+'</h6></a>';
+				    break;
+			    default:
+				    fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo3(this.text)" rel="external" id="'
+							    +j+'" ><img src="images/list15_1.png" alt="options">'+"  "+tempmarkerName[j]+' <br></h6>'+tempmarkerPlace[j]+'</h6></a>';
+			}
+			if (j == 50){
 				break;
 			}
+		    }
+		    document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
+		
 		}
-		document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
 		$( ".loading_gif" ).css( "display", "none" );
 		$("#orderedPlaces").html(fillhtml);
 		$('#orderedPlaces').trigger('create');
@@ -3670,7 +3751,7 @@ function orderPlaces(i)
 
 function readSlider(){
 	var options = { timeout: 10000, enableHighAccuracy: true };
-	watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+	watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
 //	reOrdered = true;
 //	$( ".loading_gif" ).css( "display", "block" );
 //	var fillhtml = '';
@@ -3741,8 +3822,8 @@ function showOrderedPlacesOnMap(){
 function reOrder(radius,x,y, cat, name, descr, place, sscat){
 	//console.log("in reOrder");
 //	currentLat = position.coords.latitude;
-	currentLat = 36.87636;
-	currentLong = 27.20536;
+	//currentLat = 36.87636;
+	//currentLong = 27.20536;
 //	currentLong = position.coords.longitude;
 	var dist = distance(currentLat, currentLong,x,y);
 	//console.log("distance "+dist);

@@ -65,5 +65,8 @@ var grResources = {
 	Website:"Ιστοσελίδα",
 	Address:"Διεύθυνση",
 	Place:"Τόπος",
-	Phone:"Τηλέφωνο"
+	Phone:"Τηλέφωνο",
+	NoPointsNearBy:"Δεν βρέθηκαν στοιχεία σε ακτίνα μικρότερη των ",
+	Kilometers:" χιλιομέτρων",
+        FromYourPosition:" από τη θέση σας."
 };
