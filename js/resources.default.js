@@ -15,7 +15,7 @@ MyApp.resources = {
 		Settings:"Settings",
 		Tour:"Tour",
 		SettingsHeading:"Change your settings",
-		LanguageSelect:"Language:",
+		LanguageSelect:"Language / Γλώσσα:",
 		EmailAccount:"Email Account:",
 		EmailAccountPlaceholder:"email account",
 		LoadAvailableTour:"Load Local Itineraries",
