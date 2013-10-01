@@ -3161,7 +3161,7 @@ function SetElementHeight(){
 	screenWidth=$('.ui-mobile').outerWidth(true);
 	////console.log("outerHeight= "+ screenHeight);
 	////console.log("outerWidth= "+ screenWidth);
-	$('#map').css('height',screenHeight-85);
+	$('#map').css('height',screenHeight-125);
 	$('#map').css('width',screenWidth);
 }
 	$(window).bind('orientationchange resize', function(event,ui){
@@ -3309,8 +3309,8 @@ function slideen(name, descr, web, add, place, phone, email, img)
 //	}
 //	else{
 		////console.log("in Slideen2");
-	console.log("in Slideen1");
-	console.log(descr);
+//	console.log("in Slideen1");
+//	console.log(descr);
 		var fillhtml ='';
 		if ( descr.indexOf('<div class="360cities"') != -1){
 			var k = descr.indexOf('<div class="360cities"');
@@ -3326,7 +3326,7 @@ function slideen(name, descr, web, add, place, phone, email, img)
 		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'
 					+add+'<br>'	+'<b>'+MyApp.resources.Place+': </b>'+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'
 					+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(1);"><span id="btnSlideBack">'+
+		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 						MyApp.resources.Hide+'</span></a></div>';
 //		$("#inner").html(fillhtml);
 //		console.log("inSlide "+img);
@@ -3363,8 +3363,8 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 //		});
 //	}
 //	else{
-	console.log("in Slidegr1");
-	console.log(descr);
+//	console.log("in Slidegr1");
+//	console.log(descr);
 		var fillhtml ='';
 		if ( descr.indexOf('<div class="360cities"') != -1){
 			var k = descr.indexOf('<div class="360cities"');
@@ -3373,14 +3373,14 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 			var n = descr.slice(l,-7);
 			descr = m.concat(n);
 		}
-		console.log("2222 "+descr);
+//		console.log("2222 "+descr);
 		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
 		if (!isOffline){
 			fillhtml += img+'<br>';
 		}
 		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
 			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(1);" data-rel="back"><span id="btnSlideBack">'+
+			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
 							MyApp.resources.Hide+'</span></a></div>';
 		$("#detailscontent").html(fillhtml);
 		$.mobile.changePage($('#details'));
@@ -3596,26 +3596,17 @@ function slideen3(name, descr, web, add, place, phone, email,img)
 //}
 
 
-function slideBack(x)
+function slideBack()
 {
-	navigator.app.backHistory();
+//	navigator.app.backHistory();
+//	history.go(-1);
+	console.log("in SlideBack");
+	if (typeof (navigator.app) !== "undefined") {
+		navigator.app.backHistory();
+	} else {
+		window.history.back();
+	}
 }
-//	switch (x)
-//	{
-//		case 1:
-//			backToMainPage();
-//			break;
-//		case 2:
-//			loadEachItineraryPage(globalItId);
-//			break;
-//		case 3:
-//			navigator.app.backHistory();
-//	}
-//	var fillhtml ='';
-//	$("#inner").html(fillhtml);
-	//console.log("inSlideBack");
-//	$( ".inner_wrap" ).css( "display", "none" );
-//	$('.inner_wrap').removeClass('active');
 
 function clearWatch() {
 	//console.log("in clearWatch");
@@ -4062,14 +4053,6 @@ function showFilterCategories(q){
 	document.getElementById('btnList3').innerHTML= MyApp.resources.List;
 	document.getElementById('btnMap3').innerHTML= MyApp.resources.Map;
 	document.getElementById('btnFilter3').innerHTML= MyApp.resources.Filter;
-	
-	
-//	if (q==2){
-//		slideGr2(fillhtml);
-//	}
-//	else {
-//		slideEn2(fillhtml);
-//	}
 }
 
 function cancel(){
@@ -4295,7 +4278,7 @@ function filterPlaces(x){
 }
 
 function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
-	console.log(categ);
+//	console.log(categ);
 	tempmarkerCat.push(categ); tempmarkerName.push(name); tempmarkerDescr.push(descr); tempmarkerLong.push(y); 
 	tempmarkerLat.push(x);	tempmarkerPoiid.push(poiid); tempmarkerPlace.push(place); tempmarkerSScat.push(sscat);
 }

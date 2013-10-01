@@ -58,8 +58,8 @@ a {
 	position: relative;
 }
 #placespage {
-	background: url('images/kos_map.png') no-repeat fixed;
-	position: relative;
+	background: url('images/CropKos.jpg') no-repeat fixed;
+/*	position: relative;*/
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -180,24 +180,6 @@ a {
 	float: left;
 	position: relative;
 }
-/*
-#popupBasic {
-	position: absolute;
-	display: none;
-	z-index: 9999;
-}
-
-.clickPlaces {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -8px;
-	margin-left: -8px;
-	z-index: 9999;
-	width: 16px;
-	height: 16px;
-	display: none;
-}*/
 
 /*-----------------------------------------------------------------------------------*/
 /* App Logo Settings
@@ -808,6 +790,7 @@ small {
 	/*	width:100%;
 	height:350px;*/
 }
+
 .inner_wrap {
 	z-index: 9990;
 	position: absolute;
@@ -918,51 +901,6 @@ a#inner3{
 	opacity:1;
 	visibility:visible;
 }
-/*
-#inner .close_btn {
-	background-image: url('images/close_btn.png');
-	background-color: #777;
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-	border-radius: 50px;
-	width: 30px;
-	height: 30px;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	margin-top: -15px;
-	margin-right: -15px;
-}
-
-#inner2 .close_btn {
-	background-image: url('images/close_btn.png');
-	background-color: #777;
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-	border-radius: 50px;
-	width: 30px;
-	height: 30px;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	margin-top: -15px;
-	margin-right: -15px;
-}
-
-#inner3 .close_btn {
-	background-image: url('images/close_btn.png');
-	background-color: #777;
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-	border-radius: 50px;
-	width: 30px;
-	height: 30px;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	margin-top: -15px;
-	margin-right: -15px;
-}*/
 
 a.boxclose{
     float:right;
@@ -1007,18 +945,6 @@ a.boxclose{
 	font-weight:bold;
 	text-align:center;
 }
-
-/*
-.marker_icon {
-	width: 30px;
-	height: 30px;
-	bakground-color: rgba(255, 255, 255, 0.8);
-	border: 4px solid rgba(0, 0, 0, 0.5);
-	position: absolute;
-	top: 50%;
-	left: -100%;
-	z-index: 50;
-}*/
 
 .button_list {
 	border: 1px solid #ccc !important;
@@ -1110,28 +1036,6 @@ a.boxclose{
 
 .msg {text-align:center;}
 
-/*-----------------------------------------------------------------------------------*/
-/*	Location Button Settings
-/*-----------------------------------------------------------------------------------
-
-.button x{
-	width:100%;
-	display:block;
-	margin:20px auto;
-	-webkit-border-radius: 6px;
-    border-radius: 6px;
-	text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
-.button.compass x{
-	background:url('images/Maps-and-Geolocation-Compass-icon.png') repeat-x;
-}
-.button.btn_over {
-	position:absolute;
-	left:5%;
-	margin-left:-10px;
-	bottom:80px;
-	z-index:9999;
-}*/
 
 /*-----------------------------------------------------------------------------------*/
 /*	Loader
@@ -1202,93 +1106,6 @@ a.boxclose{
 	heigth: 10px;
 }
 
-
-
-/*.loading_gif {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -8px;
-	margin-left: -8px;
-	z-index: 9999;
-	width: 16px;
-	height: 16px;
-	display: none;
-	background: #fff url('images/ajax-loader_1.gif') no-repeat;
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom:0px;
-	right:0px;
-	z-index: 9999;
-	width: 100%;
-	height: 100%;
-	display: none;
-	background-color:rgba(0,0,0,0.8);
-	
-}
-.loader {
-	widht:200px;
-	height:20px;
-	display:block;
-	line-height:20px;
-	position:absolute;
-	top:50%;
-	left:50%;
-	margin-top:-10px;
-	margin-left:-100px;
-	text-align:center;
-	font-size:12px;
-	
-	
-	background-color: #FFFFFF;
-	position: absolute;
-	color: #777777;
-	padding: 10px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	border: 4px solid rgba(0, 0, 0, 0.3);
-	
-	
-	
-	-moz-animation-duration: 0.7s;
-	-webkit-animation-duration: 0.7s;
-	-moz-animation-name: slidein;
-	-webkit-animation-name: slidein;
-	-moz-animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
-	-moz-animation-direction: alternate;
-	-webkit-animation-direction: alternate;
-}
-
-@-moz-keyframes slidein {
-  from {
-    opacity:1;
-  }
-  
-  50% {
-    opacity:0.5;
-  }
-  
-  to {
-   opacity:0;
-  }
-}
-
-@-webkit-keyframes slidein {
-  from {
-    opacity:1;
-  }
-  
-  50% {
-    opacity:0.5;
-  }
-  
-  to {
-   opacity:0;
-  }
-}*/
 /*-----------------------------------------------------------------------------------*/
 /*	Fildset
 /*-----------------------------------------------------------------------------------*/
@@ -1317,7 +1134,6 @@ div.ui-slider {
 	padding-left: 25px;
 }
 
-
 #filteredPlaces {
 	padding-top: 60px;
 }
@@ -1339,6 +1155,7 @@ div.ui-slider {
 		text-align: center;
 	}
 }
+
 #secondpage .main_content {
 	width: 100%;
 	z-index: 100;
