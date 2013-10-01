@@ -50,7 +50,7 @@ var enResources = {
 		ItineraryPageHeaderNull:'No Itineraries found in local memory. Use "Load from Portal" option to download tours from Portal',
 		ItineraryPageHeaderOk:"Select from the following itineraries",
 		Slider:"Select distance (km)",
-		orderPlacesHeader:"Slide to filter places by distance",
+		orderPlacesHeader:"Slide to filter places by distance from your current location",
 		Refresh:"Refresh",
 		Showing:"Showing ",
 		From:" places out of ",
@@ -70,5 +70,6 @@ var enResources = {
 	Phone:"Phone",
 	NoPointsNearBy:"No results found in radius less than ",
 	Kilometers:" kilometers",
-        FromYourPosition:" from your position."
+        FromYourPosition:" from your position.",
+        Next:"Next"        
 };

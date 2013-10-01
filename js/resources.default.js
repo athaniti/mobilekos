@@ -52,7 +52,7 @@ MyApp.resources = {
 		ItineraryPageHeaderNull:'No Itineraries found in local memory. Use "Load from Portal" option to download tours from Portal',
 		ItineraryPageHeaderOk:"Select from the following itineraries",
 		Slider:"Select distance (km)",
-		orderPlacesHeader:"Slide to filter places by distance",
+		orderPlacesHeader:"Slide to filter places by distance from your current location",
 		Refresh:"Refresh",
 		Showing:"Showing ",
 		From:" places out of ",
@@ -66,11 +66,12 @@ MyApp.resources = {
         SearchPopUpHeader:"Search in the results",
 		Cancel:"Cancel",
         FreeTextSearchLabel:"Use this text box for free text search",
-	Website:"Website",
-	Address:"Address",
-	Place:"Place",
-	Phone:"Phone",
-	NoPointsNearBy:"No results found in radius less than ",
-	Kilometers:" kilometers",
-        FromYourPosition:" from your position."
+		Website:"Website",
+		Address:"Address",
+		Place:"Place",
+		Phone:"Phone",
+		NoPointsNearBy:"No results found in radius less than ",
+		Kilometers:" kilometers",
+        FromYourPosition:" from your position.",
+        Next:"Next"
 };

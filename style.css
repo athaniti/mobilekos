@@ -52,12 +52,19 @@ a {
 	transition: all 100ms linear;
 }
 
-#firstpage,#secondpage,#mainpage,#settingspage,#placespage,#itinerarypage,#eachitinerarypage,#itineraryportalpage
+#firstpage,#secondpage,#mainpage,#settingspage,#itinerarypage,#eachitinerarypage,#itineraryportalpage
 	{
 	background: #e8e8e8 url('images/app_bg.jpg') repeat;
 	position: relative;
 }
-
+#placespage {
+	background: url('images/kos_map.png') no-repeat fixed;
+	position: relative;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
 /*-----------------------------------------------------------------------------------*/
 /*	Grid Settings
 /*-----------------------------------------------------------------------------------*/
@@ -302,91 +309,91 @@ a {
 .secondary_menu ul li a:hover{
 		}
 .secondary_menu ul li a#abtnFilter{
-	background: #000 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnFilter:hover,
 .secondary_menu ul li a#abtnFilter.active{
-	background: #363636 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap{
 	background: #000 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap:hover,
 .secondary_menu ul li a#abtnMap.active{
 	background: #363636 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnList{
  	background: #000 url(images/list2.png) no-repeat;
-	background-position: 10px;	
+	background-position: 5px;	
 }
 .secondary_menu ul li a#abtnList:hover,
 .secondary_menu ul li a#abtnList.active{
  	background: #363636 url(images/list2.png) no-repeat;
- 	background-position: 10px;
+ 	background-position: 5px;
 }
 
 /**/
 
 .secondary_menu ul li a#abtnFilter2{
-	background: #000 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnFilter2:hover,
 .secondary_menu ul li a#abtnFilter2.active{
-	background: #363636 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap2{
 	background: #000 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap2:hover,
 .secondary_menu ul li a#abtnMap2.active{
 	background: #363636 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnList2{
  	background: #000 url(images/list2.png) no-repeat;
-	background-position: 10px;	
+	background-position: 5px;	
 }
 .secondary_menu ul li a#abtnList2:hover,
 .secondary_menu ul li a#abtnList2.active{
  	background: #363636 url(images/list2.png) no-repeat;
- 	background-position: 10px;
+ 	background-position: 5px;
 }
 
 /**/
 
 .secondary_menu ul li a#abtnFilter3{
-	background: #000 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnFilter3:hover,
 .secondary_menu ul li a#abtnFilter3.active{
-	background: #363636 url(images/search.png) no-repeat;
-	background-position: 10px;
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap3{
 	background: #000 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnMap3:hover,
 .secondary_menu ul li a#abtnMap3.active{
 	background: #363636 url(images/mapmarker.png) no-repeat;
-	background-position: 10px;
+	background-position: 5px;
 }
 .secondary_menu ul li a#abtnList3{
  	background: #000 url(images/list2.png) no-repeat;
-	background-position: 10px;	
+	background-position: 5px;	
 }
 .secondary_menu ul li a#abtnList3:hover,
 .secondary_menu ul li a#abtnList3.active{
  	background: #363636 url(images/list2.png) no-repeat;
- 	background-position: 10px;
+ 	background-position: 5px;
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -443,7 +450,6 @@ a {
 }
 
 input#search_box {
-	border: solid 1px #229EE6 !important;
 	font-size: 1.3em;
 }
 
@@ -470,8 +476,6 @@ input {
 	color: #6d6d6d;
 	-webkit-border-radius: 6px !important;
 	border-radius: 6px !important;
-	-webkit-box-shadow: inset 1px 1px 0px 0px rgba(0, 0, 0, 0.1);
-	box-shadow: inset 1px 1px 0px 0px rgba(0, 0, 0, 0.1);
 }
 
 input:focus {
@@ -512,6 +516,11 @@ h6 {
 	font-size: 13px;
 }
 
+h7 {
+	font-size: 16px;
+	color:#ffffff;
+}
+
 small {
 	font-size: 11px;
 }
@@ -522,7 +531,7 @@ small {
 
 .button a {
 	width: 100%;
-	/*max-width: 265px;*/
+	max-width: 265px;
 	display: block;
 	margin: 20px auto;
 	color: #fff !important;
@@ -730,8 +739,6 @@ small {
 	z-index: 100;
 	float: left;
 	position: relative;
-	background-image: url('images/kos_map.png');
-	/*background: #e8e8e8 url('images/map.jpg');*/
 	
 }
 
@@ -745,13 +752,11 @@ small {
 }*/
 
 #placesPageHeader {
-	/*width: 190px;
-	height: 70px;*/
-	margin: 5px 5%;
-	max-width: 70%;
+	margin: 10px auto 20px auto;
+	min-height: 20px;
 	background-color: #F8F8F8;
 	border: 2px;
-	box-shadow: 10px 10px 10px #888888;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
 	opacity: 0.9;
 }
 
@@ -767,12 +772,11 @@ small {
 /*-----------------------------------------------------------------------------------*/
 
 #itinerarypageHeader {
-	/*width: 190px;
-	height: 70px;*/
-	margin: 5px 5px;
+	margin: 10px auto 20px auto;
+	min-height: 20px;
 	background-color: #F8F8F8;
-	border: 2px 66FFFF;
-	box-shadow: 10px 10px 10px #888888;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
 	opacity: 0.9;
 }
 
@@ -787,11 +791,11 @@ small {
 /*-----------------------------------------------------------------------------------*/
 
 #orderplacesHeader {
-	margin: 20px 10px;
-	padding: 5px 0px;
+	margin: 70px auto 20px auto;
+	min-height: 20px;
 	background-color: #F8F8F8;
-	border: 2px 66FFFF;
-	box-shadow: 10px 10px 10px #888888;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
 	opacity: 0.9;
 }
 
@@ -1284,4 +1288,72 @@ a.boxclose{
   to {
    opacity:0;
   }
+}*/
+/*-----------------------------------------------------------------------------------*/
+/*	Fildset
+/*-----------------------------------------------------------------------------------*/
+.ui-mobile fieldset {
+	min-width: 0;
+
+}
+/*-----------------------------------------------------------------------------------*/
+/*	Slider
+/*-----------------------------------------------------------------------------------*/
+
+div.ui-slider {
+	margin: .5em auto !important;
+}
+/*-----------------------------------------------------------------------------------*/
+/*	Button With Icon
+/*-----------------------------------------------------------------------------------*/
+.ui-btn-icon-right .ui-btn-inner {
+	text-align: left;
+}
+.ui-btn {
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+.ui-btn-inner h6 {
+	padding-left: 25px;
+}
+
+
+#filteredPlaces {
+	padding-top: 60px;
+}
+.ui-br {
+	border: none !important;
+}
+
+@media only screen and (min-width: 480px) {
+	.container {
+		max-width: 70%;
+		margin: 0px auto;
+	}
+	.header .container {
+		max-width: 100%;
+	}
+	.container1, .container2, .container3, .container4, .container5, .container6, .container7 {
+		width: 50%;
+		margin: 0px auto;
+		text-align: center;
+	}
+}
+#secondpage .main_content {
+	width: 100%;
+	z-index: 100;
+	float: left;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+/*
+#secondpage{
+	background: url('images/mainpage_bg.jpg') no-repeat fixed center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }*/
