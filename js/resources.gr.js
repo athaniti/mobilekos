@@ -19,7 +19,7 @@ var grResources = {
         FilterTour:"Επιλογή Περιήγησης",
         LoadAvailableTour:"Φόρτωση Διαθέσιμων Περιηγήσεων",
         LoadPortalTour:"Φόρτωση Περιηγήσεων από Portal",
-        FilterPlaces:"Φίλτρα Σημείων",
+        FilterPlaces:"Επιλογή Κατηγοριών",
         Exit:"Έξοδος",
         LoadFromPortal: "Φόρτωση από Portal",
         LoadItinerary:"Φόρτωση",

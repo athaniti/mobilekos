@@ -21,7 +21,7 @@ MyApp.resources = {
 		LoadAvailableTour:"Load Local Itineraries",
 		LoadPortalTour:"Load Itineraries From Portal",
 		FilterTour:"Load Itinerary",
-		FilterPlaces:"Filter Places",
+		FilterPlaces:"Select Categories",
 		Exit:"Exit",
 		LoadFromPortal: "Load from Portal",
 		LoadItinerary:"Load",
