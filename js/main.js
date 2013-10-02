@@ -4029,7 +4029,7 @@ function filterPlaces(x){
 //						descr += "...";
 //						descr += "<br>";
 //					}
-					concole.log("in in in ");
+					//console.log("in in in ");
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
