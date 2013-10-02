@@ -12,13 +12,15 @@ var currentLat;
 var currentLong;
 var deviceOSVersion;
 var updateAppUrl;
+var panToLat = 0;
+var panToLong = 0;
 var currentSubcategories = [];
 var hotel = false;
 var cuisine = false;
 var era  = false;
 var music = false;
 //var currentVersionCode;
-var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerPlace = [], markerSSubCat = [];
+var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerPlace = [], markerSSubCat = [], markerPoiId=[];
 var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], 
 	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 var subsubEn = [], subsubGr = [];
@@ -1415,7 +1417,8 @@ function onSuccess(position)
 		var radius = $("#slider-fill").val();
 		//console.log("adadsa "+$("#slider-fill").val());
 		for (var i=0; i<markerName.length; i++){
-			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i], markerPlace[i], markerSSubCat[i] );
+			reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i], markerPlace[i], 
+					markerSSubCat[i], markerPoiId[i] );
 		}
 		if (tempmarkerName.length==0) {
 			fillhtml = MyApp.resources.NoPointsNearBy+radius+MyApp.resources.Kilometers+MyApp.resources.FromYourPosition;
@@ -1537,7 +1540,7 @@ function onError(error)
 	alert(MyApp.resources.NoLocation);
 }
 
-function addGroupMarker(x, y, name, descr, categ, place, sscat, index)
+function addGroupMarker(x, y, name, descr, categ, place, sscat, poiID, index)
 {
 	x = x.replace(x.charAt(2), ".");
 	y = y.replace(y.charAt(2), ".");
@@ -1555,6 +1558,8 @@ function addGroupMarker(x, y, name, descr, categ, place, sscat, index)
 //		console.log(categ);
 	}
 //	console.log(categ);
+	panToLong = y;
+	panToLat = x;
 	switch (categ)
 	{
 	case "1":
@@ -1633,6 +1638,7 @@ function addGroupMarker(x, y, name, descr, categ, place, sscat, index)
 		markerSSubCat.push(sscat);
 		markerPlace.push(place);
 		markerDescr.push(descr);
+		markerPoiId.push(poiID);
 	}
 	map.addLayer(marker);
 	currentMarkers.push(marker);
@@ -1886,13 +1892,8 @@ function switchToMainPage(email,x,y)
 {
 	$.mobile.changePage($('#mainpage'), 'pop');
 	setTimeout(function(){
-//		map = new L.Map('map', {center: new L.LatLng(x,y), zoom: 13, zoomControl: false});
 		map.invalidateSize();
 		map.panTo([y,x]);
-//		map.fitBounds(e.target.getBounds());
-//		var bounds = new L.LatLngBounds([x,y]);
-//		map.fitBounds(bounds);
-//		map.center([x,y]);
 	},1500);
 	email = $('#emailaccountchange').val();
 	//console.log("123email: "+email);
@@ -2031,7 +2032,7 @@ function onClickbtnTour()
 function submitSelectedPlaces()
 {
 	checked = [];
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
+	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 //	subsubGr = [];
 	hotel = false; cusine = false; music = false; era = false;
 //	document.getElementById("loading_gif").style.display = "block";
@@ -2135,7 +2136,7 @@ function submitSelectedPlacesEn(){
 									//console.log(results.rows.item(i).subcategory);
 									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
 											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
-											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
+											results.rows.item(i).place,  results.rows.item(i).ssubcat, poiid, 1);
 								}
 							}
 						}
@@ -2244,7 +2245,7 @@ function submitSelectedPlacesGr(){
 								if ( lat2.indexOf("\n") == -1){
 									addGroupMarker(results.rows.item(i).lat , results.rows.item(i).long,
 											results.rows.item(i).name, descr, results.rows.item(i).subcategory,
-											results.rows.item(i).place,  results.rows.item(i).ssubcat ,1);
+											results.rows.item(i).place,  results.rows.item(i).ssubcat, poiid, 1);
 //									subsubGr.push(results.rows.item(i).ssubcat);
 								}
 							}
@@ -3385,215 +3386,6 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 		$("#detailscontent").html(fillhtml);
 		$.mobile.changePage($('#details'));
 }
-/*
-function slideen2(name, descr, web, add, place, phone, email,img)
-{
-//	if (deviceOSVersion < 4){
-//		$(document).ready(function () {
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//		});
-//	}
-//	else{
-		console.log("in Slideen2");
-		console.log(descr);
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities"') != -1){
-			var k = descr.indexOf('<div class="360cities">');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(2);" data-rel="back"><span id="btnSlideBack">'+
-							MyApp.resources.Hide+'</span></a></div>';
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
-}
-
-
-function slidegr2(name, descr, web, add, place, phone, email, img)
-{
-	//console.log("in Slideen");
-//	if (deviceOSVersion < 4){
-//		//console.log("in Slideen1");	
-//		$(document).ready(function () {
-////			$(".inner_wrap").niceScroll("#inner",{cursorcolor:"#00F"});
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//		});
-//	}
-//	else{
-		//console.log("in Slideen2");
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities"') != -1){
-			var k = descr.indexOf('<div class="360cities">');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(2);" data-rel="back"><span id="btnSlideBack">'+
-							MyApp.resources.Hide+'</span></a></div>';
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
-}
-
-function slideen3(name, descr, web, add, place, phone, email,img)
-{
-    
-    console.log("slideen3");
-//	if (deviceOSVersion < 4){
-//		$(document).ready(function () {
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//			//$("#inner3").html(fillhtml);
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//			//$( ".inner_wrap" ).css( "display", "block" );
-//			//$("#inner3").niceScroll({cursorcolor:"#484848"});
-//		});
-//	}
-//	else{
-		//console.log("in Slideen2");
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities"') != -1){
-			var k = descr.indexOf('<div class="360cities">');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(3);" data-rel="back"><span id="btnSlideBack">'+
-							MyApp.resources.Hide+'</span></a></div>';
-		//$("#inner3").html(fillhtml);
-		//console.log("inSlide "+img);
-		//$( ".inner_wrap" ).css( "display", "block" );
-		
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
-}
-*/
-//function slidegr3(name, descr, web, add, place, phone, email,img)
-//{
-//	if (deviceOSVersion < 4){
-//		$(document).ready(function () {
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//			//$("#inner3").html(fillhtml);
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//			//$( ".inner_wrap" ).css( "display", "block" );
-//			//$("#inner3").niceScroll({cursorcolor:"#484848"});
-//		});
-//	}
-//	else{
-		//console.log("in Slideen2");
-//		var fillhtml ='';
-//		if ( descr.indexOf('<div class="360cities"') != -1){
-//			var k = descr.indexOf('<div class="360cities">');
-//			var l = descr.indexOf('</div>');
-//			var m = descr.slice(0,k);
-//			var n = descr.slice(l,-1);
-//			descr = m.concat(n);
-//		}
-//		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//		if (!isOffline){
-//			fillhtml += img+'<br>';
-//		}
-//		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack(3);" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//		//$("#inner3").html(fillhtml);
-//		//console.log("inSlide "+img);
-//		//$( ".inner_wrap" ).css( "display", "block" );
-//		
-//		$("#detailscontent").html(fillhtml);
-//		$.mobile.changePage($('#details'));
-//}
 
 
 function slideBack()
@@ -3602,9 +3394,13 @@ function slideBack()
 //	history.go(-1);
 	console.log("in SlideBack");
 	if (typeof (navigator.app) !== "undefined") {
-		navigator.app.backHistory();
+		console.log("in SlideBack1");
+		history.go(-1);
+//		navigator.app.backHistory();
 	} else {
+		console.log("in SlideBack2");
 		window.history.back();
+//		history.go(-1);
 	}
 }
 
@@ -3828,7 +3624,7 @@ function showOrderedPlacesOnMap(){
 		}
 		for (var j=0; j<tempmarkerName.length; j++){
 			addGroupMarker(tempmarkerLat[j], tempmarkerLong[j], tempmarkerName[j], tempmarkerDescr[j], 
-							tempmarkerCat[j], tempmarkerPlace[j], tempmarkerSScat[j], 0);
+							tempmarkerCat[j], tempmarkerPlace[j], tempmarkerSScat[j], tempmarkerPoiid[j], 0);
 		}
 	}
 	else{
@@ -4071,6 +3867,7 @@ function filterPlaces(x){
 //		currentMarkers = [];
 	}
 	var text = $('#search_box').val();
+	console.log("text: "+ text);
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
 	//console.log(poiDB);
 	var newHotelFilter = '';
@@ -4129,7 +3926,8 @@ function filterPlaces(x){
 					}
 					lat2 = results.rows.item(j).lat;
 					if ( lat2.indexOf("\n") == -1){
-						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
+						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, 
+										results.rows.item(j).place, results.rows.item(j).ssubcat);
 					}
 				}
 			}, errorCB);
@@ -4217,7 +4015,6 @@ function filterPlaces(x){
 //				if (userFilters.hotel == -1){
 //					userFilters.hotel = "12345";
 //				}
-				
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
@@ -4232,6 +4029,7 @@ function filterPlaces(x){
 //						descr += "...";
 //						descr += "<br>";
 //					}
+					concole.log("in in in ");
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -4259,18 +4057,19 @@ function filterPlaces(x){
 			else{
 				searchText(text,1);
 			}
-//			$( ".secondary_menu" ).css( "display", "block" );
-//			$('#abtnPlaces').addClass("active");
-//		    $('#abtnList').removeClass("active");
-//		    $('#abtnMap').addClass("active");
-//		    $('#abtnFilter').removeClass("active");
-//		    $('#abtnTour').removeClass("active");
-//			$("#abtnFilterTour").hide();
-//			$("#abtnFilterPlaces").show();
+		    $('#abtnTour').removeClass("active");
+			$("#abtnFilterTour").hide();
+			$("#abtnFilterPlaces").show();
 			$('#abtnPlaces').addClass("active");
 		    $('#abtnList').removeClass("active");
 		    $('#abtnMap').addClass("active");
-		    $( ".inner_wrap" ).css( "display", "none" );
+//		    $( ".inner_wrap" ).css( "display", "none" );
+			setTimeout(function(){
+				map.invalidateSize();
+				if ((panToLong != 0) && (panToLat != 0)){
+					map.panTo([panToLat,panToLong]);
+				}
+			},2500);
 		    $( ".loading_gif" ).css( "display", "none" );
 		    $.mobile.changePage($('#mainpage'), 'pop');
 		}, errorCB);
@@ -4284,7 +4083,8 @@ function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
 }
 
 function searchText(text,k){
-	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [];
+	console.log(text+ " " + k);
+//	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 	//console.log("in searchText");
 	if (currentMarkers != null)
 	{
@@ -4294,11 +4094,34 @@ function searchText(text,k){
 		currentMarkers = [];
 	}
 	if (k==1){
-		//console.log(text);
-		for (var x=0 ; x <tempmarkerName.length ; x++){
+		var string = new RegExp(text, 'i');
+		console.log("112 "+markerName.length);
+		for (var x=0 ; x < markerName.length ; x++){
+//			if ((markerName[x].search(string) != -1) || (markerDescr[x].search(string) != -1)){
+//				var descr1 = markerDescr[x];
+//				if (descr1.length > 200){			//slicing the description to the first 200 charactes.
+//					descr1 = descr1.slice(0,200);
+//					descr1 += "...";
+//					descr1 += "<br>";
+//				}
+//				descr1 += "<p onclick=getMoreInfo("+markerPoiId[x]+","+markerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+//				descr1 += "<p onclick=getDirections("+markerLat[x]+","+markerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+//				addGroupMarker(markerLat[x] , markerLong[x], markerName[x], descr1, markerCat[x], markerPlace[x], 
+//						markerSSubCat[x], markerPoiId[x], 0);
+//			}
+			tempmarkerLat.push(markerLat[x]);
+			tempmarkerName.push(markerName[x]);
+			tempmarkerLong.push(markerLong[x]);
+			tempmarkerCat.push(markerCat[x]);
+			tempmarkerDescr.push(markerDescr[x]);
+			tempmarkerSScat.push(markerSSubCat[x]);
+			tempmarkerPoiid.push(markerPoiId[x]);
+			tempmarkerPlace.push(markerPlace[x]);
+		}
+		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
+		for (x=0 ; x <tempmarkerName.length ; x++){
 //			//console.log(tempmarkerName[x]);
 //			//console.log(tempmarkerDescr[x]);
-			var string = new RegExp(text, 'i');
 			if ((tempmarkerName[x].search(string) != -1) || (tempmarkerDescr[x].search(string) != -1)){
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -4308,7 +4131,8 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
+				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], 
+								tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 			}
 		}
 	}
@@ -4323,36 +4147,9 @@ function searchText(text,k){
 			}
 			descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 			descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], 1);
+			addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
+							tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 		}
-	}
-}
-
-function slideEn2(fillhtml){
-	if (deviceOSVersion < 4){
-		$(document).ready(function () {
-			$("#inner").html(fillhtml);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
-		});
-	}
-	else{
-		$("#inner").html(fillhtml);
-		$(".inner_wrap").css("display", "block");
-	}
-}
-
-function slideGr2(fillhtml){
-	if (deviceOSVersion < 4){
-		$(document).ready(function () {
-			$("#inner3").html(fillhtml);
-			$( ".inner_wrap" ).css( "display", "block" );
-			$("#inner3").niceScroll({cursorcolor:"#484848"}).resize();
-		});
-	}
-	else{
-		$("#inner3").html(fillhtml);
-		$(".inner_wrap").css("display", "block");
 	}
 }
 
