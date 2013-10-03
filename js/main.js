@@ -6,6 +6,7 @@ var screenHeight;
 var dbExistis = false;
 var screenWidth;
 var globalItId;
+var globalI;
 var currentTimestamp = [];
 var startPoint;
 var currentLat;
@@ -50,7 +51,7 @@ var snameEn = [];
 var snameGr = [];
 var db;
 var po=0;
-var showPlacesInfo = false;
+//var showPlacesInfo = false;
 var itineraryFilename = [];
 var isOffline = true;
 var language;
@@ -108,16 +109,14 @@ function onDeviceReady() {
 //	document.addEventListener("abtnList", orderPlaces, false);
 //	document.addEventListener("abtnMap", onClickbtnPlaces, false);
 //	document.addEventListener("abtnFilter", function(){showFilterCategories(0);}, false);
-	
 	document.addEventListener("offline", function() {isOffline = true;}, false);
 	document.addEventListener("online", function() {isOffline = false;}, false);
 	$.mobile.defaultPageTransition = 'none';
 	SetElementHeight();
-//	document.getElementById("loading_gif").style.display = "block";
 	platformName = device.platform;
 	deviceOSVersion = device.version;
 	deviceOSVersion = parseInt(deviceOSVersion);
-	////console.log("device.version "+device.version);
+	//console.log("device.version "+device.version);
 //	alert("platformName "+platformName);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
@@ -132,9 +131,6 @@ function onDeviceReady() {
 		        ////console.log(errorMessage);
 		    }
 		);
-
-	
-	
 	setTimeout(function(){
 		checkLanguageSettings();
 	},1500);
@@ -150,11 +146,11 @@ function onDeviceReady() {
 function filters(hotel, cuisine, music, era, radius){
 	//The Filters Object to store users' specific filters//
 //	var filters = new Object();
-		this.hotel = hotel;
-		this.cuisine = cuisine;
-		this.music = music;
-		this.era = era;
-		this.radius = radius;
+	this.hotel = hotel;
+	this.cuisine = cuisine;
+	this.music = music;
+	this.era = era;
+	this.radius = radius;
 	//The Filters Object to store users' specific filters//
 }
 
@@ -165,13 +161,13 @@ function checkForLanguage()
 	if (language =='GR'  || language == 'gr')
 	{
 		langstr = 'gr';
-		////console.log("langstr: "+langstr);
+		//console.log("langstr: "+langstr);
 		$.extend(MyApp.resources, grResources);
 	}
 	else if (language =='EN'  || language == 'en')
 	{
 		langstr = 'en';
-		////console.log("langstr: "+langstr);
+		//console.log("langstr: "+langstr);
 		$.extend(MyApp.resources, enResources);
 	}
 }
@@ -184,10 +180,9 @@ function checkLanguageSettings()
 			len = results.rows.length;
 			//console.log("SETTINGS.length= "+len);
 			if ((len == null) || (len == 0)){
-				////console.log("okook");
-				showPlacesInfo = true;
-//				createDb();
-				populateDB();
+				console.log("okook");
+//				showPlacesInfo = true;
+//				populateDB();
 			}
 			else{
 //				langstr = language = results.rows.item(0).data;
@@ -219,7 +214,7 @@ function checkLanguageSettings()
 
 function populateDB(tx)
 {
-	////console.log("IN POPULATE DB");
+	//console.log("IN POPULATE DB");
 	db.transaction(function (tx) {
 		////console.log("populateDB(tx)");
 		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
@@ -358,15 +353,17 @@ function createPoiArraysGr(){
 //				console.log(n);
 				slideImagegr.push(str);
 //				subsubGr.push(results.rows.item(p).ssubcat);
-//				//console.log("21 "+results.rows.item(p).ssubcat);
+				//console.log("21 "+results.rows.item(p).ssubcat);
 			}
 		});
-		switchToSecondPage();
+		if (cancelBackButton == false){
+			switchToSecondPage();
+		}
 	});
 }
 
 function errorCB(err) {
-    ////console.log("Error processing SQL: "+err.code);
+    //console.log("Error processing SQL: "+err.code);
 }
 
 function successCB() {
@@ -386,21 +383,21 @@ function switchToSecondPage()
 }
 
 function success13CB(){
+	console.log("success13CB");
 	populateDB();
 	//console.log("success13CB");
 	setTimeout(function(){
 //		switchToSecondPage();
 	},4000);
-	showPlacesInfo = true;
-//	createDb();
+//	showPlacesInfo = true;
 }
 
 function error13CB(){
-	////console.log("error13CB");
+	console.log("error13CB");
 }
 
 function onBackKeyDown(e) {
-	//console.log("cancelBackButton "+cancelBackButton);
+//	console.log("cancelBackButton "+cancelBackButton);
 //	if (cancelBackButton == true){
 //	Do Nothing!
 //	console.log("doing nothing..");
@@ -1128,7 +1125,6 @@ function drawPlacesPageEn(len){
 	$("#placesContent").html(fillhtml);
 //	document.getElementById('btnSaveChanges2').innerHTML= MyApp.resources.SaveChanges;
 	$('#placespage').trigger("create");
-	
 	$("#placesPageHeader").html(fillHeader);
 	$( ".loading_gif" ).css( "display", "none" );
 	$.mobile.changePage($('#placespage'), 'pop');
@@ -1662,51 +1658,34 @@ function switchToEmailPage(langid)
 //	if (newtimestamp == true){
 //		popNewTimestampDb();
 //	}
+	console.log("switchToEmailPage");
 	language = langid;
 	langstr = langid.toLowerCase();
     db.transaction(function(tx) {
     	tx.executeSql('INSERT INTO SETTINGS(id, data) VALUES (?,?)',[1,langstr],successCB, errorCB);
     	//console.log("inserted Into settings: "+langstr);
+    	checkForLanguage();
     });
-    
-    checkForLanguage();
 	if (isOffline == false){
 //		sync();
 	}
 	setTimeout(function(){
 		firstSwitchToPlacesPage();
 	},2300);
-		
 }
 
 function firstSwitchToPlacesPage()
 {
 	console.log("in firstSwitchToPlacesPage()");
 	generateMap();
-	createPageHeader(2);
+//	createPageHeader(2);
 	if (isOffline == true)
 	{
 		alert(MyApp.resources.NoInternetAccess);
 		$.dynamic_popup('adadasdads');
 	}
-//	$.mobile.changePage($('#mainpage'), 'pop');
-//	setTimeout(function(){
-//		map.invalidateSize();
-//	},2300);
-//	setLabelsForMainPage();
 	onClickbtnFilterPlaces();
 }
-
-/*
-function setLabelsForEmailPage(lang)
-{
-	document.getElementById('emailheading').innerHTML=  MyApp.resources.EmailHeading;
-	document.getElementById('btnOkEmail').innerText=  MyApp.resources.Ok;  
-	document.getElementById('btnSkipEmail').innerHTML= MyApp.resources.Skip;  
-//	document.getElementById('btnBackEmail').innerHTML=  MyApp.resources.Back;  
-//	document.getElementById('divimportantEmail').innerHTML=  MyApp.resources.ImportantEmail;  
-	document.getElementById('emailaccount').placeholder= MyApp.resources.EmailAccountPlaceholder;  
-}*/
 
 function setLabelsForMainPage()
 {
@@ -1749,9 +1728,9 @@ function setHeaderLabels(){
 //	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;
 }
 
-function setSettingsLabels(){
-	
-}
+//function setSettingsLabels(){
+//	
+//}
 
 function backToMainPage()
 {
@@ -1890,7 +1869,25 @@ function firstSwitchToMainPage(email){
 
 function switchToMainPage(email,x,y)
 {
+
 	$.mobile.changePage($('#mainpage'), 'pop');
+//	map.invalidateSize();
+
+	//
+	setTimeout(function(){
+		map.invalidateSize();
+	},2500);
+	setLabelsForMainPage();
+	$( ".loading_gif" ).css( "display", "none" );
+	createPageHeader(1);
+	$('.options').css({'display':'none'});
+	$.mobile.changePage($('#mainpage'), 'pop');
+	$('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
+    $('#abtnFilter').removeClass("active");
+	$('#abtnPlaces').addClass("active");
+	$("#abtnFilterTour").hide();
+	$("#abtnFilterPlaces").show();
 	setTimeout(function(){
 		map.invalidateSize();
 		map.panTo([y,x]);
@@ -3227,15 +3224,15 @@ function getMoreInfo2(poiName){
 
 function getMoreInfo3(poiName){
 	var k;
-	console.log("getMoreInfo3 "+poiName);
+//	console.log("getMoreInfo3 "+poiName);
 	poiName = poiName.trim();
 	var k = poiName.indexOf("\n");
 	poiName = poiName.slice(0,k);
 	poiName = poiName.trim();
-	console.log(poiName);
+//	console.log(poiName);
 	if (langstr == 'en'){
 		var c = slideName.indexOf(poiName);
-		////console.log("inslideen333");
+		//console.log("inslideen333");
 //		slideen3(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
 //				slidePhone[c], slideEmail[c], slideImage[c]);
 		slideen(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
@@ -3243,7 +3240,7 @@ function getMoreInfo3(poiName){
 	}
 	else{
 		var c = slideNamegr.indexOf(poiName);
-		////console.log("inslideen333");
+		//console.log("inslideen333");
 //		slidegr3(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
 //				slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 		slidegr(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
@@ -3393,10 +3390,12 @@ function slideBack()
 //	navigator.app.backHistory();
 //	history.go(-1);
 	console.log("in SlideBack");
-	if (typeof (navigator.app) !== "undefined") {
+	if (typeof (navigator.app) != "undefined") {
 		console.log("in SlideBack1");
 		history.go(-1);
 //		navigator.app.backHistory();
+//		orderPlaces(0);
+		window.history.back();
 	} else {
 		console.log("in SlideBack2");
 		window.history.back();
@@ -3555,6 +3554,7 @@ function orderPlaces(i)
 		}
 		
 	}
+	globalI = i;
 	createPageHeader(6);
 	$.mobile.changePage($('#orderplaces'), 'pop');
 	customHeader(6);
@@ -4029,7 +4029,7 @@ function filterPlaces(x){
 //						descr += "...";
 //						descr += "<br>";
 //					}
-					//console.log("in in in ");
+
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -4162,7 +4162,6 @@ function createPageHeader(x){
 	switch (x)
 	{
 	case 1:
-		console.log("in 1");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select"><option value="GR">Ελληνικά</option>';
@@ -4174,7 +4173,6 @@ function createPageHeader(x){
 		$(".container1").html(fillHtml2);
 		break;
 	case 2:
-		console.log("in 2");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select2"><option value="GR">Ελληνικά</option>';
@@ -4186,7 +4184,6 @@ function createPageHeader(x){
 		$(".container2").html(fillHtml2);
 		break;
 	case 3:
-		console.log("in 3");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select3"><option value="GR">Ελληνικά</option>';
@@ -4198,7 +4195,6 @@ function createPageHeader(x){
 		$(".container3").html(fillHtml2);
 		break;
 	case 4:
-		console.log("in 4");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
 		fillHtml2 += '<select name="language_select" id="language_select4"><option value="GR">Ελληνικά</option>';
