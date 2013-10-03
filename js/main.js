@@ -3179,10 +3179,10 @@ function getDirections(x,y)
 //		currentLat;
 //		var currentLong;
 		if (currentLat==undefined) {
-		    currentLat = '27.102059';
+		    currentLat = '36.809098';
 		}
 		if (currentLong==undefined) {
-		    currentLong = '36.809098';
+		    currentLong = '27.102059';
 		}url += currentLat+','+currentLong;// start point
 //		url += '36.809098,27.102059'; 
 		url += '&daddr='+x+','+y; // end point
