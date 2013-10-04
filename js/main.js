@@ -1687,11 +1687,11 @@ function switchToHomePage(){
 	createPageHeader(8);
 	var innerhtml = '';
 	innerhtml  = '<img src="images/Flag_Left_Azure2.png" class="fpicon" onClick="firstSwitchToPlacesPage();">';
-	innerhtml += '<h3>'+MyApp.resources.Explore+'</h3><br><br>';
+	innerhtml += '<span class="mplabel">'+MyApp.resources.Explore+'</span><br><br>';
 	innerhtml += '<img src="images/path2.png" class="fpicon" onClick="loadItineraries();">';
-	innerhtml += '<h3>'+MyApp.resources.Routes+'</h3><br><br>';
+	innerhtml += '<span class="mplabel">'+MyApp.resources.Routes+'</span><br><br>';
 	innerhtml += '<img src="images/Location2.png" class="fpicon" onClick="showPositionOnMap();">';
-	innerhtml += '<h3>'+MyApp.resources.CurrentPosition+'</h3>';
+	innerhtml += '<span class="mplabel">'+MyApp.resources.CurrentPosition+'</span>';
 	$("#explore").html(innerhtml);
 	$('#homepage').trigger("create");
 	$.mobile.changePage($('#homepage'), 'pop');
