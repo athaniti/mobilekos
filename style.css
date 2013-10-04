@@ -52,9 +52,13 @@ a {
 	transition: all 100ms linear;
 }
 
-#firstpage,#secondpage,#mainpage,#settingspage,#itinerarypage,#eachitinerarypage,#itineraryportalpage
+#firstpage,#secondpage,#mainpage,#settingspage,#eachitinerarypage,#itineraryportalpage
 	{
 	background: #e8e8e8 url('images/app_bg.jpg') repeat;
+	position: relative;
+}
+#itinerarypage {
+	background:transparent url(images/itinerarypagebg.png)  repeat;
 	position: relative;
 }
 #placespage {
