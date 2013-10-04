@@ -74,6 +74,6 @@ var enResources = {
 		Kilometers:" kilometers",
         FromYourPosition:" from your position.",
         Next:"Next",
-        Explore:"Explore the island",
-        Routes:"Routes"
+        Explore:"Show information about more than 1200 points of interest!",
+        Routes:"Show on map the routes that you planned on site."
 };

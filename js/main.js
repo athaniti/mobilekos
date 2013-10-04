@@ -1686,12 +1686,12 @@ function switchToHomePage(){
 	console.log("in switchToHomePage");
 	createPageHeader(8);
 	var innerhtml = '';
-	innerhtml  = '<img src="images/Flag_Left_Azure2.png" class="fpicon" onClick="firstSwitchToPlacesPage();">';
-	innerhtml += '<h4>'+MyApp.resources.Explore+'</h4><br><br>';
-	innerhtml += '<img src="images/path2.png" class="fpicon" onClick="loadItineraries();">';
-	innerhtml += '<h4>'+MyApp.resources.Routes+'</h4><br><br>';
-	innerhtml += '<img src="images/Location2.png" class="fpicon" onClick="showPositionOnMap();">';
-	innerhtml += '<h4>'+MyApp.resources.CurrentPosition+'</h4>';
+	innerhtml  = '<img src="images/Flag_Left_Azure2.png" class="fpicon" onClick="firstSwitchToPlacesPage();"><br>';
+	innerhtml += '<div style="font-weight:bold;">'+MyApp.resources.Explore+'</div><br><br>';
+	innerhtml += '<img src="images/path2.png" class="fpicon" onClick="loadItineraries();"><br>';
+	innerhtml += '<div style="font-weight:bold;">'+MyApp.resources.Routes+'</div><br><br>';
+	//innerhtml += '<img src="images/Location2.png" class="fpicon" onClick="showPositionOnMap();">';
+	//innerhtml += '<h4>'+MyApp.resources.CurrentPosition+'</h4>';
 	$("#explore").html(innerhtml);
 	$('#homepage').trigger("create");
 	$.mobile.changePage($('#homepage'), 'pop');
