@@ -67,7 +67,7 @@ var itCompleted;
 var fromMainPage = false;
 //var nameCat= [];
 //var categId = [];
-var userFilters = new filters("","","","","");
+var userFilters = new filters("","","","","","");
 var newtimestamp = false;
 var fromSettings = false;
 //var enableTourButton = false;
@@ -154,7 +154,6 @@ function filters(hotel, cuisine, music, era, radius){
 	//The Filters Object to store users' specific filters//
 }
 
-
 function checkForLanguage()
 {
     langstr = 'en';
@@ -203,8 +202,9 @@ function checkLanguageSettings()
 //				checkAppVersion();
 				setTimeout(function(){
 //					firstSwitchToMainPage();
-					firstSwitchToPlacesPage();
-				},2500);
+//					firstSwitchToPlacesPage();
+					switchToHomePage();
+				},1500);
 			}
 		},success13CB, error13CB);
 //		populateDB();
@@ -357,7 +357,7 @@ function createPoiArraysGr(){
 			}
 		});
 		if (cancelBackButton == false){
-			switchToSecondPage();
+			switchToSecondPage(0);
 		}
 	});
 }
@@ -372,14 +372,15 @@ function successCB() {
 
 function switchToSecondPage()
 {
-	if (dbExistis){
-		//do Nothing
-	}
-	else{
+//	if (dbExistis){
+//		//do Nothing
+//	}
+//	else{
 		$( ".loading_gif" ).css( "display", "none" );
 		$('#secondpage').trigger("create");
 		$.mobile.changePage($('#secondpage'), 'pop');
-	}
+		console.log("in SwitchToSecondPage");
+//	}
 }
 
 function success13CB(){
@@ -1196,7 +1197,6 @@ function drawPlacesPageGr(len){
 
 function onClickbtnFilterPlaces()
 {
-	
 	$( ".loading_gif" ).css( "display", "block" );
 //	slideBack(0);
 	firstTime = false;
@@ -1357,7 +1357,7 @@ function generateMap()
 //		var loadingControl = L.Control.loading({separate: true});
 		var osm = new L.TileLayer('map/{z}/{x}/{y}.png', {unloadInvisibleTiles: true, reuseTiles: true});
 		map.addLayer(osm);
-		map._layersMaxZoom=16;
+		map._layersMaxZoom=17;
 		map._layersMinZoom=12;
 //		document.getElementById('map').style.display = 'block';
 		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
@@ -1669,21 +1669,71 @@ function switchToEmailPage(langid)
 	if (isOffline == false){
 //		sync();
 	}
+//	setTimeout(function(){
+		switchToHomePage();
+//	},2300);
+}
+
+function switchToHomePage(){
+	if (map == null){
+		generateMap();
+	}
+	checkForLanguage();
+	if (isOffline == true)
+	{
+		alert(MyApp.resources.NoInternetAccess);
+	}
+	console.log("in switchToHomePage");
+	createPageHeader(8);
+	var innerhtml = '';
+	innerhtml  = '<img src="images/Flag_Left_Azure2.png" onClick="firstSwitchToPlacesPage();">';
+	innerhtml += '<h3>'+MyApp.resources.Explore+'</h3><br><br>';
+	innerhtml += '<img src="images/path2.png" onClick="loadItineraries();">';
+	innerhtml += '<h3>'+MyApp.resources.Routes+'</h3><br><br>';
+	innerhtml += '<img src="images/Location2.png" onClick="showPositionOnMap();">';
+	innerhtml += '<h3>'+MyApp.resources.CurrentPosition+'</h3>';
+	$("#explore").html(innerhtml);
+	$('#homepage').trigger("create");
+	$.mobile.changePage($('#homepage'), 'pop');
+	var email = $('#emailaccountchange8').val();
+	if ( email == null || email == ""){
+		$('#emailaccountchange2').val(currentEmail);
+	}
+	$('.options').css({'display':'none'});
+	setLabelsForMainPage();
+}
+
+function showPositionOnMap(){
+	$.mobile.changePage($('#mainpage'), 'pop');
+	setLabelsForMainPage();
+	$( ".loading_gif" ).css( "display", "none" );
+	createPageHeader(1);
+	$('.options').css({'display':'none'});
+	$.mobile.changePage($('#mainpage'), 'pop');
+	$('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
+    $('#abtnFilter').removeClass("active");
+	$('#abtnPlaces').addClass("active");
+	$("#abtnFilterTour").hide();
+	$("#abtnFilterPlaces").show();
 	setTimeout(function(){
-		firstSwitchToPlacesPage();
-	},2300);
+		map.invalidateSize();
+	},2500);
+	email = $('#emailaccountchange').val();
+	if ( email == null || email == ''){
+		$('#emailaccountchange').val(currentEmail);
+	}
+	setLabelsForMainPage();
+	if (fromSettings == true){
+	    onClickSettings();
+	    fromSettings = false;
+	}
+	onClickbtnCurrent();
 }
 
 function firstSwitchToPlacesPage()
 {
 	console.log("in firstSwitchToPlacesPage()");
-	generateMap();
-//	createPageHeader(2);
-	if (isOffline == true)
-	{
-		alert(MyApp.resources.NoInternetAccess);
-		$.dynamic_popup('adadasdads');
-	}
 	onClickbtnFilterPlaces();
 }
 
@@ -1703,7 +1753,7 @@ function setLabelsForMainPage()
 //	document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
 //	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
 //	document.getElementById('lblslider').innerHTML= MyApp.resources.Slider;
-	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
+//	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
 //	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
 	document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;    
 	document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;
@@ -1792,6 +1842,33 @@ function saveEmail(newEmail)
     }
 }
 
+function reloadHomePage(){
+	var newLanguage = $("#language_select8").val();
+	var newEmail =  $("#emailaccountchange8").val();
+	var newlangstr = $("#language_select8").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	console.log(langstr);
+	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+		console.log(language);
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}
+	var email = $('#emailaccountchange8').val();
+	if ( email != null && email != ''){
+		$('#emailaccountchange8').val(currentEmail);
+	}
+	saveEmail(newEmail);
+	checkForLanguage();
+	switchToHomePage();
+}
+
 function reloadPlacesPage(){
 	var newLanguage = $("#language_select2").val();
 	var newEmail =  $("#emailaccountchange2").val();
@@ -1869,14 +1946,7 @@ function firstSwitchToMainPage(email){
 
 function switchToMainPage(email,x,y)
 {
-
 	$.mobile.changePage($('#mainpage'), 'pop');
-//	map.invalidateSize();
-
-	//
-	setTimeout(function(){
-		map.invalidateSize();
-	},2500);
 	setLabelsForMainPage();
 	$( ".loading_gif" ).css( "display", "none" );
 	createPageHeader(1);
@@ -1890,8 +1960,7 @@ function switchToMainPage(email,x,y)
 	$("#abtnFilterPlaces").show();
 	setTimeout(function(){
 		map.invalidateSize();
-		map.panTo([y,x]);
-	},1500);
+	},2500);
 	email = $('#emailaccountchange').val();
 	//console.log("123email: "+email);
 	if ( email == null || email == ''){
@@ -1902,6 +1971,7 @@ function switchToMainPage(email,x,y)
 	    onClickSettings();
 	    fromSettings = false;
 	}
+	onClickbtnCurrent();
 }
 
 function switchToMainPage2(){
@@ -2079,7 +2149,6 @@ function submitSelectedPlacesEn(){
 			music = true;
 		}
 	}
-//	//console.log("checked.length= "+checked.length);
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SUBCATEGORIESEN', [], function (tx, results) {
 			var len = results.rows.length, subNew;
@@ -2163,9 +2232,6 @@ function submitSelectedPlacesEn(){
 			});
 		}, errorCB);
 	});
-//	////console.log("in SubmitSelected En4");
-//	}
-//	})(checked);
 
 }
 
@@ -2192,7 +2258,6 @@ function submitSelectedPlacesGr(){
 			music = true;
 		}
 	}
-	
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
 			var len = results.rows.length, subNew;
@@ -3384,24 +3449,27 @@ function slidegr(name, descr, web, add, place, phone, email,img)
 		$.mobile.changePage($('#details'));
 }
 
-
 function slideBack()
 {
-//	navigator.app.backHistory();
-//	history.go(-1);
 	console.log("in SlideBack");
+//	if ($.mobile.activePage.is('#details')){
+//	console.log(globalI);
+//	orderPlaces(globalI);
+//	}
+//	else{
 	if (typeof (navigator.app) != "undefined") {
 		console.log("in SlideBack1");
-		history.go(-1);
+//		history.go(-1);
 //		navigator.app.backHistory();
 //		orderPlaces(0);
 		window.history.back();
 	} else {
 		console.log("in SlideBack2");
-		window.history.back();
-//		history.go(-1);
+//		window.history.back();
+		history.go(-1);
 	}
 }
+//}
 
 function clearWatch() {
 	//console.log("in clearWatch");
@@ -3452,7 +3520,7 @@ function orderPlaces(i)
 	reOrdered = false;
 	fromOrderPlaces = true;
 	var fillhtml = '';
-	var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.orderPlacesHeader+'<p></span>';
+	//var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.orderPlacesHeader+'<p></span>';
 	//console.log("inOrderPlaces");
 	document.getElementById('orderedPlaces').innerHTML='';
 	document.getElementById('showingInfo').innerHTML='';
@@ -3552,7 +3620,6 @@ function orderPlaces(i)
 						MyApp.resources.Next+'</span></a></div>';
 			break;
 		}
-		
 	}
 	globalI = i;
 	createPageHeader(6);
@@ -3698,6 +3765,32 @@ function reloadOrderPlaces(){
 	orderPlaces(0);
 }
 
+function reloadFilteredPlaces(){
+	var newLanguage = $("#language_select7").val();
+	var newEmail =  $("#emailaccountchange7").val();
+	var newlangstr = $("#language_select7").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+		//console.log(language);
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}
+	var email = $('#emailaccountchange6').val();
+	if ( email != null && email != ''){
+		$('#emailaccountchange6').val(currentEmail);
+	}
+	saveEmail(newEmail);
+	checkForLanguage();
+	showFilterCategories();
+}
+
 function backToMap(){
 	navigator.app.backHistory();
 }
@@ -3721,6 +3814,7 @@ function deg2rad(deg) {
 function showFilterCategories(q){
 	var g;
 	var initHtml='';
+	var fillhtml ='';
 	$("#hotelContent").html(initHtml);
 	$("#restaurantContent").html(initHtml);
 	$("#archaiologicalContent").html(initHtml);
@@ -3729,6 +3823,21 @@ function showFilterCategories(q){
 	var restaurantHtml='';
 	var eraHtml='';
 	var musicHtml='';
+	var placeHtml='';
+	placeHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.PlacePoi+'</legend>';
+	placeHtml +='<div data-role="fieldcontain"><label for="place_select" id="placeselect"></label><select name="place_select" id="place_select">';
+	placeHtml += '<option value="-1">'+MyApp.resources.WholeIsland+'</option>';
+	if (langstr == 'gr'){
+		for (g=0; g<placeGr.length; g++){
+			placeHtml += '<option value="'+g+'">'+placeGr[g]+'</option>';
+		}
+		placeHtml += '</select></div>';
+	} else {
+		for (g=0; g<placeEn.length; g++){
+			placeHtml += '<option value="'+g+'">'+placeEn[g]+'</option>';
+		}
+		placeHtml += '</select></div>';
+	}
 	if (hotel == true){
 		hotelHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.HotelStars+'</legend>';
 		hotelHtml += '<div data-role="fieldcontain"><label for="hotel_select" id="hotelselect"></label><select name="hotel_select" id="hotel_select">';
@@ -3738,10 +3847,7 @@ function showFilterCategories(q){
 		hotelHtml += '<option value="3">3 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="4">4 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="5">5 '+MyApp.resources.Stars+'</option>';
-//		hotelHtml += '<option value="6">'+MyApp.resources.ShowAll+'</option>';
 		hotelHtml += '</select></div>';
-//		$("#hotelContent").html(hotelHtml);
-//		$("#hotel_select").msDropDown();
 	}
 	if (cuisine == true){
 		restaurantHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.RestaurantCuisine+'</legend>';
@@ -3761,18 +3867,16 @@ function showFilterCategories(q){
 			}
 			restaurantHtml += '</select></div>';
 		}
-//		$("#restaurantContent").html(restaurantHtml);
 	}	
 	if (era == true){
 		eraHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.ArchaiologicalEra+'</legend>';
 		eraHtml +='<div data-role="fieldcontain"><label for="era_select" id="eraselect"></label><select name="era_select" id="era_select">';
 		eraHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
-//		    eraHtml += '<option value="-1" selected="selected">Όλες</option>';
 			for (g=0; g<eraGr.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraGr[g]+'</option>';
 			}
-//			eraHtml += '</select></div>';
+			eraHtml += '</select></div>';
 		}
 		else{
 //		    eraHtml += '<option value="-1" selected="selected">All</option>';
@@ -3788,37 +3892,35 @@ function showFilterCategories(q){
 		musicHtml +='<div data-role="fieldcontain"><label for="music_select" id="musicelect"></label><select name="music_select" id="music_select">';
 		musicHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
-//		    musicHtml += '<option value="-1" selected="selected">Όλα</option>';
 			for (g=0; g<musicGr.length; g++){
-				//console.log(musicGr[g]);
 				musicHtml += '<option value="'+musicGr[g]+'">'+musicGr[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
 		else{
-//		    musicHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<musicEn.length; g++){
 				//console.log(musicEn[g]);
 				musicHtml += '<option value="'+musicEn[g]+'">'+musicEn[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
-//		$("#musicContent").html(musicHtml);
 	}
-	var fillhtml ='';
 	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><h2>'+MyApp.resources.SearchPopUpHeader+'</h2>';
 	fillhtml += '<p></p>';
 	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox">'+MyApp.resources.FreeTextSearchLabel+'</label>';
-	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" />	</div>';
-	fillhtml += '<h3>'+MyApp.resources.FilterPopUpHeader+'</h3>';
-	fillhtml += '<p></p>';
-	fillhtml += '<p></p>';
+	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" /></div>';
+	fillhtml += '<br>';
+	fillhtml += '<div id="orderplacesHeader"><span>'+MyApp.resources.orderPlacesHeader+'</span></div>';
+	fillhtml += '<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />';
+	fillhtml += '<br>';
+	fillhtml += placeHtml;
+	fillhtml += '<br>';
 	fillhtml += hotelHtml;
-	fillhtml += '<p></p>';
+	fillhtml += '<br>';
 	fillhtml += restaurantHtml;
-	fillhtml += '<p></p>';
+	fillhtml += '<br>';
 	fillhtml += eraHtml;
-	fillhtml += '<p></p>';
+	fillhtml += '<br>';
 	fillhtml += musicHtml;
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "filterPlaces();"><span id="btnSlideBack">'+
 				MyApp.resources.Apply+'</span></a></div>';
@@ -3828,12 +3930,10 @@ function showFilterCategories(q){
 	$.mobile.changePage($('#filterplaces'), 'pop');
 	customHeader(7);
 	checkForLanguage();
-//	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + i + MyApp.resources.From + markerName.length;
 //	$("#orderplacesHeader").html(fillHeader);
 	$('#abtnTour7').removeClass("active");
 	$('#abtnCurrentPosition7').removeClass("active");
 	$('#abtnPlaces7').addClass("active");
-//	document.getElementById('btnSaveChanges7').innerHTML= MyApp.resources.SaveChanges;
 	$('#abtnMap3').removeClass("active");
 	$('#abtnList3').removeClass("active");
 	$('#abtnFilter3').addClass("active");
@@ -3852,7 +3952,19 @@ function showFilterCategories(q){
 }
 
 function cancel(){
-	$( ".inner_wrap" ).css( "display", "none" );	
+    $('#abtnTour').removeClass("active");
+	$("#abtnFilterTour").hide();
+	$("#abtnFilterPlaces").show();
+	$('#abtnPlaces').addClass("active");
+    $('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
+	setTimeout(function(){
+		map.invalidateSize();
+//		if ((panToLong != 0) && (panToLat != 0)){
+//			map.panTo([panToLat,panToLong]);
+//		}
+	},2500);
+    $.mobile.changePage($('#mainpage'), 'pop');
 }
 
 function filterPlaces(x){
@@ -3866,14 +3978,22 @@ function filterPlaces(x){
 		}
 //		currentMarkers = [];
 	}
+	// radius filter
+	var radius = $("#slider-fill").val();
+	if (radius != 40){
+		readSlider();
+	}
+	
 	var text = $('#search_box').val();
 	console.log("text: "+ text);
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
-	//console.log(poiDB);
 	var newHotelFilter = '';
 	var newCuisineSelect = '';
 	var newEraSelect = '';
 	var newMusicSelect = '';
+	var newPlaceSelect = '';
+	userFilters.place = $("#place_select").val();
+	console.log("place "+userFilters.place);
 	if (hotel == true){
 		userFilters.hotel = $("#hotel_select").val();
 		console.log(userFilters.hotel);
@@ -3905,7 +4025,6 @@ function filterPlaces(x){
 		}
 		console.log(userFilters.music);
 	}
-	//console.log(userFilters.hotel+"_"+userFilters.cuisine+"-"+userFilters.era+"_"+userFilters.music);
 	if (userFilters.hotel == -1){
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
@@ -4010,11 +4129,6 @@ function filterPlaces(x){
 			var len = results.rows.length;
 			var lat2;
 			for (var j=0; j<len; j++){
-//				//console.log(results.rows.item(j).ssubcat);
-//				//console.log(results.rows.item(j).ssubcat.indexOf(newHotelFilter));
-//				if (userFilters.hotel == -1){
-//					userFilters.hotel = "12345";
-//				}
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
@@ -4051,11 +4165,21 @@ function filterPlaces(x){
 					}
 				}
 			}
-			if ((text == '') || (text == null)){
-				searchText(text,2);
+			if (userFilters.place == -1){
+				if ((text == '') || (text == null)){
+					searchText(text,2);
+				}
+				else{
+					searchText(text,1);
+				}
 			}
-			else{
-				searchText(text,1);
+			else {
+				if ((text == '') || (text == null)){
+					searchText(text,3);
+				}
+				else{
+					searchText(text,4);
+				}
 			}
 		    $('#abtnTour').removeClass("active");
 			$("#abtnFilterTour").hide();
@@ -4097,18 +4221,6 @@ function searchText(text,k){
 		var string = new RegExp(text, 'i');
 		console.log("112 "+markerName.length);
 		for (var x=0 ; x < markerName.length ; x++){
-//			if ((markerName[x].search(string) != -1) || (markerDescr[x].search(string) != -1)){
-//				var descr1 = markerDescr[x];
-//				if (descr1.length > 200){			//slicing the description to the first 200 charactes.
-//					descr1 = descr1.slice(0,200);
-//					descr1 += "...";
-//					descr1 += "<br>";
-//				}
-//				descr1 += "<p onclick=getMoreInfo("+markerPoiId[x]+","+markerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-//				descr1 += "<p onclick=getDirections("+markerLat[x]+","+markerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-//				addGroupMarker(markerLat[x] , markerLong[x], markerName[x], descr1, markerCat[x], markerPlace[x], 
-//						markerSSubCat[x], markerPoiId[x], 0);
-//			}
 			tempmarkerLat.push(markerLat[x]);
 			tempmarkerName.push(markerName[x]);
 			tempmarkerLong.push(markerLong[x]);
@@ -4151,12 +4263,56 @@ function searchText(text,k){
 							tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 		}
 	}
+	else if (k==3){
+//		var place = (langstr == 'en') ? placeEn[userFilters.place] : placeGr[userFilters.place];
+		var place = placeGr[userFilters.place];
+		console.log("place "+place);
+		if ((text == '') || (text == null)){
+			for (var x=0 ; x <tempmarkerName.length ; x++){
+				var descr = tempmarkerDescr[x];
+				if (descr.length > 200){			//slicing the description to the first 200 charactes.
+					descr = descr.slice(0,200);
+					descr += "...";
+					descr += "<br>";
+				}
+				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+				console.log("12 "+tempmarkerPlace[x] + " " + place);
+				if (tempmarkerPlace[x] == place){
+					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
+									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
+				}
+			}
+		}
+	}
+	else if (k==4){
+		var string = new RegExp(text, 'i');
+		var place = placeGr[userFilters.place];
+		console.log("place "+place);
+		if ((text == '') || (text == null)){
+			for (var x=0 ; x <tempmarkerName.length ; x++){
+				var descr = tempmarkerDescr[x];
+				if (descr.length > 200){			//slicing the description to the first 200 charactes.
+					descr = descr.slice(0,200);
+					descr += "...";
+					descr += "<br>";
+				}
+				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
+				console.log("12 "+tempmarkerPlace[x] + " " + place);
+				if ((tempmarkerPlace[x] == place) && ((tempmarkerName[x].search(string) != -1) || (tempmarkerDescr[x].search(string) != -1))){
+					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
+									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
+				}
+			}
+		}
+	}
 }
 
 function createPageHeader(x){
 	var fillHtml = '';
 	var fillHtml2 = '';
-	fillHtml  = '<div class="container"> <div class="app_logo"> <img src="images/logo_app.png" alt="logo"/></div>';
+	fillHtml  = '<div class="container"> <div class="app_logo"> <img src="images/logo_app.png" alt="logo" onClick="switchToHomePage();"></div>';
 	fillHtml +=	'<div class="app_options no_active"><a href="#" onClick = "onClickSettings();">	<img src="images/settings_new.png" alt="options">';
 	fillHtml += '</a></div></div>';
 	switch (x)
@@ -4234,9 +4390,21 @@ function createPageHeader(x){
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" /></div>';
-		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOrderPlaces();"><span id="btnSaveChanges7">'
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadFilteredPlaces();"><span id="btnSaveChanges7">'
 						+MyApp.resources.SaveChanges+'</span></a></div>';
 		$(".container7").html(fillHtml2);
+		break;
+	case 8:
+		console.log("in 8");
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>';
+		fillHtml2 += '<select name="language_select" id="language_select8"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange8" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadHomePage();"><span id="btnSaveChanges8">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container8").html(fillHtml2);
 		break;
 	}
 	$(".header").html(fillHtml);

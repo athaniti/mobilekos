@@ -104,6 +104,11 @@ a {
 	padding: 0px 20px;
 }
 
+.container8 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
 
 /*-----------------------------------------------------------------------------------*/
 /*	Flags Settings
@@ -238,6 +243,11 @@ a {
 	color: #fff !important;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
 }
+
+/*.home{
+	background-image: url('images/home.png');
+    background-repeat: no-repeat;
+}*/
 
 /*-----------------------------------------------------------------------------------*/
 /*	Secondary Menu Settings
@@ -765,7 +775,7 @@ small {
 #itinerarypageHeader p {
 	margin: 30px 40px;
 	font-weight: bold;
-	color: #000000; 
+	color: #000000;
 }
 
 #itineraryPagePhoto img{
@@ -777,16 +787,28 @@ small {
 }
 
 /*-----------------------------------------------------------------------------------*/
+/*	Home Page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#explore{
+	text-align: center;
+	padding-top: 5%;
+}
+
+/*-----------------------------------------------------------------------------------*/
 /*	OrderPlaces page Settings
 /*-----------------------------------------------------------------------------------*/
 
 #orderplacesHeader {
-	margin: 70px auto 20px auto;
+	/*margin: 70px auto 20px auto;
 	min-height: 20px;
 	background-color: #F8F8F8;
 	border: 2px;
 	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
-	opacity: 0.9;
+	opacity: 0.9;*/
+	
+	margin: 0px auto 0px auto;
+	min-height: 20px;
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -1157,7 +1179,7 @@ div.ui-slider {
 	.header .container {
 		max-width: 100%;
 	}
-	.container1, .container2, .container3, .container4, .container5, .container6, .container7 {
+	.container1, .container2, .container3, .container4, .container5, .container6, .container7, .container8 {
 		width: 50%;
 		margin: 0px auto;
 		text-align: center;

@@ -58,6 +58,7 @@ MyApp.resources = {
 		From:" places out of ",
 		HotelStars:"Filter Hotels by stars: ",
 		RestaurantCuisine:"Filter restaurants by cuisine: ",
+		PlacePoi:"Filter results by place: ",
 		ArchaiologicalEra:"Filter Archaiological places by era: ",
 		NightClubMusic:"Filter Night clubs by music: ",
 		ShowAll:"All ",
@@ -68,10 +69,13 @@ MyApp.resources = {
         FreeTextSearchLabel:"Use this text box for free text search",
 		Website:"Website",
 		Address:"Address",
+		WholeIsland:"All",
 		Place:"Place",
 		Phone:"Phone",
 		NoPointsNearBy:"No results found in radius less than ",
 		Kilometers:" kilometers",
         FromYourPosition:" from your position.",
-        Next:"Next"
+        Next:"Next",
+        Explore:"Explore the island",
+        Routes:"Routes"
 };

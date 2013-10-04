@@ -11,6 +11,9 @@ var eraEn = new Array();
 var eraGr = new Array();
 var musicGr = new Array();
 var musicEn = new Array();
+var placeEn = new Array();
+var placeGr = new Array();
+
 categs[0]="";
 categs[1]="shopping";
 categs[2]="sights";
@@ -90,6 +93,26 @@ musicGr[5]="Ελληνική";
 musicGr[6]="Κλασική";
 musicGr[7]="Μουσικές του κόσμου";
 musicGr[8]="Πειραματική";
+placeEn[0]="Antimachia";
+placeEn[1]="Zipari";
+placeEn[2]="Zia";
+placeEn[3]="Kardamena";
+placeEn[4]="Kefalos";
+placeEn[5]="Kos (Town)";
+placeEn[6]="Marmari";
+placeEn[7]="Mastihari";
+placeEn[8]="Pili";
+placeEn[9]="Tigkaki";
+placeGr[0]="Αντιμάχεια";
+placeGr[1]="Ζηπάρι";
+placeGr[2]="Ζιά";
+placeGr[3]="Καρδάμαινα";
+placeGr[4]="Κέφαλος";
+placeGr[5]="Κως (Πόλη)";
+placeGr[6]="Μαρμάρι";
+placeGr[7]="Μαστιχάρι";
+placeGr[8]="Πυλί";
+placeGr[9]="Τιγκάκι";
 
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {

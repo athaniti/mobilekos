@@ -16,10 +16,10 @@
 <script src="js/common.js"></script>
 <script src="js/json2.js"></script>
 <script src="js/main.js"></script>
-<script src="js/Control.Loading.js"></script>
-<script src="js/jquery.nicescroll.js"></script>
 <script src="js/KML.js"></script>
-<!-- script src="js/GPX.js"></script-->
+<!-- script src="js/GPX.js"></script>
+<script src="js/Control.Loading.js"></script>
+<script src="js/jquery.nicescroll.js"></script>-->
 <script src="js/resources.default.js"> </script>
 <script src="js/resources.gr.js"> </script> 
 <script src="js/resources.en.js"> </script>
@@ -73,6 +73,19 @@
 	</div>
 </div>
 
+<div data-role="page" id="homepage">
+	<div class="header"></div>
+	<div class="options">
+		 <div class="container8"></div>
+	</div>
+	<div class="main_content">
+		<div class="container">
+			<div id="explore"></div>
+		</div>
+	</div>
+</div>
+
+
 <div data-role="page" id="mainpage">
 	<div class="header"></div>
 	<div class="options">
@@ -80,6 +93,7 @@
 	</div>
    	<div class="main_menu">
 		<ul>
+			<!-- li class="home"><a href="#" id="abtnHome" onClick = "onClickbtnFilterPlaces();"><span id="btnPlaces"></span></a></li> -->
 			<li><a href="#" id="abtnPlaces" onClick = "onClickbtnPlaces();"><span id="btnPlaces"></span></a></li>
 			<li><a href="#" id="abtnTour" onClick = "onClickbtnTour();"><span id="btnTour"></span></a></li>
 			<li><a href="#" id="abtnCurrentPosition" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition"></span></a></li>
@@ -272,14 +286,8 @@
 			<div class="loading_gif">
 				<div class="loader"><span>Please Wait...</span></div>
 			</div>
-			<div id="orderplacesHeader" style="text-align:center"></div>
+			
 	 		<!-- label for="slider-fill" id="lblslider"></label-->
-			<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />
-			<div class="button blue small">
-				<a href="#" onClick = "readSlider();">
-					<span id="btnRefresh"> </span>
-				</a>
-			</div>
 			<div id="showingInfo" style="text-align:center"></div>
 			<div id="orderedPlaces"></div>
 		</div>
@@ -308,6 +316,13 @@
 			</ul>
 		</div>
 		<div class="container">
+			
+			<!-- div class="button blue small">
+				<a href="#" onClick = "readSlider();">
+					<span id="btnRefresh"> </span>
+				</a>
+			</div> -->
+			
 			<div id="filteredPlaces"></div>
 			<div id="hotelContent"></div>
 			<div id="restaurantContent"></div>
