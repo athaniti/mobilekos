@@ -3627,7 +3627,7 @@ function orderPlaces(i)
 	customHeader(6);
 	checkForLanguage();
 	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + i + MyApp.resources.From + markerName.length;
-	$("#orderplacesHeader").html(fillHeader);
+	//$("#orderplacesHeader").html(fillHeader);
 	$('#abtnTour6').removeClass("active");
 	$('#abtnCurrentPosition6').removeClass("active");
 	$('#abtnPlaces6').addClass("active");
