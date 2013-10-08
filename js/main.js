@@ -8,7 +8,7 @@ var screenWidth;
 var globalItId;
 var globalI;
 var currentTimestamp = [];
-var hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2;
+var hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2, placeHtmlId = -2;
 var placeHtml='';
 var startPoint;
 var currentLat;
@@ -680,11 +680,11 @@ function popSubCategoriesGrDb(){
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
 //			if (catId == 7){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['7_1','Χωριά',catId], success4CB, error4CB);
+//						['7_1','ΞΒ§Ξβ€°ΞοΏ½ΞΞ‰ΞΒ¬',catId], success4CB, error4CB);
 //			}
 //			else if (catId == 9){
 //				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Γενικές πληροφορίες',catId], success4CB, error4CB);
+//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Ξβ€ΞΒµΞΒ½ΞΞ‰ΞΞΞΒ­Ξβ€ Ξβ‚¬ΞΒ»ΞΒ·ΞοΏ½ΞΞΞβ€ ΞΞΞοΏ½Ξβ€•ΞΒµΞβ€',catId], success4CB, error4CB);
 //			}
 //			else{
 				for (var j=0; j<sub.length; j++){
@@ -1200,7 +1200,7 @@ function onClickbtnFilterPlaces()
 	$( ".loading_gif" ).css( "display", "block" );
 //	slideBack(0);
 	firstTime = false;
-	hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2;
+	hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2, placeHtmlId = -2;
 	if (langstr == 'en'){
 //		readCatDbEn();
 		drawPlacesPageEn();
@@ -1688,6 +1688,7 @@ function showPositionOnMap(){
 	$('#abtnPlaces').addClass("active");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").show();
+	$('#map').css('height',screenHeight-125);
 	setTimeout(function(){
 		map.invalidateSize();
 	},2500);
@@ -1776,6 +1777,7 @@ function backToMainPage()
     checkForLanguage();
     fromSettings = true;
     $.mobile.changePage($('#mainpage'), 'pop');
+    $('#map').css('height',screenHeight-125);
 	email = $('#emailaccountchange').val();
 	//console.log("123email: "+email);
 	if ( email == null || email == ''){
@@ -1898,19 +1900,38 @@ function reloadItinerariesPage(){
 
 function switchToMainPage(email,x,y)
 {
-	$.mobile.changePage($('#mainpage'), 'pop');
+	/*
+	$( ".loading_gif" ).css( "display", "none" );
+					createPageHeader(1);
+					$.mobile.changePage($('#mainpage'), 'pop');
+					$('#abtnPlaces').addClass("active");
+				    $('#abtnList').removeClass("active");
+				    $('#abtnMap').addClass("active");
+				    $('#abtnFilter').removeClass("active");
+					$("#abtnFilterTour").hide();
+					$("#abtnFilterPlaces").show();
+					setTimeout(function(){
+						map.invalidateSize();
+					},2500);
+					setLabelsForMainPage();
+					$('.options').css({'display':'none'});
+	*/
+//	$.mobile.changePage($('#mainpage'), 'pop');
 	setLabelsForMainPage();
 	$( ".loading_gif" ).css( "display", "none" );
 	createPageHeader(1);
 	$('.options').css({'display':'none'});
 	$.mobile.changePage($('#mainpage'), 'pop');
-	$('#abtnList').removeClass("active");
-    $('#abtnMap').addClass("active");
-    $('#abtnFilter').removeClass("active");
-	$('#abtnPlaces').addClass("active");
-	$("#abtnFilterTour").hide();
-	$("#abtnFilterPlaces").show();
+	$('#abtnTour').addClass("active");
+//	$('#abtnList').removeClass("active");
+//    $('#abtnMap').removeClass("active");
+//    $('#abtnFilter').removeClass("active");
+	$('#abtnPlaces').removeClass("active");
+	$("#abtnFilterTour").show();
+	$('#abtnCurrentPosition').removeClass("active");
+	$("#abtnFilterPlaces").hide();
 	setTimeout(function(){
+		$('#map').css('height',screenHeight-100);
 		map.invalidateSize();
 	},2500);
 	email = $('#emailaccountchange').val();
@@ -1923,11 +1944,12 @@ function switchToMainPage(email,x,y)
 	    onClickSettings();
 	    fromSettings = false;
 	}
-	onClickbtnCurrent();
+//	onClickbtnCurrent();
 }
 
 function switchToMainPage2(){
 	$.mobile.changePage($('#mainpage'), 'pop');
+	$('#map').css('height',screenHeight-125);
 	setTimeout(function(){
 		map.invalidateSize();
 	},2500);
@@ -1993,6 +2015,7 @@ function onClickbtnPlaces2()
 	createPageHeader(1);
 	$.mobile.changePage($('#mainpage'), 'pop');
 	$( ".secondary_menu" ).css( "display", "block" );
+	$('#map').css('height',screenHeight-125);
 	$('#abtnPlaces').addClass("active");
     $('#abtnList').removeClass("active");
     $('#abtnMap').addClass("active");
@@ -2066,12 +2089,25 @@ function submitSelectedPlaces()
 		currentMarkers = [];
 	}
 	firstTime = false;
-//	showFilterCategories(1,1,1,1);
 	if (langstr == 'en'){
 		submitSelectedPlacesEn();
 	}
 	else {
 		submitSelectedPlacesGr();
+//		var poiName = "The wetland of Psalidi";
+//		var c = slideName.indexOf(poiName);
+//		console.log(c);
+//		var tempId = slideId[c];
+//		var tempCat = slideCat[c];
+//		console.log(tempId+" "+tempCat);
+//		for ( var l=0; l < slideIdgr.length ;l++){
+//			if ( (tempId == slideIdgr[l]) && (tempCat == slideCatgr[l]) ){
+//			//	fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo2(this.text)" rel="external" id="'
+//			//	+pointCode[k]+'" >'+slideNamegr[l]+'</a>';
+//				getMoreInfo2(slideNamegr[l]);
+//				break;
+//			}
+//		}
 	}
 }
 
@@ -2083,9 +2119,6 @@ function submitSelectedPlacesEn(){
 			//console.log("name222: "+this.name);
 		}
 	});
-//	checked.push("Sites of Interest");
-//	checked.push("Hotels");
-//	checked.push("Archaelogical Sites and Monuments");
 	for (var l=0; l<checked.length; l++){
 		
 		if (checked[l] == "Hotels"){
@@ -2110,8 +2143,8 @@ function submitSelectedPlacesEn(){
 //					//console.log("in SubmitSelected En2");
 					subNew = $.trim(results.rows.item(i).name);
 //					//console.log("_"+subNew+"_");
-					if (checked[j] == subNew){
-						
+					if (checked[j] == subNew)
+					{
 						checked[j] = results.rows.item(i).id;
 						if (results.rows.item(i).id == '2_3'){
 							checked.push('2_5');
@@ -2166,6 +2199,7 @@ function submitSelectedPlacesEn(){
 					$('#abtnPlaces').addClass("active");
 				    $('#abtnList').removeClass("active");
 				    $('#abtnMap').addClass("active");
+				    $('#map').css('height',screenHeight-125);
 				    $('#abtnFilter').removeClass("active");
 					$("#abtnFilterTour").hide();
 					$("#abtnFilterPlaces").show();
@@ -2197,16 +2231,16 @@ function submitSelectedPlacesGr(){
 	});
 	for (var l=0; l<checked.length; l++){
 		
-		if (checked[l] == "Ξενοδοχεία"){
+		if (checked[l] == "ΞΞµΞ½ΞΏΞ΄ΞΏΟ‡ΞµΞ―Ξ±"){
 			hotel = true;
 		}
-		if (checked[l] == "Εστιατόρια"){
+		if (checked[l] == "Ξ•ΟƒΟ„ΞΉΞ±Ο„ΟΟΞΉΞ±"){
 			cuisine = true;
 		}
-		if (checked[l].indexOf("Αρχαιολογικοί") != -1){
+		if (checked[l].indexOf("Ξ‘ΟΟ‡Ξ±ΞΉΞΏΞ»ΞΏΞ³ΞΉΞΊΞΏΞ―") != -1){
 			era = true;
 		}
-		if (checked[l] == "Νυχτερινά Κέντρα"){
+		if (checked[l] == "ΞΟ…Ο‡Ο„ΞµΟΞΉΞ½Ξ¬ ΞΞ­Ξ½Ο„ΟΞ±"){
 			music = true;
 		}
 	}
@@ -2271,6 +2305,7 @@ function submitSelectedPlacesGr(){
 					$.mobile.changePage($('#mainpage'), 'pop');
 //					map.invalidateSize();
 					$('#abtnList').removeClass("active");
+					$('#map').css('height',screenHeight-125);
 				    $('#abtnMap').addClass("active");
 				    $('#abtnFilter').removeClass("active");
 					$('#abtnPlaces').addClass("active");
@@ -2366,6 +2401,7 @@ function loadItinerariesfromPortal()
     $('#abtnPlaces5').removeClass("active");
 //    $('#abtnExit5').removeClass("active");
     $('#itineraryportalpage').trigger('create');
+	$( ".loading_gif" ).css( "display", "none" );
     $('.options').css({'display':'none'});
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
 	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;
@@ -2972,12 +3008,8 @@ function showAvailableDays(id)
 					day.push(results.rows.item(k).day);
 					pointCode.push(results.rows.item(k).pointcode);
 					pointName.push(results.rows.item(k).pointname);
-//					//console.log("kkk "+day[0]+ " "+pointCode[k]+" "+pointName[k]);
 				}
 				duration.push(results.rows.item(k).duration);
-//				//console.log(day[k]);
-//				//console.log(pointCode[k]);
-//				//console.log(pointName[k]);
 			}
 			for (var j=1 ; j < day.length ; j++){
 				if (day[j] != day[j-1]){
@@ -2997,8 +3029,25 @@ function showAvailableDays(id)
 					if ((day[k] == dd) ){//&& (results.rows.item(k).id == id)){
 						if (temp == ''){
 							temp = pointName[k];
-						} 
-						fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo2(this.text)" rel="external" id="'+pointCode[k]+'" >'+pointName[k]+'</a>';
+						}
+						if (langstr == 'gr'){
+							var poiName = pointName[k];
+							var c = slideName.indexOf(poiName);
+							var tempId = slideId[c];
+							var tempCat = slideCat[c];
+							for ( var l=0; l < slideIdgr.length ; l++){
+								if ( (tempId == slideIdgr[l]) && (tempCat == slideCatgr[l]) ){
+									fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo2(this.text)" rel="external" id="'
+									+pointCode[k]+'" >'+slideNamegr[l]+'</a>';
+									break;
+								}
+							}
+//							var y=k;
+						}
+						else{
+						fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getMoreInfo2(this.text)" rel="external" id="'
+									+pointCode[k]+'" >'+pointName[k]+'</a>';
+						}
 //						$('<a href="#" input type="button" data-icon="arrow-r" data-iconpos="right"id="'
 //								+pointCode[k]+'" >'
 //								+pointName[k]+'</a>').click(function() {
@@ -3209,7 +3258,6 @@ function getDirections(x,y)
 
 function getMoreInfo2(poiName){
 	var k;
-	////console.log("getMoreInfo2 "+poiName);
 	poiName = poiName.trim();
 	if (langstr == 'en'){
 		var c = slideName.indexOf(poiName);
@@ -3219,8 +3267,6 @@ function getMoreInfo2(poiName){
 		////console.log("inslideen333");
 		slideen(slideName[c], slideDescr[c], slideWebsite[c], slideAddress[c], slidePlace[c], 
 				slidePhone[c], slideEmail[c], slideImage[c]);
-//		}
-//		}
 	}
 	else{
 		////console.log("..."+slideId.length);
@@ -3232,8 +3278,6 @@ function getMoreInfo2(poiName){
 		slidegr(slideNamegr[c], slideDescrgr[c], slideWebsitegr[c], slideAddressgr[c], slidePlacegr[c], 
 				slidePhonegr[c], slideEmailgr[c], slideImage[c]);
 	}
-//	}
-//	}
 }
 
 function getMoreInfo3(poiName){
@@ -3292,110 +3336,52 @@ function errorCCB(err){
 
 function slideen(name, descr, web, add, place, phone, email, img)
 {
-//	if (deviceOSVersion < 4){
-//		$(document).ready(function () {
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-////			$("#inner").html(fillhtml);
-////			console.log("inSlide "+img);
-////			$( ".inner_wrap" ).css( "display", "block" );
-////			$("#inner").niceScroll({cursorcolor:"#484848"}).resize();
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//		});
-//	}
-//	else{
-		////console.log("in Slideen2");
-//	console.log("in Slideen1");
-//	console.log(descr);
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities"') != -1){
-			var k = descr.indexOf('<div class="360cities"');
-			var l = descr.indexOf('</div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-1);
-			descr = m.concat(n);
-		}
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'
-					+add+'<br>'	+'<b>'+MyApp.resources.Place+': </b>'+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'
-					+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
-		fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
-						MyApp.resources.Hide+'</span></a></div>';
-//		$("#inner").html(fillhtml);
-//		console.log("inSlide "+img);
-//		//console.log("inSlide "+fillhtml);
-//		$( ".inner_wrap" ).css( "display", "block" );
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
+	var fillhtml ='';
+	if ( descr.indexOf('<div class="360cities"') != -1){
+		var k = descr.indexOf('<div class="360cities"');
+		var l = descr.indexOf('</div>');
+		var m = descr.slice(0,k);
+		var n = descr.slice(l,-1);
+		descr = m.concat(n);
+	}
+	fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+	if (!isOffline){
+		fillhtml += img+'<br>';
+	}
+	fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'
+	+add+'<br>'	+'<b>'+MyApp.resources.Place+': </b>'+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'
+	+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
+	fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
+	MyApp.resources.Hide+'</span></a></div>';
+//	$("#inner").html(fillhtml);
+//	console.log("inSlide "+img);
+//	//console.log("inSlide "+fillhtml);
+//	$( ".inner_wrap" ).css( "display", "block" );
+	$("#detailscontent").html(fillhtml);
+	$.mobile.changePage($('#details'));
 }
 
 function slidegr(name, descr, web, add, place, phone, email,img)
 {
-//	if (deviceOSVersion < 4){
-//		////console.log("in Slideen1");	
-//		$(document).ready(function () {
-//			var fillhtml ='';
-//			if ( descr.indexOf('<div class="360cities">') != -1){
-//				var k = descr.indexOf('<div class="360cities">');
-//				var l = descr.indexOf('</div>');
-//				var m = descr.slice(0,k);
-//				var n = descr.slice(l,-1);
-//				descr = m.concat(n);
-//			}
-//			img = img.replace('height="auto"','height="50%"');
-//			fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-//			if (!isOffline){
-//				fillhtml += img+'<br>';
-//			}
-//			fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-//			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-//			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-//							MyApp.resources.Hide+'</span></a></div>';
-//			$("#detailscontent").html(fillhtml);
-//			$.mobile.changePage($('#details'));
-//		});
-//	}
-//	else{
-//	console.log("in Slidegr1");
-//	console.log(descr);
-		var fillhtml ='';
-		if ( descr.indexOf('<div class="360cities"') != -1){
-			var k = descr.indexOf('<div class="360cities"');
-			var l = descr.indexOf('</div></div>');
-			var m = descr.slice(0,k);
-			var n = descr.slice(l,-7);
-			descr = m.concat(n);
-		}
-//		console.log("2222 "+descr);
-		fillhtml = '<span class="pointtitle">'+name+'</span><br>';
-		if (!isOffline){
-			fillhtml += img+'<br>';
-		}
-		fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
-			+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
-			fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
-							MyApp.resources.Hide+'</span></a></div>';
-		$("#detailscontent").html(fillhtml);
-		$.mobile.changePage($('#details'));
+	var fillhtml ='';
+	if ( descr.indexOf('<div class="360cities"') != -1){
+		var k = descr.indexOf('<div class="360cities"');
+		var l = descr.indexOf('</div></div>');
+		var m = descr.slice(0,k);
+		var n = descr.slice(l,-7);
+		descr = m.concat(n);
+	}
+//	console.log("2222 "+descr);
+	fillhtml = '<span class="pointtitle">'+name+'</span><br>';
+	if (!isOffline){
+		fillhtml += img+'<br>';
+	}
+	fillhtml += descr+'<br>' +'<b>'+MyApp.resources.Website+': </b>'+web+'<br>' +'<b>'+MyApp.resources.Address+': </b>'+add+'<br>' +'<b>'+MyApp.resources.Place+': </b>'
+	+place+'<br>' +'<b>'+MyApp.resources.Phone+': </b>'+phone+'<br>'+'<b>email: </b>' +email + '<br>';
+	fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();" data-rel="back"><span id="btnSlideBack">'+
+	MyApp.resources.Hide+'</span></a></div>';
+	$("#detailscontent").html(fillhtml);
+	$.mobile.changePage($('#details'));
 }
 
 function slideBack()
@@ -3656,6 +3642,7 @@ function showOrderedPlacesOnMap(){
 	}
 	$( ".loading_gif" ).css( "display", "none" );
 	$.mobile.changePage($('#mainpage'), 'pop');
+	$('#map').css('height',screenHeight-125);
 	$('#abtnPlaces').addClass("active");
 	$("#abtnFilterTour").hide();
 	$("#abtnFilterPlaces").show();
@@ -3803,7 +3790,7 @@ function showFilterCategories(q){
 		restaurantHtml +='<div data-role="fieldcontain"><label for="cuisine_select" id="cuisineselect"></label><select name="cuisine_select" id="cuisine_select">';
 		restaurantHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
-//		    restaurantHtml += '<option value="-1" selected="selected">Όλες</option>';
+//		    restaurantHtml += '<option value="-1" selected="selected">ΞοΏ½ΞΒ»ΞΒµΞβ€</option>';
 			for (g=0; g<cuisineGr.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineGr[g]+'</option>';
 			}
@@ -3857,19 +3844,11 @@ function showFilterCategories(q){
 	fillhtml  = '<img src="images/info_icon.png" style="float:left;"><h2>'+MyApp.resources.SearchPopUpHeader+'</h2>';
 	fillhtml += '<p></p>';
 	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox">'+MyApp.resources.FreeTextSearchLabel+'</label>';
-	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" /></div>';
-//	fillhtml += '<br>';
-//	fillhtml += '<div id="orderplacesHeader"><span>'+MyApp.resources.orderPlacesHeader+'</span></div>';
-//	fillhtml += '<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />';
-	fillhtml += '<br>';
+	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" /></div><br>';
 	fillhtml += placeHtml;
-//	fillhtml += '<br>';
 	fillhtml += hotelHtml;
-//	fillhtml += '<br>';
 	fillhtml += restaurantHtml;
-//	fillhtml += '<br>';
 	fillhtml += eraHtml;
-//	fillhtml += '<br>';
 	fillhtml += musicHtml;
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "filterPlaces();"><span id="btnSlideBack">'+
 				MyApp.resources.Apply+'</span></a></div>';
@@ -3894,6 +3873,9 @@ function showFilterCategories(q){
 		}
 	}
 	$("#filteredPlaces").html(fillhtml);
+	if (placeHtmlId != -2){
+		$("#place_select").val(placeHtmlId);
+	}
 	if ((hotelHtmlId != -2) && (hotel == true)){
 		$("#hotel_select").val(hotelHtmlId);
 	}
@@ -3929,6 +3911,7 @@ function cancel(){
 //		}
 	},2500);
     $.mobile.changePage($('#mainpage'), 'pop');
+    $('#map').css('height',screenHeight-125);
 }
 
 function filterPlaces(x){
@@ -3944,9 +3927,9 @@ function filterPlaces(x){
 	}
 	// radius filter
 	var radius = $("#slider-fill").val();
-	if (radius != 40){
-		readSlider();
-	}
+//	if (radius != 40){
+//		readSlider();
+//	}
 	var text = $('#search_box').val();
 //	console.log("text: "+ text);
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
@@ -3957,6 +3940,8 @@ function filterPlaces(x){
 	var newPlaceSelect = '';
 	userFilters.place = $("#place_select").val();
 //	console.log("place "+userFilters.place);
+	
+	placeHtmlId = $("#place_select").val();
 	if (hotel == true){
 		userFilters.hotel = $("#hotel_select").val();
 		hotelHtmlId = $("#hotel_select").val();
@@ -4091,26 +4076,25 @@ function filterPlaces(x){
 			}, errorCB);
 		});
 	}
+	for (var f=0; f< markerName.length; f++){
+		if ( markerSSubCat[f] == "none" )
+		{
+			console.log(markerPlace[f]);
+			addTempMarker(markerLat[f], markerLong[f], markerName[f], markerDescr[f], markerCat[f], 
+					markerPoiId[f], markerPlace[f], markerSSubCat[f]);
+		}
+	}
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM '+poiDB+'', [], function (tx, results) {
 			var len = results.rows.length;
 			var lat2;
 			for (var j=0; j<len; j++){
-				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
-						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (results.rows.item(j).subcategory == "7_1")	&& (cuisine == true) )
-						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
-						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.music) != -1) && (results.rows.item(j).subcategory == "7_5")	&& 	(music == true) )
+				if (   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
+					|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (results.rows.item(j).subcategory == "7_1")	&& (cuisine == true) )
+					|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
+					|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.music) != -1) && (results.rows.item(j).subcategory == "7_5")	&& 	(music == true) )
 					)
 				{
-//					if (userFilters.radius)
-//					//console.log("in in ");
-//					var descr = results.rows.item(j).descr;
-//					if (descr.length > 200){			//slicing the description to the first 200 charactes.
-//						descr = descr.slice(0,200);
-//						descr += "...";
-//						descr += "<br>";
-//					}
-
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -4122,8 +4106,6 @@ function filterPlaces(x){
 						x = y;
 						y = temp;
 					}
-//					descr += "<p onclick=getMoreInfo("+poiid+","+poicat+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
-//					descr += "<p onclick=getDirections("+x+","+y+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 					lat2 = results.rows.item(j).lat;
 					if ( lat2.indexOf("\n") == -1){
 //						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
@@ -4164,6 +4146,7 @@ function filterPlaces(x){
 			},2500);
 		    $( ".loading_gif" ).css( "display", "none" );
 		    $.mobile.changePage($('#mainpage'), 'pop');
+		    $('#map').css('height',screenHeight-125);
 		}, errorCB);
 	});
 }
@@ -4217,6 +4200,7 @@ function searchText(text,k){
 		}
 	}
 	else if (k==2){
+		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 		//console.log("in searchText2");
 		for (var x=0 ; x <tempmarkerName.length ; x++){
 			var descr = tempmarkerDescr[x];
@@ -4235,7 +4219,9 @@ function searchText(text,k){
 //		var place = (langstr == 'en') ? placeEn[userFilters.place] : placeGr[userFilters.place];
 		var place = placeGr[userFilters.place];
 //		console.log("place "+place);
-		if ((text == '') || (text == null)){
+//		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
+//		if ((text == '') || (text == null)){
+		console.log(tempmarkerName.length);
 			for (var x=0 ; x <tempmarkerName.length ; x++){
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -4243,22 +4229,34 @@ function searchText(text,k){
 					descr += "...";
 					descr += "<br>";
 				}
-				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+//				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 //				console.log("12 "+tempmarkerPlace[x] + " " + place);
+				console.log(tempmarkerPlace[x] + " "+ place);
 				if (tempmarkerPlace[x] == place){
+					console.log("1");
 					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
 									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 				}
 			}
-		}
+//		}
 	}
 	else if (k==4){
 		var string = new RegExp(text, 'i');
-		var place = placeGr[userFilters.place];
-//		console.log("place "+place);
-		if ((text == '') || (text == null)){
-			for (var x=0 ; x <tempmarkerName.length ; x++){
+		for (var x=0 ; x < markerName.length ; x++){
+			tempmarkerLat.push(markerLat[x]);
+			tempmarkerName.push(markerName[x]);
+			tempmarkerLong.push(markerLong[x]);
+			tempmarkerCat.push(markerCat[x]);
+			tempmarkerDescr.push(markerDescr[x]);
+			tempmarkerSScat.push(markerSSubCat[x]);
+			tempmarkerPoiid.push(markerPoiId[x]);
+			tempmarkerPlace.push(markerPlace[x]);
+		}
+		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
+		for (x=0 ; x <tempmarkerName.length ; x++){
+			if ((tempmarkerName[x].search(string) != -1 || tempmarkerDescr[x].search(string) != -1) && 
+					(tempmarkerPlace[x] == placeGr[userFilters.place] )) {
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
 					descr = descr.slice(0,200);
@@ -4267,11 +4265,8 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-//				console.log("12 "+tempmarkerPlace[x] + " " + place);
-				if ((tempmarkerPlace[x] == place) && ((tempmarkerName[x].search(string) != -1) || (tempmarkerDescr[x].search(string) != -1))){
-					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
-									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
-				}
+				addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, tempmarkerCat[x], 
+								tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 			}
 		}
 	}
@@ -4288,7 +4283,7 @@ function createPageHeader(x){
 	case 1:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
-		fillHtml2 += '<select name="language_select" id="language_select"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange" placeholder="email account" /></div>';
@@ -4299,7 +4294,7 @@ function createPageHeader(x){
 	case 2:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
-		fillHtml2 += '<select name="language_select" id="language_select2"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select2"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange2" placeholder="email account" /></div>';
@@ -4310,7 +4305,7 @@ function createPageHeader(x){
 	case 3:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
-		fillHtml2 += '<select name="language_select" id="language_select3"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select3"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange3" placeholder="email account" /></div>';
@@ -4321,7 +4316,7 @@ function createPageHeader(x){
 	case 4:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
-		fillHtml2 += '<select name="language_select" id="language_select4"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select4"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange4" placeholder="email account" /></div>';
@@ -4332,7 +4327,7 @@ function createPageHeader(x){
 	case 5:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
-		fillHtml2 += '<select name="language_select" id="language_select5"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select5"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange5" placeholder="email account" /></div>';
@@ -4343,7 +4338,7 @@ function createPageHeader(x){
 	case 6:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>	';
-		fillHtml2 += '<select name="language_select" id="language_select6"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select6"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange6" placeholder="email account" /></div>';
@@ -4354,7 +4349,7 @@ function createPageHeader(x){
 	case 7:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
-		fillHtml2 += '<select name="language_select" id="language_select7"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select7"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange7" placeholder="email account" /></div>';
@@ -4365,7 +4360,7 @@ function createPageHeader(x){
 	case 8:
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
-		fillHtml2 += '<select name="language_select" id="language_select8"><option value="GR">Ελληνικά</option>';
+		fillHtml2 += '<select name="language_select" id="language_select8"><option value="GR">'+MyApp.resources.Greek+'</option>';
 		fillHtml2 += '<option value="EN">English</option></select>	</div>';
 		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
 		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange8" placeholder="email account" /></div>';

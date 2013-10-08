@@ -232,11 +232,20 @@ L.Util.extend(L.KML, {
         }
         //__
         for (var j=0 ; j < slideName.length ; j++){
-        	if (name = slideName[j]){
+        	if (name == slideName[j]){
         		if (langstr == 'en'){
 	        		descr = slideDescr[j];
-        		} else {
-        			descr = slideDescrgr[j];	
+        		}
+        		else {
+					var tempId = slideId[j];
+					var tempCat = slideCat[j];
+					for ( var l=0; l < slideIdgr.length ; l++){
+						if ( (tempId == slideIdgr[l]) && (tempCat == slideCatgr[l]) ){
+							descr = slideDescrgr[l];
+							break;
+						}
+					}
+					name = slideNamegr[l];
 	        	}
         		if (descr.length > 200){			//slicing the description to the first 200 charactes.
 					descr = descr.slice(0,200);

@@ -13,7 +13,7 @@ var enResources = {
 		Settings:"Settings",
 		Tour:"Tour",
 		SettingsHeading:"Change your settings",
-		LanguageSelect:"Language / Ãëþóóá:",
+		LanguageSelect:"Language / Î“Î»ÏŽÏƒÏƒÎ±:",
 		EmailAccount:"Email Account:",
 		EmailAccountPlaceholder:"email account",
 		LoadAvailableTour:"Load Local Itineraries",
@@ -36,7 +36,7 @@ var enResources = {
 		UserMustBeOnLine:"Internet Connection needed to get directions",
 		GetDirections:"Get directions",
 		ShowNone:"Show none",
-		MoreInfo:"More Énformation",
+		MoreInfo:"More Î™nformation",
 		CouldNotLoadItineraries:"Couldn't find itineraries for the specified email address",
 		Hide:"hide",
 		ShowPlaces:"Places near you",
@@ -75,5 +75,6 @@ var enResources = {
         FromYourPosition:" from your position.",
         Next:"Next",
         Explore:"Show information about more than 1200 points of interest!",
-        Routes:"Show on map the routes that you planned on site."
+        Routes:"Show on map the routes that you planned on site.",
+	Greek:"Greek"
 };

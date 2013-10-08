@@ -15,7 +15,7 @@ MyApp.resources = {
 		Settings:"Settings",
 		Tour:"Tour",
 		SettingsHeading:"Change your settings",
-		LanguageSelect:"Language / ������:",
+		LanguageSelect:"Language / Γλώσσα:",
 		EmailAccount:"Email Account:",
 		EmailAccountPlaceholder:"email account",
 		LoadAvailableTour:"Load Local Itineraries",
@@ -38,7 +38,7 @@ MyApp.resources = {
 		UserMustBeOnLine:"Internet Connection needed to get directions",
 		GetDirections:"Get directions",
 		ShowNone:"Show none",
-		MoreInfo:"More �nformation",
+		MoreInfo:"More Ιnformation",
 		CouldNotLoadItineraries:"Couldn't find itineraries for the specified email address",
 		Hide:"hide",
 		ShowPlaces:"Show places near you",
@@ -77,5 +77,6 @@ MyApp.resources = {
         FromYourPosition:" from your position.",
         Next:"Next",
         Explore:"Show information about more than 1200 points of interest!",
-        Routes:"Show on map the routes that you planned on site."
+        Routes:"Show on map the routes that you planned on site.",
+	Greek:"Ελληνικά"
 };
