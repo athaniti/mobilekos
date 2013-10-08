@@ -8,6 +8,8 @@ var screenWidth;
 var globalItId;
 var globalI;
 var currentTimestamp = [];
+var hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2;
+var placeHtml='';
 var startPoint;
 var currentLat;
 var currentLong;
@@ -22,7 +24,7 @@ var era  = false;
 var music = false;
 //var currentVersionCode;
 var markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerPlace = [], markerSSubCat = [], markerPoiId=[];
-var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [], 
+var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [],
 	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 var subsubEn = [], subsubGr = [];
 var reOrdered = false;
@@ -308,18 +310,18 @@ function createPoiArraysEn(){
 			var k = results.rows.length;
 			////console.log("POIEN LENGTH"+ k);
 			for (var p =0;p<k; p++){
-				slideId.push(results.rows.item(p).siteid); 
+				slideId.push(results.rows.item(p).siteid);
 				slideCat.push(results.rows.item(p).category);
 				slideName.push(results.rows.item(p).name);
 				slideDescr.push(results.rows.item(p).descr);
 				slideWebsite.push(results.rows.item(p).website);
-				slideAddress.push(results.rows.item(p).address); 
-				slidePlace.push(results.rows.item(p).place); 
-				slidePhone.push(results.rows.item(p).phone); 
-				slideEmail.push(results.rows.item(p).email);				
+				slideAddress.push(results.rows.item(p).address);
+				slidePlace.push(results.rows.item(p).place);
+				slidePhone.push(results.rows.item(p).phone);
+				slideEmail.push(results.rows.item(p).email);			
 				var str = results.rows.item(p).image;
 				str = str.replace('src="','src="http://www.kos.gr');
-				str = str.replace('style="border-width: 0px;','height="auto" width="100%'); 
+				str = str.replace('style="border-width: 0px;','height="auto" width="100%');
 //				console.log(str); 
 				slideImage.push(str);
 //				subsubEn.push(results.rows.item(p).ssubcat);
@@ -337,14 +339,14 @@ function createPoiArraysGr(){
 			var k = results.rows.length;
 			////console.log("POIGR LENGTH"+ k);
 			for (var p =0;p<k; p++){
-				slideIdgr.push(results.rows.item(p).siteid); 
+				slideIdgr.push(results.rows.item(p).siteid);
 				slideCatgr.push(results.rows.item(p).category);
 				slideNamegr.push(results.rows.item(p).name);
 				slideDescrgr.push(results.rows.item(p).descr);
 				slideWebsitegr.push(results.rows.item(p).website);
-				slideAddressgr.push(results.rows.item(p).address); 
-				slidePlacegr.push(results.rows.item(p).place); 
-				slidePhonegr.push(results.rows.item(p).phone); 
+				slideAddressgr.push(results.rows.item(p).address);
+				slidePlacegr.push(results.rows.item(p).place);
+				slidePhonegr.push(results.rows.item(p).phone);
 				slideEmailgr.push(results.rows.item(p).email);
 				var str = results.rows.item(p).image;
 				str = str.replace('src="','src="http://www.kos.gr');
@@ -529,8 +531,6 @@ function udpateApp(){
 	{
 	}
 }
-
-
 
 function error0CB(){
 //	alert("error0CB");
@@ -1200,6 +1200,7 @@ function onClickbtnFilterPlaces()
 	$( ".loading_gif" ).css( "display", "block" );
 //	slideBack(0);
 	firstTime = false;
+	hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2;
 	if (langstr == 'en'){
 //		readCatDbEn();
 		drawPlacesPageEn();
@@ -1314,29 +1315,6 @@ function removeOptionSelected()
     }
   }
 }
-
-//function appendOptionListLast(text, value)
-//{
-//	var elOptNew = document.createElement('option');
-//	elOptNew.text = text;
-//	elOptNew.value = value;
-//	var elSel = document.getElementById('destination_select');
-//	if ($('#destination_select option:contains('+ text +')').length)
-//	{
-//		alert('This option already exists!');
-//	}
-//	else
-//	{
-//		try
-//		{
-//			elSel.add(elOptNew, null);
-//		}
-//		catch(ex) 
-//		{
-//			elSel.add(elOptNew);
-//		}
-//	}
-//}
 
 function removeOptionListSelected()
 {
@@ -1640,12 +1618,6 @@ function addGroupMarker(x, y, name, descr, categ, place, sscat, poiID, index)
 	currentMarkers.push(marker);
 }
 
-//function addMarkerToList(name)
-//{
-//	$('#yourList').removeClass('ui-disabled');
-//	appendOptionListLast(name,0);
-//}
-
 function ClearAll(){
 	$('#placespage input[type=checkbox]').each(function (){
 		this.checked = false;
@@ -1753,7 +1725,7 @@ function setLabelsForMainPage()
 //	document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
 //	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
 //	document.getElementById('lblslider').innerHTML= MyApp.resources.Slider;
-//	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
+	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
 //	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
 	document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;    
 	document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;
@@ -1924,26 +1896,6 @@ function reloadItinerariesPage(){
 //	}
 }
 
-/*
-function firstSwitchToMainPage(email){
-//	//console.log("in first switch... email: "+email);
-	if (fromMainPage == false){
-		generateMap();
-	}
-	if (isOffline == true)
-	{
-		alert(MyApp.resources.NoInternetAccess);
-	}
-	$.mobile.changePage($('#mainpage'), 'pop');
-	setTimeout(function(){
-		map.invalidateSize();
-	},2300);
-	setLabelsForMainPage();
-	if (firstTime == true){
-		onClickbtnCurrent();
-	}
-}*/
-
 function switchToMainPage(email,x,y)
 {
 	$.mobile.changePage($('#mainpage'), 'pop');
@@ -2052,6 +2004,7 @@ function onClickbtnPlaces2()
 		map.invalidateSize();
 	},2500);
 	setLabelsForMainPage();
+	$( ".loading_gif" ).css( "display", "none" );
 	$('.options').css({'display':'none'});
 	/*setLabelsForMainPage();
 	$.mobile.changePage($('#mainpage'), 'pop');
@@ -2093,15 +2046,14 @@ function onClickbtnTour()
     {
     	loadItineraries();
     }
-    
-}    
+}
 
 function submitSelectedPlaces()
 {
 	checked = [];
 	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 //	subsubGr = [];
-	hotel = false; cusine = false; music = false; era = false;
+	hotel = false; cuisine = false; music = false; era = false;
 //	document.getElementById("loading_gif").style.display = "block";
 //	$( ".loading_gif" ).css( "display", "block" );
 	cancelBackButton = false;
@@ -2261,7 +2213,7 @@ function submitSelectedPlacesGr(){
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM SUBCATEGORIESGR', [], function (tx, results) {
 			var len = results.rows.length, subNew;
-			////console.log("!!!! "+len);
+			//console.log("!!!! "+len);
 			for (var j=0; j<checked.length; j++){
 //				alert("("+checked[j]+")");
 				for (var i = 0; i < len; i++){
@@ -2288,12 +2240,12 @@ function submitSelectedPlacesGr(){
 						for (var i = 0; i < len; i++){
 							if (checked[j] == results.rows.item(i).subcategory){
 								var descr = results.rows.item(i).descr;
-								//////console.log(descr);
+								//console.log(descr);
 								if (descr.length > 140){			//slicing the description to the first 140 charactes.
 									descr = descr.slice(0,140);
 									descr += "...";
 									descr += "<br>";
-//									////console.log("1231231: "+descr);
+//									//console.log("1231231: "+descr);
 								}
 								var poiid = results.rows.item(i).siteid;
 								var poicat = results.rows.item(i).category;
@@ -2413,17 +2365,14 @@ function loadItinerariesfromPortal()
     $('#abtnCurrentPosition5').removeClass("active");
     $('#abtnPlaces5').removeClass("active");
 //    $('#abtnExit5').removeClass("active");
+    $('#itineraryportalpage').trigger('create');
     $('.options').css({'display':'none'});
-//	document.getElementById('btnSaveChanges5').innerHTML= MyApp.resources.SaveChanges;
-//	document.getElementById('btnLoad5').innerHTML= MyApp.resources.Load;
-//	document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
 	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;
 	var email = $('#emailaccountchange5').val();
 	if (currentEmail != 'undefined' || currentEmail != '') {
 		if (email == null || email == ""){
 			$('#emailaccountchange5').val(currentEmail);
-			////console.log(currentEmail);
 		}
 	}
 }
@@ -2476,9 +2425,9 @@ function popItinerariesDb(xmlDoc){
 //			pointName.push(($(this).text()));
 			pointName = $(this).text();
 //			duration.push(($(this).parent().parent().text()).slice(2,10));
-			////console.log("1 "+duration);
+			//console.log("1 "+duration);
 			duration = $(this).parent().parent().text().slice(0,10);
-			////console.log("2 "+duration);
+			//console.log("2 "+duration);
 			itActive = 0;
 			itCompleted = 0;
 			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname,coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
@@ -2504,7 +2453,7 @@ function popItinerariesDb(xmlDoc){
 function error12CB(){
 	//console.log("error12CB");
 }
-
+/*
 function loadItineraryXml(x){
 	if (x == 2){
 //		alert("xml/itinerary2_2.xml");
@@ -2567,10 +2516,10 @@ function popItinerariesDb2(xmlDoc5){
 			pointCode = $(this).attr("Code");
 			pointName = $(this).find("Title").text();
 			coords = $(this).find("Coordinates").text();
-			////console.log("Title: "+pointName);
-			////console.log("1 "+duration);
+			//console.log("Title: "+pointName);
+			//console.log("1 "+duration);
 			duration = $(this).parent().parent().text().trim().slice(0,10);
-			////console.log("2 "+duration);
+			//console.log("2 "+duration);
 //			alert(duration);
 			itActive = 0;
 			itCompleted = 0;
@@ -2580,7 +2529,7 @@ function popItinerariesDb2(xmlDoc5){
 		});
 	});
 }
-
+*/
 function checkItDb(){
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {	
@@ -2599,7 +2548,7 @@ function loadItineraries()
 	var fillhtml = '';
 	document.getElementById('availableFiles').innerHTML='';
 	var itineraryPageHeader ='';
-	////console.log("in availableFiles");
+	//console.log("in availableFiles");
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {
 			var len = results.rows.length;
@@ -3520,7 +3469,7 @@ function orderPlaces(i)
 	reOrdered = false;
 	fromOrderPlaces = true;
 	var fillhtml = '';
-	//var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.orderPlacesHeader+'<p></span>';
+	var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.orderPlacesHeader+'<p></span>';
 	//console.log("inOrderPlaces");
 	document.getElementById('orderedPlaces').innerHTML='';
 	document.getElementById('showingInfo').innerHTML='';
@@ -3627,7 +3576,7 @@ function orderPlaces(i)
 	customHeader(6);
 	checkForLanguage();
 	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + i + MyApp.resources.From + markerName.length;
-	//$("#orderplacesHeader").html(fillHeader);
+	$("#orderplacesHeader").html(fillHeader);
 	$('#abtnTour6').removeClass("active");
 	$('#abtnCurrentPosition6').removeClass("active");
 	$('#abtnPlaces6').addClass("active");
@@ -3831,12 +3780,12 @@ function showFilterCategories(q){
 		for (g=0; g<placeGr.length; g++){
 			placeHtml += '<option value="'+g+'">'+placeGr[g]+'</option>';
 		}
-		placeHtml += '</select></div>';
+		placeHtml += '</select></div><br>';
 	} else {
 		for (g=0; g<placeEn.length; g++){
 			placeHtml += '<option value="'+g+'">'+placeEn[g]+'</option>';
 		}
-		placeHtml += '</select></div>';
+		placeHtml += '</select></div><br>';
 	}
 	if (hotel == true){
 		hotelHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.HotelStars+'</legend>';
@@ -3847,7 +3796,7 @@ function showFilterCategories(q){
 		hotelHtml += '<option value="3">3 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="4">4 '+MyApp.resources.Stars+'</option>';
 		hotelHtml += '<option value="5">5 '+MyApp.resources.Stars+'</option>';
-		hotelHtml += '</select></div>';
+		hotelHtml += '</select></div><br>';
 	}
 	if (cuisine == true){
 		restaurantHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.RestaurantCuisine+'</legend>';
@@ -3858,16 +3807,16 @@ function showFilterCategories(q){
 			for (g=0; g<cuisineGr.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineGr[g]+'</option>';
 			}
-			restaurantHtml += '</select></div>';
+			restaurantHtml += '</select></div><br>';
 		}
 		else{
 //		    restaurantHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<cuisineEn.length; g++){
 				restaurantHtml += '<option value="'+g+'">'+cuisineEn[g]+'</option>';
 			}
-			restaurantHtml += '</select></div>';
+			restaurantHtml += '</select></div><br>';
 		}
-	}	
+	}
 	if (era == true){
 		eraHtml = '<fieldset data-role="controlgroup"><legend>' + MyApp.resources.ArchaiologicalEra+'</legend>';
 		eraHtml +='<div data-role="fieldcontain"><label for="era_select" id="eraselect"></label><select name="era_select" id="era_select">';
@@ -3876,14 +3825,14 @@ function showFilterCategories(q){
 			for (g=0; g<eraGr.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraGr[g]+'</option>';
 			}
-			eraHtml += '</select></div>';
+			eraHtml += '</select></div><br>';
 		}
 		else{
 //		    eraHtml += '<option value="-1" selected="selected">All</option>';
 			for (g=0; g<eraEn.length; g++){
 				eraHtml += '<option value="'+g+'">'+eraEn[g]+'</option>';
 			}
-			eraHtml += '</select></div>';
+			eraHtml += '</select></div><br>';
 		}
 //		$("#archaiologicalContent").html(eraHtml);
 	}
@@ -3893,14 +3842,14 @@ function showFilterCategories(q){
 		musicHtml += '<option value="-1">'+MyApp.resources.ShowAll+'</option>';
 		if (langstr == 'gr'){
 			for (g=0; g<musicGr.length; g++){
-				musicHtml += '<option value="'+musicGr[g]+'">'+musicGr[g]+'</option>';
+				musicHtml += '<option value="'+g+'">'+musicGr[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
 		else{
 			for (g=0; g<musicEn.length; g++){
 				//console.log(musicEn[g]);
-				musicHtml += '<option value="'+musicEn[g]+'">'+musicEn[g]+'</option>';
+				musicHtml += '<option value="'+g+'">'+musicEn[g]+'</option>';
 			}
 			musicHtml += '</select></div>';
 		}
@@ -3909,18 +3858,18 @@ function showFilterCategories(q){
 	fillhtml += '<p></p>';
 	fillhtml += '<div data-role="fieldcontain" ><label for="searchbox" id="searchbox">'+MyApp.resources.FreeTextSearchLabel+'</label>';
 	fillhtml += '<input type="text" value="" name="search_box" id="search_box" placeholder="" /></div>';
-	fillhtml += '<br>';
-	fillhtml += '<div id="orderplacesHeader"><span>'+MyApp.resources.orderPlacesHeader+'</span></div>';
-	fillhtml += '<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />';
+//	fillhtml += '<br>';
+//	fillhtml += '<div id="orderplacesHeader"><span>'+MyApp.resources.orderPlacesHeader+'</span></div>';
+//	fillhtml += '<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />';
 	fillhtml += '<br>';
 	fillhtml += placeHtml;
-	fillhtml += '<br>';
+//	fillhtml += '<br>';
 	fillhtml += hotelHtml;
-	fillhtml += '<br>';
+//	fillhtml += '<br>';
 	fillhtml += restaurantHtml;
-	fillhtml += '<br>';
+//	fillhtml += '<br>';
 	fillhtml += eraHtml;
-	fillhtml += '<br>';
+//	fillhtml += '<br>';
 	fillhtml += musicHtml;
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "filterPlaces();"><span id="btnSlideBack">'+
 				MyApp.resources.Apply+'</span></a></div>';
@@ -3945,6 +3894,21 @@ function showFilterCategories(q){
 		}
 	}
 	$("#filteredPlaces").html(fillhtml);
+	if ((hotelHtmlId != -2) && (hotel == true)){
+		$("#hotel_select").val(hotelHtmlId);
+	}
+	if ((restaurantHtmlId != -2) && (cuisine == true)){
+//		console.log(restaurantHtmlId);
+		$("#cuisine_select").val(restaurantHtmlId);
+	}
+	if ((eraHtmlId != -2) && (era == true)){
+//		console.log(eraHtmlId);
+		$("#era_select").val(eraHtmlId);
+	}
+	if ((musicHtmlId != -2) && (music == true)){
+//		console.log(musicHtmlId);
+		$("#music_select").val(musicHtmlId);
+	}
 	$('#filterplaces').trigger('create');
 	document.getElementById('btnList3').innerHTML= MyApp.resources.List;
 	document.getElementById('btnMap3').innerHTML= MyApp.resources.Map;
@@ -3983,9 +3947,8 @@ function filterPlaces(x){
 	if (radius != 40){
 		readSlider();
 	}
-	
 	var text = $('#search_box').val();
-	console.log("text: "+ text);
+//	console.log("text: "+ text);
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
 	var newHotelFilter = '';
 	var newCuisineSelect = '';
@@ -3993,10 +3956,11 @@ function filterPlaces(x){
 	var newMusicSelect = '';
 	var newPlaceSelect = '';
 	userFilters.place = $("#place_select").val();
-	console.log("place "+userFilters.place);
+//	console.log("place "+userFilters.place);
 	if (hotel == true){
 		userFilters.hotel = $("#hotel_select").val();
-		console.log(userFilters.hotel);
+		hotelHtmlId = $("#hotel_select").val();
+//		console.log(hotelHtmlId);
 	}
 	if (cuisine == true){
 		if ($("#cuisine_select").val() == -1){
@@ -4005,7 +3969,8 @@ function filterPlaces(x){
 		else{
 			userFilters.cuisine = cuisineGr[$("#cuisine_select").val()];
 		}
-		console.log(userFilters.cuisine);
+		restaurantHtmlId = $("#cuisine_select").val();
+//		console.log(userFilters.cuisine);
 	}
 	if (era == true){
 		if ($("#era_select").val() == -1){
@@ -4014,24 +3979,26 @@ function filterPlaces(x){
 		else{
 			userFilters.era = eraGr[$("#era_select").val()];
 		}
-		console.log(userFilters.era);
+		eraHtmlId = $("#era_select").val();
+//		console.log(userFilters.era);
 	}
 	if (music == true){
 		if ($("#music_select").val() == -1){
 			userFilters.music = $("#music_select").val();
 		}
 		else{
-			userFilters.music = $("#music_select").val();
+			userFilters.music = musicGr[$("#music_select").val()];
 		}
-		console.log(userFilters.music);
+		musicHtmlId = $("#music_select").val();
+//		console.log(userFilters.music);
 	}
 	if (userFilters.hotel == -1){
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
 				var len = results.rows.length;
-				console.log(len);
+//				console.log(len);
 				for (var j=0; j<len; j++){
-					console.log("in Select1 "+j);
+//					console.log("in Select1 "+j);
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -4130,9 +4097,9 @@ function filterPlaces(x){
 			var lat2;
 			for (var j=0; j<len; j++){
 				if (	   ( (results.rows.item(j).ssubcat.indexOf(userFilters.hotel) != -1) 	&& 	(hotel == true)	)
-						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (cuisine == true) )
+						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.cuisine) != -1) && (results.rows.item(j).subcategory == "7_1")	&& (cuisine == true) )
 						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.era) != -1) 		&& 	  (era == true) )
-						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.music) != -1) 	&& 	(music == true) )
+						|| ( (results.rows.item(j).ssubcat.indexOf(userFilters.music) != -1) && (results.rows.item(j).subcategory == "7_5")	&& 	(music == true) )
 					)
 				{
 //					if (userFilters.radius)
@@ -4165,6 +4132,7 @@ function filterPlaces(x){
 					}
 				}
 			}
+//			markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 			if (userFilters.place == -1){
 				if ((text == '') || (text == null)){
 					searchText(text,2);
@@ -4207,9 +4175,9 @@ function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
 }
 
 function searchText(text,k){
-	console.log(text+ " " + k);
+//	console.log(text+ " " + k);
 //	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
-	//console.log("in searchText");
+//	console.log("in searchText");
 	if (currentMarkers != null)
 	{
 		for(var i = 0; i < currentMarkers.length; ++i){
@@ -4219,7 +4187,7 @@ function searchText(text,k){
 	}
 	if (k==1){
 		var string = new RegExp(text, 'i');
-		console.log("112 "+markerName.length);
+//		console.log("112 "+markerName.length);
 		for (var x=0 ; x < markerName.length ; x++){
 			tempmarkerLat.push(markerLat[x]);
 			tempmarkerName.push(markerName[x]);
@@ -4266,7 +4234,7 @@ function searchText(text,k){
 	else if (k==3){
 //		var place = (langstr == 'en') ? placeEn[userFilters.place] : placeGr[userFilters.place];
 		var place = placeGr[userFilters.place];
-		console.log("place "+place);
+//		console.log("place "+place);
 		if ((text == '') || (text == null)){
 			for (var x=0 ; x <tempmarkerName.length ; x++){
 				var descr = tempmarkerDescr[x];
@@ -4277,7 +4245,7 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-				console.log("12 "+tempmarkerPlace[x] + " " + place);
+//				console.log("12 "+tempmarkerPlace[x] + " " + place);
 				if (tempmarkerPlace[x] == place){
 					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
 									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
@@ -4288,7 +4256,7 @@ function searchText(text,k){
 	else if (k==4){
 		var string = new RegExp(text, 'i');
 		var place = placeGr[userFilters.place];
-		console.log("place "+place);
+//		console.log("place "+place);
 		if ((text == '') || (text == null)){
 			for (var x=0 ; x <tempmarkerName.length ; x++){
 				var descr = tempmarkerDescr[x];
@@ -4299,7 +4267,7 @@ function searchText(text,k){
 				}
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
-				console.log("12 "+tempmarkerPlace[x] + " " + place);
+//				console.log("12 "+tempmarkerPlace[x] + " " + place);
 				if ((tempmarkerPlace[x] == place) && ((tempmarkerName[x].search(string) != -1) || (tempmarkerDescr[x].search(string) != -1))){
 					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
 									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
@@ -4395,7 +4363,6 @@ function createPageHeader(x){
 		$(".container7").html(fillHtml2);
 		break;
 	case 8:
-		console.log("in 8");
 		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
 						+MyApp.resources.LanguageSelect+'</label>';
 		fillHtml2 += '<select name="language_select" id="language_select8"><option value="GR">Ελληνικά</option>';

@@ -58,7 +58,8 @@ a {
 	position: relative;
 }
 #itinerarypage {
-	background:transparent url(images/itinerarypagebg.png)  repeat;
+	/*background:transparent url(images/itinerarypagebg.png)  repeat;*/
+	background:transparent url(images/CropKos3.png)  no-repeat fixed;
 	position: relative;
 }
 #placespage {
@@ -774,7 +775,7 @@ small {
 /*-----------------------------------------------------------------------------------*/
 
 #itinerarypageHeader {
-	margin: -20px auto 20px auto;
+	margin: 30px auto 20px auto;
 	min-height: 20px;
 	background-color: #F8F8F8;
 	border: 2px;
@@ -810,15 +811,15 @@ small {
 /*-----------------------------------------------------------------------------------*/
 
 #orderplacesHeader {
-	/*margin: 70px auto 20px auto;
+	margin: 70px auto 20px auto;
 	min-height: 20px;
 	background-color: #F8F8F8;
 	border: 2px;
 	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
-	opacity: 0.9;*/
-	
+	opacity: 0.9;
+	/*
 	margin: 0px auto 0px auto;
-	min-height: 20px;
+	min-height: 20px;*/
 }
 
 /*-----------------------------------------------------------------------------------*/

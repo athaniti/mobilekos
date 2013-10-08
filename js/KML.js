@@ -230,15 +230,36 @@ L.Util.extend(L.KML, {
         if (el.length) {
             name = el[0].childNodes[0].nodeValue;
         }
-        el = place.getElementsByTagName('description');
-        for (i = 0; i < el.length; i++) {
-            for (j = 0; j < el[i].childNodes.length; j++) {
-                descr = descr + el[i].childNodes[j].nodeValue;
-            }
-        }
+        //__
+        for (var j=0 ; j < slideName.length ; j++){
+        	if (name = slideName[j]){
+        		if (langstr == 'en'){
+	        		descr = slideDescr[j];
+        		} else {
+        			descr = slideDescrgr[j];	
+	        	}
+        		if (descr.length > 200){			//slicing the description to the first 200 charactes.
+					descr = descr.slice(0,200);
+					descr += "...";
+					descr += "<br>";
+				}
+        		var ID = slideId[j];
+        		var CAT = slideCat[j];
+        		descr += "<p onclick=getMoreInfo("+ID+","+CAT+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+        		break;
+    		}
+    	}
+        //^^
+//        el = place.getElementsByTagName('description');
+//        for (i = 0; i < el.length; i++) {
+//            for (j = 0; j < el[i].childNodes.length; j++) {
+//                descr = descr + el[i].childNodes[j].nodeValue;
+//            }
+//        }
 
         if (name) {
-            layer.bindPopup("<h2>" + name + "</h2>" + descr);
+        	layer.bindPopup("<b>" + name + "</b>" + descr);
+//          layer.bindPopup("<h2>" + name + "</h2>" + descr);
         }
 
         return layer;

@@ -166,7 +166,7 @@
 	</div>
 </div>
 
-<div  data-role="page" id="itinerarypage" >
+<div data-role="page" id="itinerarypage" >
 	<div class="header"></div>
 	<div class="options">
 		 <div class="container3"></div>
@@ -181,7 +181,7 @@
 	<div class="main_content">
 		<div class="container">
 			
-			<div id="itinerarypageHeader" style="text-align:center; margin-top: 50px;"></div>
+			<div id="itinerarypageHeader" style="text-align:center;"></div>
 	 		<div id="availableFiles"></div>
 			<div class="button blue">
 				<a href="#" id="abtnLoadfromportal" onClick="loadItinerariesfromPortal()"><span  id="btnLoadfromportal"></span></a>
@@ -194,7 +194,7 @@
 	</div>
 </div>
 
-<div  data-role="page" id="eachitinerarypage">
+<div data-role="page" id="eachitinerarypage">
 	<div class="header">
 	</div>
 	<div class="options">
@@ -224,7 +224,7 @@
 	</div>
 </div>
 
-<div  data-role="page" id="itineraryportalpage" >
+<div data-role="page" id="itineraryportalpage" >
 	<div class="header">
 	</div>
 	<div class="options">
@@ -259,7 +259,7 @@
 	</div>
 </div>
 
-<div  data-role="page" id="orderplaces" >
+<div data-role="page" id="orderplaces" >
 	<div class="header">
 	</div>
 	<div class="options"> 
@@ -284,8 +284,14 @@
 			<div class="loading_gif">
 				<div class="loader"><span>Please Wait...</span></div>
 			</div>
-			
+			<div id="orderplacesHeader" style="text-align:center"></div>
 	 		<!-- label for="slider-fill" id="lblslider"></label-->
+			<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />
+			<div class="button blue small">
+				<a href="#" onClick = "readSlider();">
+					<span id="btnRefresh"> </span>
+				</a>
+			</div>
 			<div id="showingInfo" style="text-align:center"></div>
 			<div id="orderedPlaces"></div>
 		</div>
