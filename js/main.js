@@ -127,7 +127,7 @@ function onDeviceReady() {
 		    function(version_name) {		        //do something with version_name
 		        ////console.log(version_name);
 		        currentVersionName = version_name;
-		        checkAppVersion();
+//		        checkAppVersion();
 		    },
 		    function(errorMessage) {		        //do something with errorMessage
 		        ////console.log(errorMessage);
@@ -400,32 +400,6 @@ function error13CB(){
 }
 
 function onBackKeyDown(e) {
-//	console.log("cancelBackButton "+cancelBackButton);
-//	if (cancelBackButton == true){
-//	Do Nothing!
-//	console.log("doing nothing..");
-//	}
-//	else{
-//	if ($.mobile.activePage.is('#firstpage')) {
-//	e.preventDefault();
-//	navigator.app.exitApp();
-//	}
-//	else if ($.mobile.activePage.is('#mainpage')){
-//		fromMainPage = true;
-//		navigator.app.backHistory();
-//		exitApplication();
-//	var fillHtml = '';
-//	fillHtml  = '<div data-role="header" style="text-align:center"><h7>'+MyApp.resources.ExitApp+'</h7></div>';
-//	fillHtml += '<div data-role="content">';
-//	fillHtml += '<a href="#" data-role="button"data-inline="true" data-rel="back" data-theme="a">'+MyApp.resources.Cancel+'</a>'; 
-//	fillHtml += '<a href="#" data-role="button" onclick = "exitApplication();" data-inline="true">'+MyApp.resources.Ok+'</a></div>';
-//	$("#dialogtxt").html(fillHtml);
-//	$.mobile.changePage( "#dialog", { role: "dialog" });
-//	}
-//	else {
-//	navigator.app.backHistory();
-//	}
-//	}
 	if (cancelBackButton == true){
 	}
 	else{
@@ -1330,37 +1304,30 @@ function removeOptionListSelected()
 }
 
 function generateMap()
-{ 
-		map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
+{
+	map = new L.Map('map', {center: new L.LatLng(36.8939,27.2884), zoom: 13, zoomControl: false});
 //		var loadingControl = L.Control.loading({separate: true});
-		var osm = new L.TileLayer('map/{z}/{x}/{y}.png', {unloadInvisibleTiles: true, reuseTiles: true});
-		map.addLayer(osm);
-		map._layersMaxZoom=17;
-		map._layersMinZoom=12;
+	var osm = new L.TileLayer('map/{z}/{x}/{y}.png', {unloadInvisibleTiles: true, reuseTiles: true});
+	map.addLayer(osm);
+	map._layersMaxZoom=16;
+	map._layersMinZoom=12;
 //		document.getElementById('map').style.display = 'block';
-		map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
-		new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+	map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
+	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
 //		map.addControl(clearControl(orderPlaces));
 }
 
 function onClickbtnCurrent()
 {
-//	slideBack(0);
 	$('#abtnCurrentPosition').addClass("active");
 	setTimeout(function(){
 		$('#abtnCurrentPosition').removeClass("active");
 	},800);
-//	$('#abtnPlaces').removeClass("active");
-//	$('#abtnTour').removeClass("active");
-//	$("#abtnFilterTour").hide();
-//	$("#abtnFilterPlaces").hide();
 	if (watchClear == false){
 		watchClear = true;
-//		navigator.geolocation.getCurrentPosition(onSuccess, onError,{frequency:5000,maximumAge: 0, enableHighAccuracy:true});
-//		navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout: 20000, enableHighAccuracy:true});
 		var options = { timeout: 20000, enableHighAccuracy: true };
 		watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-		switchToMainPage();
+		switchToMainPage3();
 	}
 	else{
 		watchClear = false;
@@ -1490,6 +1457,7 @@ function onSuccess(position)
 		if ((currentLat < 36.65) || (currentLat > 36.91) || (currentLong < 26.90) || (currentLong > 27.35)){
 			alert(MyApp.resources.AwayFromKos);
 			clearWatch();
+			$( ".loading_gif" ).css( "display", "none" );
 		}
 		else{
 			map.panTo([currentLat,currentLong ]);
@@ -1504,6 +1472,7 @@ function onSuccess(position)
 			.openPopup();
 			map.addLayer(marker);
 			marker1= marker;
+			$( ".loading_gif" ).css( "display", "none" );
 		}
 	}
 }
@@ -1512,6 +1481,7 @@ function onError(error)
 {
 //	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 	alert(MyApp.resources.NoLocation);
+	$( ".loading_gif" ).css( "display", "none" );
 }
 
 function addGroupMarker(x, y, name, descr, categ, place, sscat, poiID, index)
@@ -1713,35 +1683,20 @@ function firstSwitchToPlacesPage()
 function setLabelsForMainPage()
 {
 	setHeaderLabels();
-//	document.getElementById('btnSettings').innerHTML= MyApp.resources.Settings; 
-//	document.getElementById('btnSBack').innerHTML=  MyApp.resources.Back;  
 	document.getElementById('btnPBack').innerHTML= MyApp.resources.Apply;
-//	document.getElementById('btnPBack2').innerHTML= MyApp.resources.Apply;
-//	document.getElementById('btnShowNone').innerHTML= MyApp.resources.ShowNone;
 	document.getElementById('btnList').innerHTML= MyApp.resources.List;
 	document.getElementById('btnMap').innerHTML= MyApp.resources.Map;
 	document.getElementById('btnFilter').innerHTML= MyApp.resources.Filter;
 	document.getElementById('btnLocalBack').innerHTML= MyApp.resources.Back;
 	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;
-//	document.getElementById('settingsheading').innerHTML= MyApp.resources.SettingsHeading;   
-//	document.getElementById('lbllanguageselect').innerHTML= MyApp.resources.LanguageSelect;
-//	document.getElementById('lblslider').innerHTML= MyApp.resources.Slider;
 	document.getElementById('btnRefresh').innerHTML= MyApp.resources.Refresh;
-//	document.getElementById('lblemailaccount').innerHTML= MyApp.resources.EmailAccount;
 	document.getElementById('btnFilterTour').innerHTML= MyApp.resources.FilterTour;    
 	document.getElementById('btnFilterPlaces').innerHTML= MyApp.resources.FilterPlaces;
-//	document.getElementById('btnSlideBack').innerHTML= MyApp.resources.Close;
 	document.getElementById('btnLoadfromportal').innerHTML= MyApp.resources.LoadFromPortal;
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
-//	document.getElementById('btnLoadSelected').innerHTML= MyApp.resources.LoadSelected;
 	document.getElementById('btnEachItineraryBack').innerHTML= MyApp.resources.Back;
-//	document.getElementById('btnHide').innerHTML= MyApp.resources.Hide;
-//	document.getElementById('itinerarypageheader').innerHTML= MyApp.resources.LoadAvailableTour;  
-//	document.getElementById('itineraryportalpageheader').innerHTML= MyApp.resources.LoadPortalTour;  
 	document.getElementById('btnClearAll').innerHTML= MyApp.resources.ClearAll;
 	document.getElementById('btnLoad').innerHTML= MyApp.resources.Load;
-//	document.getElementById('btnSaveChanges').innerHTML= MyApp.resources.SaveChanges;
-//	document.getElementById('btnShowPlacesPage').innerHTML= MyApp.resources.ShowPlaces;
 }
 
 function setHeaderLabels(){
@@ -1750,10 +1705,6 @@ function setHeaderLabels(){
 	document.getElementById('btnTour').innerHTML= MyApp.resources.Tour;
 //	document.getElementById('btnExit').innerHTML= MyApp.resources.Exit;
 }
-
-//function setSettingsLabels(){
-//	
-//}
 
 function backToMainPage()
 {
@@ -1900,32 +1851,12 @@ function reloadItinerariesPage(){
 
 function switchToMainPage(email,x,y)
 {
-	/*
-	$( ".loading_gif" ).css( "display", "none" );
-					createPageHeader(1);
-					$.mobile.changePage($('#mainpage'), 'pop');
-					$('#abtnPlaces').addClass("active");
-				    $('#abtnList').removeClass("active");
-				    $('#abtnMap').addClass("active");
-				    $('#abtnFilter').removeClass("active");
-					$("#abtnFilterTour").hide();
-					$("#abtnFilterPlaces").show();
-					setTimeout(function(){
-						map.invalidateSize();
-					},2500);
-					setLabelsForMainPage();
-					$('.options').css({'display':'none'});
-	*/
-//	$.mobile.changePage($('#mainpage'), 'pop');
 	setLabelsForMainPage();
 	$( ".loading_gif" ).css( "display", "none" );
 	createPageHeader(1);
 	$('.options').css({'display':'none'});
 	$.mobile.changePage($('#mainpage'), 'pop');
 	$('#abtnTour').addClass("active");
-//	$('#abtnList').removeClass("active");
-//    $('#abtnMap').removeClass("active");
-//    $('#abtnFilter').removeClass("active");
 	$('#abtnPlaces').removeClass("active");
 	$("#abtnFilterTour").show();
 	$('#abtnCurrentPosition').removeClass("active");
@@ -1944,7 +1875,36 @@ function switchToMainPage(email,x,y)
 	    onClickSettings();
 	    fromSettings = false;
 	}
-//	onClickbtnCurrent();
+}
+
+function switchToMainPage3(email,x,y)
+{
+	setLabelsForMainPage();
+	createPageHeader(1);
+	$('.options').css({'display':'none'});
+	$.mobile.changePage($('#mainpage'), 'pop');
+	$('#abtnTour').removeClass("active");
+	$('#abtnPlaces').addClass("active");
+	$("#abtnFilterTour").hide();
+	$('#abtnCurrentPosition').removeClass("active");
+	$("#abtnFilterPlaces").show();
+    $('#abtnList').removeClass("active");
+    $('#abtnMap').addClass("active");
+    $('#abtnFilter').removeClass("active");
+//    $( ".loading_gif" ).css( "display", "none" );
+	setTimeout(function(){
+		$('#map').css('height',screenHeight-125);
+		map.invalidateSize();
+	},2500);
+	email = $('#emailaccountchange').val();
+	if ( email == null || email == ''){
+		$('#emailaccountchange').val(currentEmail);
+	}
+	setLabelsForMainPage();
+	if (fromSettings == true){
+	    onClickSettings();
+	    fromSettings = false;
+	}
 }
 
 function switchToMainPage2(){
@@ -1997,20 +1957,15 @@ function onClickbtnPlaces()
 function onClickbtnPlaces2()
 {
 	clearWatch();
-	//console.log("currentMarkers.length "+currentMarkers.length);
 	if (currentMarkers != null)// && (firstTime == false))
 	{
-		//console.log("in here!");
 		for(var i = 0; i < currentMarkers.length; ++i){
 			map.addLayer(currentMarkers[i]);
-			//console.log("in here2!");
-			//console.log("Current marker "+currentMarkers[i]);
 		}
 	}
 	if (track != null)
 	{
 		map.removeLayer(track);
-//		map.removeControl(control);
 	}
 	createPageHeader(1);
 	$.mobile.changePage($('#mainpage'), 'pop');
@@ -2029,16 +1984,6 @@ function onClickbtnPlaces2()
 	setLabelsForMainPage();
 	$( ".loading_gif" ).css( "display", "none" );
 	$('.options').css({'display':'none'});
-	/*setLabelsForMainPage();
-	$.mobile.changePage($('#mainpage'), 'pop');
-	setTimeout(function(){
-		map.invalidateSize();
-	},2000);
-	$("#abtnFilterPlaces").show();
-    $("#abtnFilterTour").hide();
-    $('#abtnPlaces').addClass("active");
-    $('#abtnTour').removeClass("active");
-    $('#abtnCurrentPosition').removeClass("active");*/
 }
 
 function onClickbtnTour()
@@ -2077,8 +2022,7 @@ function submitSelectedPlaces()
 	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 //	subsubGr = [];
 	hotel = false; cuisine = false; music = false; era = false;
-//	document.getElementById("loading_gif").style.display = "block";
-//	$( ".loading_gif" ).css( "display", "block" );
+	$( ".loading_gif" ).css( "display", "block" );
 	cancelBackButton = false;
 	var descr;
 	if (currentMarkers != null)
@@ -2474,98 +2418,10 @@ function popItinerariesDb(xmlDoc){
 	loadItineraryXml18();
 }
 
-//function popItiDayDb(){
-//	var itid;
-//	var kml;
-//	var duration;
-//
-//	$(xmlDoc).find("Route").each(function(){
-//		duration = $(xmlDoc).find("Duration").text();
-//		kml = $(xmlDoc).find("Route").attr("Kml");
-//		itid = $(xmlDoc).find("Itinerary").attr("id");
-//	});
-//}
-
 function error12CB(){
 	//console.log("error12CB");
 }
-/*
-function loadItineraryXml(x){
-	if (x == 2){
-//		alert("xml/itinerary2_2.xml");
-		xmlpathcat = 'xml/itinerary2_2.xml';
-	}
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc4 = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	popItinerariesDb(xmlDoc4);
-}
 
-function loadItineraryXml2(){
-//	alert("xml/itinerary3_3.xml");
-	xmlpathcat = 'xml/itinerary_12.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc5 = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	popItinerariesDb2(xmlDoc5);
-}
-
-function loadItineraryXml18(){
-//	alert("xml/itinerary3_3.xml");
-	xmlpathcat = 'xml/itinerary_26.xml';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", xmlpathcat, false);
-	xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-	xmlhttp.send("");
-	xmlDoc4 = xmlhttp.responseXML;
-	if ((xmlhttp.status != 200) && (xmlhttp.status != 0)){
-		alert("Error loading Xml file4: "+ xmlhttp.status);
-	}
-	//popItinerariesDb2(xmlDoc4);
-} 
-
-function popItinerariesDb2(xmlDoc5){
-	var title;
-	var user;
-	var id;
-	var pointCode ;
-	var pointName ;
-	var duration ;
-	var day ;
-	var coords;
-	db.transaction(function(tx){
-		title = $(xmlDoc5).find("It_Title").text();
-		user = $(xmlDoc5).find("User").text();
-		id = $(xmlDoc5).find("Itinerary").attr("id");
-		$(xmlDoc5).find("Point").each(function(){
-			day =   $(this).parent().parent().attr("Kml");
-			pointCode = $(this).attr("Code");
-			pointName = $(this).find("Title").text();
-			coords = $(this).find("Coordinates").text();
-			//console.log("Title: "+pointName);
-			//console.log("1 "+duration);
-			duration = $(this).parent().parent().text().trim().slice(0,10);
-			//console.log("2 "+duration);
-//			alert(duration);
-			itActive = 0;
-			itCompleted = 0;
-//			alert("id: "+id+" title: "+title+" user: "+user+ " days: "+day +" "+pointCode+" "+pointName+" "+duration);
-			tx.executeSql('INSERT INTO ITINERARIES(id, title, user, day, pointcode, pointname, coordinates, duration, isActive, completed) VALUES (?,?,?,?,?,?,?,?,?,?)'
-					,[id,title,user,day,pointCode,pointName,coords,duration,itActive,itCompleted], successCB, error12CB);
-		});
-	});
-}
-*/
 function checkItDb(){
 	db.transaction(function (tx) {
 		tx.executeSql('SELECT * FROM ITINERARIES', [], function (tx, results) {	
@@ -3353,10 +3209,6 @@ function slideen(name, descr, web, add, place, phone, email, img)
 	+phone+'<br>'+'<b>email: </b>' +email+ '<br>';
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "slideBack();"><span id="btnSlideBack">'+
 	MyApp.resources.Hide+'</span></a></div>';
-//	$("#inner").html(fillhtml);
-//	console.log("inSlide "+img);
-//	//console.log("inSlide "+fillhtml);
-//	$( ".inner_wrap" ).css( "display", "block" );
 	$("#detailscontent").html(fillhtml);
 	$.mobile.changePage($('#details'));
 }
@@ -3588,28 +3440,6 @@ function orderPlaces(i)
 function readSlider(){
 	var options = { timeout: 20000, enableHighAccuracy: true };
 	watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-//	reOrdered = true;
-//	$( ".loading_gif" ).css( "display", "block" );
-//	var fillhtml = '';
-//	document.getElementById('orderedPlaces').innerHTML='';
-//	document.getElementById('showingInfo').innerHTML='';
-//	tempmarkerCat = [],	tempmarkerName = [], tempmarkerDescr = [], tempmarkerLong =[], tempmarkerLat = [];
-//	//console.log("inReadSlider");
-//	var radius = $("#slider-fill").val();
-//	//console.log("adadsa "+$("#slider-fill").val());
-//	for (var i=0; i<markerName.length; i++){
-//		reOrder(radius, markerLat[i], markerLong[i], markerCat[i], markerName[i], markerDescr[i] );
-//	}
-//	for (var j=0; j<tempmarkerName.length; j++){
-//		fillhtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "" rel="external" id="'+j+'" >'+tempmarkerName[j]+'</a>';
-//		if (j == 30){
-//			break;
-//		}
-//	}
-//	document.getElementById('showingInfo').innerHTML= MyApp.resources.Showing + j + MyApp.resources.From + tempmarkerName.length;
-//	$( ".loading_gif" ).css( "display", "none" );
-//	$("#orderedPlaces").html(fillhtml);
-//	$('#orderedPlaces').trigger('create');
 }
 
 function showOrderedPlacesOnMap(){
@@ -3852,7 +3682,7 @@ function showFilterCategories(q){
 	fillhtml += musicHtml;
 	fillhtml += '<div class="button blue small"><a href="#" onClick = "filterPlaces();"><span id="btnSlideBack">'+
 				MyApp.resources.Apply+'</span></a></div>';
-	fillhtml += '<div class="button blue small"><a href="#" onClick = "cancel();"><span id="btnSlideBack">'+
+	fillhtml += '<div class="button blue small"><a href="#" onClick = "cancel();"><span id="onClickbtnPlaces2()">'+
 				MyApp.resources.Cancel+'</span></a></div>';
 	createPageHeader(7);
 	$.mobile.changePage($('#filterplaces'), 'pop');
@@ -4216,11 +4046,8 @@ function searchText(text,k){
 		}
 	}
 	else if (k==3){
-//		var place = (langstr == 'en') ? placeEn[userFilters.place] : placeGr[userFilters.place];
 		var place = placeGr[userFilters.place];
-//		console.log("place "+place);
-//		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
-//		if ((text == '') || (text == null)){
+		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
 		console.log(tempmarkerName.length);
 			for (var x=0 ; x <tempmarkerName.length ; x++){
 				var descr = tempmarkerDescr[x];
@@ -4229,7 +4056,7 @@ function searchText(text,k){
 					descr += "...";
 					descr += "<br>";
 				}
-//				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
+				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 //				console.log("12 "+tempmarkerPlace[x] + " " + place);
 				console.log(tempmarkerPlace[x] + " "+ place);
