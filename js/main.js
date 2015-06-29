@@ -5,15 +5,18 @@ var screenHeight;
 //var fulldescription='';
 var dbExistis = false;
 var screenWidth;
+var offersUrl;
 var globalItId;
-var globalI;
+var globalI, globalOffersIndex;
+var offersTitle = [], offersTitleEn = [], offersDescr = [], offersDescrEn = [], offersFrom = [], offersTill = [], offersPlaceId=[];
+var offerCat;
 var currentTimestamp = [];
 var hotelHtmlId = -2, restaurantHtmlId = -2, eraHtmlId = -2, musicHtmlId = -2, placeHtmlId = -2;
 var placeHtml='';
 var startPoint;
 var currentLat;
 var currentLong;
-var deviceOSVersion;
+//var deviceOSVersion;
 var updateAppUrl;
 var panToLat = 0;
 var panToLong = 0;
@@ -28,7 +31,7 @@ var tempmarkerCat = [], tempmarkerName = [], tempmarkerDescr = [], tempmarkerLon
 	tempmarkerPoiid = [], tempmarkerPlace = [], tempmarkerSScat = [];
 var subsubEn = [], subsubGr = [];
 var reOrdered = false;
-var currentVersionName;
+//var currentVersionName;
 //var testname, testdescr, testwebsite, testaddress,testplace,testphone,testemail;
 var platformName;
 var slideId = [], slideCat = [],slideName = [], slideDescr= [], slideWebsite= [], slideAddress= [], 
@@ -67,14 +70,13 @@ var itinerariesId =[];
 var itActive;
 var itCompleted;
 var fromMainPage = false;
-//var nameCat= [];
-//var categId = [];
 var userFilters = new filters("","","","","","");
 var newtimestamp = false;
 var fromSettings = false;
 //var enableTourButton = false;
 var timestampa, timestampb, timestampc, timestampd;
 var track, control, info, tourXmlName, dd, sname, fillhtml, catId;
+var offersCategId;
 var LeafIcon = L.Icon.extend({
     options: {
 //        shadowUrl: 'marker-shadow.png',
@@ -115,14 +117,15 @@ function onDeviceReady() {
 	document.addEventListener("online", function() {isOffline = false;}, false);
 	$.mobile.defaultPageTransition = 'none';
 	SetElementHeight();
-	platformName = device.platform;
-	deviceOSVersion = device.version;
-	deviceOSVersion = parseInt(deviceOSVersion);
+//	platformName = device.platform;
+//	deviceOSVersion = device.version;
+//	deviceOSVersion = parseInt(deviceOSVersion);
 	//console.log("device.version "+device.version);
 //	alert("platformName "+platformName);
 	if(navigator.network && navigator.network.connection.type != Connection.NONE){
 		isOffline = false;
 	}
+	/*
 	window.plugins.version.getVersionName(
 		    function(version_name) {		        //do something with version_name
 		        ////console.log(version_name);
@@ -132,7 +135,7 @@ function onDeviceReady() {
 		    function(errorMessage) {		        //do something with errorMessage
 		        ////console.log(errorMessage);
 		    }
-		);
+		);*/
 	setTimeout(function(){
 		checkLanguageSettings();
 	},1500);
@@ -218,9 +221,7 @@ function populateDB(tx)
 {
 	//console.log("IN POPULATE DB");
 	db.transaction(function (tx) {
-		////console.log("populateDB(tx)");
 		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
-//		tx.executeSql('DROP TABLE IF EXISTS POINTS');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
 		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
 		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
@@ -228,14 +229,12 @@ function populateDB(tx)
 		tx.executeSql('DROP TABLE IF EXISTS POIEN');
 		tx.executeSql('DROP TABLE IF EXISTS POIGR');
 		tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
-//		tx.executeSql('DROP TABLE IF EXISTS XMLDB');
-//		tx.executeSql('DROP TABLE IF EXISTS ROUTES');
 		tx.executeSql('DROP TABLE IF EXISTS TEMP');
 		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
+		tx.executeSql('DROP TABLE IF EXISTS OFFERSEN');
+		tx.executeSql('DROP TABLE IF EXISTS OFFERSGR');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, coordinates, duration, isActive, completed)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
-//		tx.executeSql('CREATE TABLE IF NOT EXISTS XMLDB (id, xmlstring)');
-//		tx.executeSql('CREATE TABLE IF NOT EXISTS POINTS (id, Id_Portal, routeId, isActive, visited, long, lat)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id, name, catid)');
@@ -243,8 +242,8 @@ function populateDB(tx)
 		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
 		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
-//		tx.executeSql('CREATE TABLE IF NOT EXISTS ROUTES (id, title, itineraryId, isActive, completed)');
-		////console.log("populateDB()2");
+		tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSEN (id unique, title, category, description, from, till, )');
+		tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSGR (id unique, title, category, description, from, till, )');
 		populateDatabases();
 	});
 }
@@ -325,7 +324,8 @@ function createPoiArraysEn(){
 //				console.log(str); 
 				slideImage.push(str);
 //				subsubEn.push(results.rows.item(p).ssubcat);
-//				//console.log("09 "+results.rows.item(p).ssubcat);
+//				console.log("09 "+results.rows.item(p).category);
+//				console.log("010 "+results.rows.item(p).siteid);
 			}
 		});
 	});
@@ -413,7 +413,8 @@ function onBackKeyDown(e) {
 			exitApplication();
 		}
 		else {
-			navigator.app.backHistory();
+//			navigator.app.backHistory();
+			window.history.back();
 		}
 	}
 }
@@ -433,6 +434,7 @@ function sync(){
 	downloadXmlFiles();
 }
 
+/*
 function checkAppVersion(){
 	$.ajax({
 		url: baseapiurl+'/mobileversion',
@@ -480,6 +482,7 @@ function checkAppVersion(){
 		}
 	});
 }
+*/
 
 function udpateApp(){
 	var r=confirm(MyApp.resources.UpdateApp);
@@ -507,12 +510,11 @@ function udpateApp(){
 }
 
 function error0CB(){
-//	alert("error0CB");
 	populateDB();
 }
 
 function success0CB(){
-	////console.log("success0CB");
+	//console.log("success0CB");
 }
 
 function checkItinerariesDb(){
@@ -593,15 +595,6 @@ function popSubCategoriesEnDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc.getElementsByTagName("Category")[i].getAttribute('id');
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-//			if (catId == 7){
-//				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
-//						['7_1','Villages',catId], success4CB, error4CB);
-//			}
-////			else if (catId == 9){
-////				tx.executeSql('INSERT INTO SUBCATEGORIESEN (id, name, catid) VALUES (?,?,?)',
-////						['0x010020858B5F00431840A5FF9BA2B0E92EAE','General Information',catId], success4CB, error4CB);
-////			}
-//			else{
 				for (var j=0; j<sub.length; j++){
 					subName = sub[j].getElementsByTagName("Name")[0].textContent;
 					subId = sub[j].getAttribute('id');
@@ -652,15 +645,6 @@ function popSubCategoriesGrDb(){
 		for (var i=0; i< cat.length; i++){
 			catId = xmlDoc1.getElementsByTagName("Category")[i].getAttribute('id');
 			sub = cat[i].getElementsByTagName("Subcategories")[0].getElementsByTagName("Subcategory");
-//			if (catId == 7){
-//				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['7_1','Ξ§Ο‰Ο�ΞΉΞ¬',catId], success4CB, error4CB);
-//			}
-//			else if (catId == 9){
-//				tx.executeSql('INSERT INTO SUBCATEGORIESGR (id, name, catid) VALUES (?,?,?)',
-//						['0x010020858B5F00431840A5FF9BA2B0E92EAE','Ξ“ΞµΞ½ΞΉΞΊΞ­Ο‚ Ο€Ξ»Ξ·Ο�ΞΏΟ†ΞΏΟ�Ξ―ΞµΟ‚',catId], success4CB, error4CB);
-//			}
-//			else{
 				for (var j=0; j<sub.length; j++){
 					subName = sub[j].getElementsByTagName("Name")[0].textContent;
 //					alert(subName);
@@ -715,7 +699,6 @@ function popPoiEnDb(){
 			tx.executeSql('INSERT INTO POIEN (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub2, img], successCB, error2CB);
 		}
-//		alert("5: "+poiName);
 	});	
 }
 
@@ -765,7 +748,6 @@ function popPoiGrDb(){
 			tx.executeSql('INSERT INTO POIGR (siteid,name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 					,[poiId, poiName, poiDescr, poiCat, subCatId, poiLong, poiLat, web, address, place, phone, email, ssub, img], sccssCB, error2CB);
 		}
-//		alert("6: "+poiName);
 		createCatArraysEn();
 		createSubCatArraysEn();
 		createPoiArraysEn();
@@ -781,7 +763,6 @@ function error2CB(){
 }
 
 function popTimestampDb(){
-	//console.log("in popTimestampDb");
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[1,timestampa],successCB,error7CB);
 		tx.executeSql('INSERT INTO TIMESTAMP (id, timestamp) VALUES (?,?)',[2,timestampb],successCB,error7CB);
@@ -1033,7 +1014,10 @@ function json2xml(o, tab){
 	}, xml="";
 	for (var m in o){
 		xml = toXml(o[m], m, "");
-		createXmlString(xml);
+//		createXmlString(xml);
+//		alert("222 "+xml);
+		showOffersResults(xml);
+		
 	}
 //	return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 	var tab1 = tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
@@ -1634,6 +1618,8 @@ function switchToHomePage(){
 	innerhtml += '<div style="font-weight:bold;">'+MyApp.resources.Routes+'</div><br><br>';
 	//innerhtml += '<img src="images/Location2.png" class="fpicon" onClick="showPositionOnMap();">';
 	//innerhtml += '<h4>'+MyApp.resources.CurrentPosition+'</h4>';
+	innerhtml += '<img src="images/price-tag-euro.png" class="fpicon" onClick="switchToOfferPage();"><br>';
+	innerhtml += '<div style="font-weight:bold;">'+MyApp.resources.OffersPageHeader+'</div><br><br>';
 	$("#explore").html(innerhtml);
 	$('#homepage').trigger("create");
 	$.mobile.changePage($('#homepage'), 'pop');
@@ -2340,13 +2326,13 @@ function loadItinerariesfromPortal()
 	document.getElementById('emailaccountitinerary').placeholder= MyApp.resources.EmailAccountPlaceholder;
 	customHeader(5);
 	checkForLanguage();
-    $('#abtnTour5').addClass("active");
-    $('#abtnCurrentPosition5').removeClass("active");
-    $('#abtnPlaces5').removeClass("active");
+	$('#abtnTour5').addClass("active");
+	$('#abtnCurrentPosition5').removeClass("active");
+	$('#abtnPlaces5').removeClass("active");
 //    $('#abtnExit5').removeClass("active");
-    $('#itineraryportalpage').trigger('create');
+	$('#itineraryportalpage').trigger('create');
 	$( ".loading_gif" ).css( "display", "none" );
-    $('.options').css({'display':'none'});
+	$('.options').css({'display':'none'});
 	document.getElementById('btnLoadItinerary').innerHTML= MyApp.resources.LoadItinerary;
 	document.getElementById('btnPortalBack').innerHTML= MyApp.resources.Back;
 	var email = $('#emailaccountchange5').val();
@@ -2530,7 +2516,7 @@ function loadFromPortal(email)
 				{
 					$(jQuery.parseJSON(JSON.stringify(data))).each(function() { 
 				         var ID = this.ItineraryId;
-				         ////console.log("ID "+ID);
+				         //console.log("ID "+ID);
 				         itinerariesId.push(ID);
 					});
 					createXmlDb();
@@ -3254,6 +3240,9 @@ function slideBack()
 		console.log("in SlideBack2");
 //		window.history.back();
 		history.go(-1);
+		setTimeout(function(){
+			map.invalidateSize();
+		},1000);
 	}
 }
 //}
@@ -3755,11 +3744,7 @@ function filterPlaces(x){
 		}
 //		currentMarkers = [];
 	}
-	// radius filter
 	var radius = $("#slider-fill").val();
-//	if (radius != 40){
-//		readSlider();
-//	}
 	var text = $('#search_box').val();
 //	console.log("text: "+ text);
 	var poiDB = (langstr == 'en') ? "POIEN" : "POIGR";
@@ -3795,7 +3780,6 @@ function filterPlaces(x){
 			userFilters.era = eraGr[$("#era_select").val()];
 		}
 		eraHtmlId = $("#era_select").val();
-//		console.log(userFilters.era);
 	}
 	if (music == true){
 		if ($("#music_select").val() == -1){
@@ -3805,15 +3789,12 @@ function filterPlaces(x){
 			userFilters.music = musicGr[$("#music_select").val()];
 		}
 		musicHtmlId = $("#music_select").val();
-//		console.log(userFilters.music);
 	}
 	if (userFilters.hotel == -1){
 		db.transaction(function (tx) {
 			tx.executeSql('SELECT * FROM '+poiDB+' WHERE subcategory=?', ["3_1"], function (tx, results) {
 				var len = results.rows.length;
-//				console.log(len);
 				for (var j=0; j<len; j++){
-//					console.log("in Select1 "+j);
 					var poiid = results.rows.item(j).siteid;
 					var poicat = results.rows.item(j).category;
 					var x = results.rows.item(j).lat;
@@ -3909,9 +3890,8 @@ function filterPlaces(x){
 	for (var f=0; f< markerName.length; f++){
 		if ( markerSSubCat[f] == "none" )
 		{
-			console.log(markerPlace[f]);
 			addTempMarker(markerLat[f], markerLong[f], markerName[f], markerDescr[f], markerCat[f], 
-					markerPoiId[f], markerPlace[f], markerSSubCat[f]);
+							markerPoiId[f], markerPlace[f], markerSSubCat[f]);
 		}
 	}
 	db.transaction(function (tx) {
@@ -3938,8 +3918,6 @@ function filterPlaces(x){
 					}
 					lat2 = results.rows.item(j).lat;
 					if ( lat2.indexOf("\n") == -1){
-//						addTempMarker(results.rows.item(j).lat , results.rows.item(j).long, results.rows.item(j).name, 
-//								results.rows.item(j).descr, results.rows.item(j).category, poiid, poicat , x, y);
 						addTempMarker(x, y, results.rows.item(j).name, results.rows.item(j).descr, poicat, poiid, results.rows.item(j).place, results.rows.item(j).ssubcat);
 					}
 				}
@@ -3988,9 +3966,6 @@ function addTempMarker(x, y, name, descr, categ, poiid, place, sscat){
 }
 
 function searchText(text,k){
-//	console.log(text+ " " + k);
-//	markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
-//	console.log("in searchText");
 	if (currentMarkers != null)
 	{
 		for(var i = 0; i < currentMarkers.length; ++i){
@@ -4048,7 +4023,7 @@ function searchText(text,k){
 	else if (k==3){
 		var place = placeGr[userFilters.place];
 		markerCat = [], markerName = [], markerDescr = [], markerLong =[], markerLat = [], markerSSubCat = [], markerPlace = [], markerPoiId=[];
-		console.log(tempmarkerName.length);
+//		console.log(tempmarkerName.length);
 			for (var x=0 ; x <tempmarkerName.length ; x++){
 				var descr = tempmarkerDescr[x];
 				if (descr.length > 200){			//slicing the description to the first 200 charactes.
@@ -4059,9 +4034,8 @@ function searchText(text,k){
 				descr += "<p onclick=getMoreInfo("+tempmarkerPoiid[x]+","+tempmarkerCat[x]+")><i><u>"+MyApp.resources.MoreInfo+"</i></u></p>";
 				descr += "<p onclick=getDirections("+tempmarkerLat[x]+","+tempmarkerLong[x]+")><i><u>"+MyApp.resources.GetDirections+"</i></u></p>";
 //				console.log("12 "+tempmarkerPlace[x] + " " + place);
-				console.log(tempmarkerPlace[x] + " "+ place);
+//				console.log(tempmarkerPlace[x] + " "+ place);
 				if (tempmarkerPlace[x] == place){
-					console.log("1");
 					addGroupMarker(tempmarkerLat[x] , tempmarkerLong[x], tempmarkerName[x], descr, 
 									tempmarkerCat[x], tempmarkerPlace[x], tempmarkerSScat[x], tempmarkerPoiid[x], 1);
 				}
@@ -4097,6 +4071,376 @@ function searchText(text,k){
 			}
 		}
 	}
+}
+
+function switchToOfferPage(){
+	console.log("in switchToOfferPage");
+	if (isOffline){
+		alert(MyApp.resources.OfflineOffers);
+	}
+	else{
+		var fillHeader= '<img src="images/info_icon.png" style="float:left;"><span>'+MyApp.resources.OffersPageHeader+'</span>';
+		var len = offersEn.length;
+		fillhtml = '<ul class="offersUl">';
+		if (langstr == 'en'){
+			for (var k=0; k < len ; k++){
+				fillhtml += '<li class="offersCategory2" id="'+k+'" onClick="switchToOffersCategoryPage('+k+');"><div>'+offersEn[k]+'</div></li>';
+			}
+		}
+		else{
+			for (var k=0; k < len ; k++){
+				fillhtml += '<li class="offersCategory2" id="'+k+'" onClick="switchToOffersCategoryPage('+k+');"><div>'+offersGr[k]+'</div></li>';
+			}
+		}
+		fillhtml += "</ul>";
+		createPageHeader(9);
+		$("#offersContent").html(fillhtml);
+		$('#offerspage').trigger("create");
+		$("#offersPageHeader").html(fillHeader);
+		$( ".loading_gif" ).css( "display", "none" );
+		$.mobile.changePage($('#offerspage'), 'pop');
+		customHeader(9);
+		$('#abtnTour9').removeClass("active");
+		$('#abtnPlaces9').removeClass("active");
+		$('#abtnCurrentPosition9').removeClass("active");
+		$('.options').css({'display':'none'});
+		setLabelsForMainPage();
+		var email = $('#emailaccountchange9').val();
+		if ( email == null || email == ""){
+			var cm = "";
+			if (currentEmail!=undefined) cm=currentEmail;
+			$('#emailaccountchange9').val(cm);
+		}
+	}
+}
+
+function reloadOffersPage(){
+	var newLanguage = $("#language_select9").val();
+	var newEmail =  $("#emailaccountchange9").val();
+	var newlangstr = $("#language_select9").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	console.log(langstr);
+//	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}
+	var email = $('#emailaccountchange9').val();
+	if ( email != null && email != ''){
+		$('#emailaccountchange9').val(currentEmail);
+	}
+	saveEmail(newEmail);
+	checkForLanguage();
+	onClickSettings();
+	switchToOfferPage();
+}
+
+function switchToOffersCategoryPage(k){
+//	console.log("in Test "+k+" "+catNameEn[k]+" "+catNameGr[k]);
+	$( ".loading_gif" ).css( "display", "block" );
+	offerCat = k;
+	offersUrl = '';
+	offersTitle = [], offersTitleEn = [], offersDescr = [], offersDescrEn = [], offersFrom = [], offersTill = [], offersPlaceId=[];
+	switch (offerCat)
+	{
+	case 0:
+		offersUrl += "SeaId%20gt%200";
+		globalOffersIndex = 0;
+		offersCategId = "SeaId";
+		break;
+	case 1:
+		offersUrl += "AccommodationId%20gt%200";
+		globalOffersIndex = 1;
+		offersCategId = "AccommodationId";
+		break;
+	case 2:
+		offersUrl += "TransportId%20gt%200";
+		globalOffersIndex = 2;
+		offersCategId = "TransportId";
+		break;
+	case 3:
+		offersUrl += "SightsId%20gt%200";
+		globalOffersIndex = 3;
+		offersCategId = "SightsId";
+		break;
+	case 4:
+		offersUrl += "FoodId%20gt%200";
+		globalOffersIndex = 4;
+		offersCategId = "FoodId";
+		break;
+	case 5:
+		offersUrl += "ActivitiesId%20gt%200";
+		globalOffersIndex = 5;
+		offersCategId = "ActivitiesId";
+		break;
+	case 6:
+		offersUrl += "ShoppingId%20gt%200";
+		globalOffersIndex = 6;
+		offersCategId = "ShoppingId";
+		break;
+	}
+	var fillHeader, fillhtml;
+	if (isOffline){
+		alert(MyApp.resources.OfflineOffers);
+	}
+	else{
+		if (langstr == 'en'){
+			fillHeader= '<h3>'+MyApp.resources.OffersCategoryPageHeader+catNameEn[k]+'</h3>';	
+		}
+		else{
+			fillHeader= '<h3>'+MyApp.resources.OffersCategoryPageHeader+catNameGr[k]+'</h3>';
+		}
+//		offersUrl = "_vti_bin/listdata.svc/%CE%A0%CF%81%CE%BF%CF%83%CF%86%CE%BF%CF%81%CE%AD%CF%82?$filter=AccommodationId%20gt%200";
+		var username='sofia', pass='password!';
+		var baseOfferUrl = 'http://kos.gr/_vti_bin/listdata.svc/%CE%A0%CF%81%CE%BF%CF%83%CF%86%CE%BF%CF%81%CE%AD%CF%82?$filter='+offersUrl;
+		$.ajax({
+			url: 'http://www.kos.gr/_vti_bin/authentication.asmx',
+			dataType: 'xml',
+			contentType: 'text/xml; charset=\"utf-8\"',
+			type: 'POST',
+			data: '<?xml version="1.0" encoding="utf-8"?>\n<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><Login xmlns="http://schemas.microsoft.com/sharepoint/soap/"><username>' 
+					+ username + '</username><password>' + pass + '</password></Login></soap12:Body></soap12:Envelope>',
+			complete: function(xhr, status) {
+				if (status !== 'success') {
+					return console.warn("failed to get cookie");
+				}
+				var header = "Cookie";
+				if (!xhr.getResponseHeader(header)) { header = "Set-Cookie"; }
+				document.cookie = xhr.getResponseHeader(header);
+				$.ajax({
+					headers: {
+						"ACCEPT": "application/json;odata=verbose"
+					},
+//					url: baseOfferUrl,
+//					crossDomain: true,
+					url: baseOfferUrl,
+					type: "GET",
+					dataType: 'json',
+					data: "",
+					contentType: "application/json;odata=verbose",
+//					cache: false,
+					success: function (data){
+						console.log("555 "+baseOfferUrl);
+//						console.log("666 "+data);
+//						alert(JSON.stringify(data));
+//						data = JSON.stringify(data);
+//						showOffersResults(data);
+						json2xml(data);
+					},
+					error: function (error){
+						console.log(baseOfferUrl);
+						console.log('failed to connect to server '+error);
+						console.log(JSON.stringify(error, null, 4));
+					},
+				});
+			}
+		});
+	}
+}
+
+function showOffersResults(data){
+	alert(data);
+	$(data).find("Title").each(function (){
+		console.log($(this).text());
+		offersTitle.push($(this).text());
+	});
+	$(data).find("ΤίτλοςΑγγλικά").each(function (){
+		console.log($(this).text());
+		offersTitleEn.push($(this).text());
+	});
+	$(data).find("Περιγραφή").each(function (){
+		console.log($(this).text());
+		offersDescr.push($(this).text());
+	});
+	$(data).find("ΠεριγραφήΑγγλικά").each(function (){
+		console.log($(this).text());
+		offersDescrEn.push($(this).text());
+	});
+	$(data).find("Από").each(function (){
+		console.log($(this).text());
+		offersFrom.push($(this).text());
+	});
+	$(data).find("Έως").each(function (){
+		console.log($(this).text());
+		offersTill.push($(this).text());
+	});
+	$(data).find(offersCategId).each(function (){
+		console.log($(this).text());
+		offersPlaceId.push($(this).text());
+	});
+	showOffersPlaces();
+}
+
+function showOffersPlaces(){
+	if (offersPlaceId.length == 0){
+		alert(MyApp.resources.noOffersFound);
+	}
+	else{
+		var fillHtml='';
+		for (var j = 0 ; j < offersPlaceId.length ; j++){
+			console.log(offersPlaceId[j] +" 333 "+offersLink[globalOffersIndex]);
+			console.log();
+			if(langstr == 'en'){
+				for (var b =0; b < slideId.length ; b++){
+//					console.log(slideId[b]+" "+slideCat[b]);
+					if ((offersPlaceId[j] == slideId[b]) && (offersLink[globalOffersIndex] == slideCat[b])){
+//						console.log("FOUND");
+						fillHtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getOfferInfo(this.id)" rel="external" id="'
+							+j+'" ><img src="images/list15_3.png" alt="options">'+"  "+slideName[b]+'<br><h6>'+slidePlace[b]+'</h6></a>';
+						break;
+					}
+				}
+			}
+			else{
+				for (var b =0; b < slideId.length ; b++){
+					if ((offersPlaceId[j] == slideIdgr[b]) && (offersLink[globalOffersIndex] == slideCatgr[b])){
+						//console.log("FOUND");
+						//console.log(slideDescr[b]);
+						fillHtml += '<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" onclick = "getOfferInfo(this.id)" rel="external" id="'
+							+j+'" ><img src="images/list15_3.png" alt="options">'+"  "+slideNamegr[b]+'<br><h6>'+slidePlacegr[b]+'</h6></a>';
+						break;
+						break;
+					}
+				}
+			}
+		}
+		createPageHeader(9);
+		$("#offersCategoryContent").html(fillHtml);
+		$('#offerscategory').trigger("create");
+//		$("#offersPageHeader").html(fillHeader);
+		$( ".loading_gif" ).css( "display", "none" );
+		$.mobile.changePage($('#offerscategory'), 'pop');
+		customHeader(10);
+		$('#abtnTour10').removeClass("active");
+		$('#abtnPlaces10').removeClass("active");
+		$('#abtnCurrentPosition10').removeClass("active");
+		$('.options').css({'display':'none'});
+		setLabelsForMainPage();
+		var email = $('#emailaccountchange10').val();
+		if ( email == null || email == ""){
+			var cm = "";
+			if (currentEmail!=undefined) cm=currentEmail;
+			$('#emailaccountchange10').val(cm);
+		}
+	}
+}
+
+function getOfferInfo(j){
+	var fillHtml = '';
+	if(langstr == 'en'){
+		$("#offerdetailsheader").html(offersTitleEn[j]);
+		$("#offerdetailscontent").html(offersDescrEn[j]);
+		fillHtml += '<b>'+MyApp.resources.ValidFrom+'</b>'+offersFrom[j];
+		fillHtml += '<br>';
+		fillHtml += '<b>'+MyApp.resources.ValidTill+'</b>'+offersTill[j];
+		$("#offerdetailsfooter").html(fillHtml);
+	}
+	else{
+		$("#offerdetailsheader").html(offersTitle[j]);
+		$("#offerdetailscontent").html(offersDescr[j]);
+		fillHtml += '<b>'+MyApp.resources.ValidFrom+'</b>'+offersFrom[j];
+		fillHtml += '<br>';
+		fillHtml += '<b>'+MyApp.resources.ValidTill+'</b>'+offersTill[j];
+		$("#offerdetailsfooter").html(fillHtml);
+	}
+	$('#offersdetails').trigger("create");
+	$( ".loading_gif" ).css( "display", "none" );
+	$.mobile.changePage($('#offersdetails'), 'pop');
+}
+
+
+/*		var listUrl = 'http://kos.gr/_vti_bin/listdata.svc/'+offersGr[globalOffersIndex]+"?$filter="+anagnoristiko;
+
+		for (var i = 0 ; i < offersPlaceId.length ; i++){
+			if (i == 0){
+				listUrl += '%20gt%20';
+				listUrl += offersPlaceId[i]+'%20or%20';
+			}
+			else{
+				listUrl += anagnoristiko+'%20gt%20';
+				listUrl += offersPlaceId[i]+'%20or%20';
+			}
+		}
+		var k = listUrl.length;
+		listUrl = listUrl.slice(0,k-8);
+//		var username='sofia', pass='password!';
+		listUrl = listUrl.replace(/ /g,'');
+
+		console.log("999 "+ listUrl);
+//		$.ajax({
+//		url: 'http://www.kos.gr/_vti_bin/authentication.asmx',
+//		dataType: 'xml',
+//		contentType: 'text/xml; charset=\"utf-8\"',
+//		type: 'POST',
+//		data: '<?xml version="1.0" encoding="utf-8"?>\n<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><Login xmlns="http://schemas.microsoft.com/sharepoint/soap/"><username>' 
+//		+ username + '</username><password>' + pass + '</password></Login></soap12:Body></soap12:Envelope>',
+//		complete: function(xhr, status) {
+//		if (status !== 'success') {
+//			return console.warn("failed to get cookie");
+//		}
+//		var header = "Cookie";
+//		if (!xhr.getResponseHeader(header)) { header = "Set-Cookie"; }
+//		document.cookie = xhr.getResponseHeader(header);
+		$.ajax({
+			headers: {
+				"ACCEPT": "application/json;odata=verbose"
+			},
+//			url: baseOfferUrl,
+//			crossDomain: true,
+			url: listUrl,
+			type: "GET",
+			dataType: 'json',
+			data: "",
+			contentType: "application/json;odata=verbose",
+			success: function (data){
+				console.log("555 "+listUrl);
+				alert(JSON.stringify(data));
+//				data = JSON.stringify(data);
+//				showOffersResults(data);
+//				json2xml(data);
+			},
+			error: function (error){
+				console.log("554 "+listUrl);
+//				console.log('failed to connect to server '+error);
+				console.log(JSON.stringify(error, null, 4));
+			},
+		});
+//		}
+//		});
+	}*/
+
+
+function reloadOffersCategoryPage(){
+	var newLanguage = $("#language_select10").val();
+	var newEmail =  $("#emailaccountchange10").val();
+	var newlangstr = $("#language_select10").val();
+	var settingsChanged = false;
+	langstr = newlangstr.toLowerCase();
+	console.log(langstr);
+//	fromselectedplaces = false;
+	if (language != newLanguage)
+	{
+		language = newLanguage;
+		langchanged = true;
+		db.transaction(function(tx) {
+			tx.executeSql('UPDATE SETTINGS SET DATA = ? WHERE ID= ?',[language,1]);
+		});
+		settingsChanged = true;
+	}
+	var email = $('#emailaccountchange10').val();
+	if ( email != null && email != ''){
+		$('#emailaccountchange10').val(currentEmail);
+	}
+	saveEmail(newEmail);
+	checkForLanguage();
+	onClickSettings();
+	switchToOffersCategoryPage(offerCat);
 }
 
 function createPageHeader(x){
@@ -4195,9 +4539,30 @@ function createPageHeader(x){
 						+MyApp.resources.SaveChanges+'</span></a></div>';
 		$(".container8").html(fillHtml2);
 		break;
+	case 9:
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>';
+		fillHtml2 += '<select name="language_select" id="language_select9"><option value="GR">'+MyApp.resources.Greek+'</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange9" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOffersPage();"><span id="btnSaveChanges9">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container9").html(fillHtml2);
+		break;
+	case 10:
+		fillHtml2  = '<div data-role="fieldcontain"><label for="language_select" id="lbllanguageselect">'
+						+MyApp.resources.LanguageSelect+'</label>';
+		fillHtml2 += '<select name="language_select" id="language_select10"><option value="GR">'+MyApp.resources.Greek+'</option>';
+		fillHtml2 += '<option value="EN">English</option></select>	</div>';
+		fillHtml2 += '<div data-role="fieldcontain" ><label for="emailaccount" id="lblemailaccount">';
+		fillHtml2 += '</label><input type="text" value="" name="emailaccount" id="emailaccountchange10" placeholder="email account" /></div>';
+		fillHtml2 += '<div class="button blue small"><a href="#" onClick = "reloadOffersCategoryPage();"><span id="btnSaveChanges10">'
+						+MyApp.resources.SaveChanges+'</span></a></div>';
+		$(".container10").html(fillHtml2);
+		break;
 	}
 	$(".header").html(fillHtml);
-//	$(".container2").html(fillHtml2);
 }
 
 

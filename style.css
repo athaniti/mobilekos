@@ -770,6 +770,48 @@ small {
 	color: #000000;
 }*/
 
+
+/*-----------------------------------------------------------------------------------*/
+/*	Offers page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#offersPageHeader{
+	text-align: center;
+	margin: 100px auto 20px auto;
+	min-height: 20px;
+	max-height: 30px;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+	opacity: 0.9;
+/*	max-width: 70%;*/
+}
+
+.offersUl{
+	border:2px solid; 
+  	border-radius:25px;
+}
+
+.offersCategory2{
+	border-bottom: 2px solid;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 8px;
+	text-align: center;
+	font-weight: bold;
+	font-size: small;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Offers Category page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#offersCategoryPageHeader{
+	text-align: center;
+	margin-top: 100px;
+}
+
+
 /*-----------------------------------------------------------------------------------*/
 /*	Itinerary page Settings
 /*-----------------------------------------------------------------------------------*/
