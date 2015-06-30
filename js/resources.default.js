@@ -1,4 +1,4 @@
-﻿var MyApp = MyApp || {};
+var MyApp = MyApp || {};
 
 MyApp.resources = {
 		EmailHeading: "Fill your email:",
@@ -38,7 +38,7 @@ MyApp.resources = {
 		UserMustBeOnLine:"Internet Connection needed to get directions",
 		GetDirections:"Get directions",
 		ShowNone:"Show none",
-		MoreInfo:"More Ξ™nformation",
+		MoreInfo:"More Ιnformation",
 		CouldNotLoadItineraries:"Couldn't find itineraries for the specified email address",
 		Hide:"hide",
 		ShowPlaces:"Show places near you",
@@ -78,11 +78,5 @@ MyApp.resources = {
         Next:"Next",
         Explore:"Show information about more than 1200 points of interest!",
         Routes:"Show on map the routes that you planned on site.",
-        Greek:"Greek",
-        OffersPageHeader:"Select the type of business to see the available offers",
-    	OfflineOffers:"You must be online to see the availble offers",
-    	OffersCategoryPageHeader:"Offers / ",
-    	noOffersFound:"No offers found for the specific category",
-    	ValidFrom:"Valid from: ",
-    	ValidTill:"Valid till: "
+	Greek:"Ελληνικά"
 };

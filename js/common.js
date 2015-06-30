@@ -1,4 +1,4 @@
-﻿//var baseapiurl='ath.dataverse.gr:18090/api/';
+//var baseapiurl='ath.dataverse.gr:18090/api/';
 var baseapiurl='http://www.kos.gr:90/api/';
 var baseurl = 'http://www.kos.gr/';
 var baseaccount="info@kos.gr";
@@ -13,12 +13,6 @@ var musicGr = new Array();
 var musicEn = new Array();
 var placeEn = new Array();
 var placeGr = new Array();
-var offersEn = new Array();
-var offersGr = new Array();
-var offersLink = new Array();
-var anagnoristiko="%CE%91%CE%BD%CE%B1%CE%B3%CE%BD%CF%89%CF%81%CE%B9%CF%83%CF%84%CE%B9%CE%BA%CF%8C";
-//var anagnoristiko="Αναγνωριστικό";
-//var anagnoristiko="ID";
 
 categs[0]="";
 categs[1]="shopping";
@@ -119,37 +113,6 @@ placeGr[6]="Μαρμάρι";
 placeGr[7]="Μαστιχάρι";
 placeGr[8]="Πυλί";
 placeGr[9]="Τιγκάκι";
-offersGr[0]="Θάλασσα";
-offersGr[1]="Διαμονή";
-offersGr[2]="Μετακίνηση";
-offersGr[3]="Αξιοθέατα";
-offersGr[4]="Φαγητό Kαι Διασκέδαση";
-offersGr[5]="Δραστηριότητες";
-offersGr[6]="Shopping";
-offersEn[0]="Sea";
-offersEn[1]="Accommodation";
-offersEn[2]="Transport";
-offersEn[3]="Sights";
-offersEn[4]="Food and Fun";
-offersEn[5]="Activities";
-offersEn[6]="Shopping";
-offersLink[0]= 5;
-offersLink[1]= 3;
-offersLink[2]= 6;
-offersLink[3]= 2;
-offersLink[4]= 7;
-offersLink[5]= 4;
-offersLink[6]= 1;
-//offersLink[0]="%CE%98%CE%AC%CE%BB%CE%B1%CF%83%CF%83%CE%B1";
-//offersLink[1]="%CE%94%CE%B9%CE%B1%CE%BC%CE%BF%CE%BD%CE%AE";
-//offersLink[2]="%CE%9C%CE%B5%CF%84%CE%B1%CE%BA%CE%AF%CE%BD%CE%B7%CF%83%CE%B7";
-//offersLink[3]="%CE%91%CE%BE%CE%B9%CE%BF%CE%B8%CE%AD%CE%B1%CF%84%CE%B1";
-//offersLink[4]="%CE%A6%CE%B1%CE%B3%CE%B7%CF%84%CF%8C%CE%9A%CE%B1%CE%B9%CE%94%CE%B9%CE%B1%CF%83%CE%BA%CE%AD%CE%B4%CE%B1%CF%83%CE%B7";
-//offersLink[5]="%CE%94%CF%81%CE%B1%CF%83%CF%84%CE%B7%CF%81%CE%B9%CF%8C%CF%84%CE%B7%CF%84%CE%B5%CF%82";
-//offersLink[6]="Shopping";
-
-
-
 
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
