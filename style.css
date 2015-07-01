@@ -1,0 +1,1148 @@
+/*-----------------------------------------------------------------------------------*/
+/*	0.	CSS Reset
+/*-----------------------------------------------------------------------------------*/
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
+	{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+body {
+	background: #e8e8e8 url('images/app_bg.jpg') repeat;
+	font-size: 12px;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	color: #A0A0A0;
+	line-height: 1.6;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	outline: 0;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	General Settings
+/*-----------------------------------------------------------------------------------*/
+
+a {
+	-webkit-transition: all 100ms linear;
+	-moz-transition: all 100ms linear;
+	-o-transition: all 100ms linear;
+	-ms-transition: all 100ms linear;
+	transition: all 100ms linear;
+}
+
+#firstpage,#secondpage,#mainpage,#settingspage,#eachitinerarypage,#itineraryportalpage
+	{
+	background: #e8e8e8 url('images/app_bg.jpg') repeat;
+	position: relative;
+}
+#itinerarypage {
+	/*background:transparent url(images/itinerarypagebg.png)  repeat;*/
+	background:transparent url(images/CropKos3.png)  no-repeat fixed;
+	position: relative;
+}
+#placespage {
+	background: url('images/CropKos.jpg') no-repeat fixed;
+/*	position: relative;*/
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+/*-----------------------------------------------------------------------------------*/
+/*	Grid Settings
+/*-----------------------------------------------------------------------------------*/
+
+.container {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container2 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container3 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container4 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container5 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container6 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container7 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+.container8 {
+	width: 100%;
+	padding: 0px 20px;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Flags Settings
+/*-----------------------------------------------------------------------------------*/
+
+.flags {
+	width: 154px;
+	height: 57px;
+	display: block;
+	margin: 35px auto;
+}
+
+.flags a {
+	width: 57px;
+	height: 57px;
+	margin: 0px 10px;
+	float: left;
+	background-image: url('images/flags.png');
+	background-repeat: no-repeat;
+}
+
+.flags a.flag_01 {
+	background-position: 0px 0px;
+}
+
+.flags a.flag_01:hover {
+	background-position: 0px -57px;
+}
+
+.flags a.flag_02 {
+	background-position: -57px 0px;
+}
+
+.flags a.flag_02:hover {
+	background-position: -57px -57px;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Header Settings
+/*-----------------------------------------------------------------------------------*/
+
+.header {
+	left: 0px;
+	width: 100%;
+	height: 45px;
+	float: left;
+	position: relative;
+	z-index: 10;
+	color: #fff;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Comment Settings
+/*-----------------------------------------------------------------------------------*/
+
+#divimportantEmail {
+	width: 100%;
+	max-width: 265px;
+	font-size: 15px;
+	/*font-weight:bold;*/
+	text-align: center;
+	line-height: 37px;
+	color: #161661 !important;
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Main Content Settings
+/*-----------------------------------------------------------------------------------*/
+
+.main_content {
+	width: 100%;
+	z-index: 100;
+	float: left;
+	position: relative;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/* App Logo Settings
+/*-----------------------------------------------------------------------------------*/
+
+.app_logo {
+	float: left;
+}
+
+.app_logo img {
+	display: block;
+	width: 100%;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Main Menu Settings
+/*-----------------------------------------------------------------------------------*/
+
+.main_menu {
+	left: 0px;
+	width: 100%;
+	float: left;
+	position: relative;
+	z-index: 10;
+	height: 40px;
+}
+
+.main_menu ul {
+	width: 100%;
+	float: left;
+}
+
+.main_menu ul li a {
+	float: left;
+	width: 33.3%;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+	color: #343434 !important;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 40px;
+	height: 40px;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.main_menu ul li:first-child a {
+	border-left: 0px;
+}
+
+.main_menu ul li:last-child a {
+	border-right: 0px;
+}
+
+.main_menu ul li a.active {
+	color: #fff !important;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+/*.home{
+	background-image: url('images/home.png');
+    background-repeat: no-repeat;
+}*/
+
+/*-----------------------------------------------------------------------------------*/
+/*	Secondary Menu Settings
+/*-----------------------------------------------------------------------------------*/
+
+.secondary_menu {
+	left: 0px;
+	position: absolute;
+	width: 100%;
+	float: left;
+	position: relative;
+	z-index: 1000;
+}
+
+.secondary_menu ul {
+	width: 100%;
+	float:left;
+	background:#000;
+}
+.secondary_menu ul li{
+	width:33.3%;
+	float:left;
+}
+.secondary_menu ul li a {
+	float: left;
+	width: 100%;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+	color: #fff !important;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 40px;
+	height: 40px;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+	background: #000;
+	}
+
+.secondary_menu ul li:first-child a {
+	border-left: 0px;
+}
+
+.secondary_menu ul li:last-child a {
+	border-right: 0px;
+}
+
+.secondary_menu ul li a.active {
+	color: #fff !important;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+.secondary_menu ul li a:hover{
+		}
+.secondary_menu ul li a#abtnFilter{
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnFilter:hover,
+.secondary_menu ul li a#abtnFilter.active{
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap{
+	background: #000 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap:hover,
+.secondary_menu ul li a#abtnMap.active{
+	background: #363636 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnList{
+ 	background: #000 url(images/list2.png) no-repeat;
+	background-position: 5px;	
+}
+.secondary_menu ul li a#abtnList:hover,
+.secondary_menu ul li a#abtnList.active{
+ 	background: #363636 url(images/list2.png) no-repeat;
+ 	background-position: 5px;
+}
+
+/**/
+
+.secondary_menu ul li a#abtnFilter2{
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnFilter2:hover,
+.secondary_menu ul li a#abtnFilter2.active{
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap2{
+	background: #000 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap2:hover,
+.secondary_menu ul li a#abtnMap2.active{
+	background: #363636 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnList2{
+ 	background: #000 url(images/list2.png) no-repeat;
+	background-position: 5px;	
+}
+.secondary_menu ul li a#abtnList2:hover,
+.secondary_menu ul li a#abtnList2.active{
+ 	background: #363636 url(images/list2.png) no-repeat;
+ 	background-position: 5px;
+}
+
+/**/
+
+.secondary_menu ul li a#abtnFilter3{
+	background: #000 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnFilter3:hover,
+.secondary_menu ul li a#abtnFilter3.active{
+	background: #363636 url(images/search2.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap3{
+	background: #000 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnMap3:hover,
+.secondary_menu ul li a#abtnMap3.active{
+	background: #363636 url(images/mapmarker.png) no-repeat;
+	background-position: 5px;
+}
+.secondary_menu ul li a#abtnList3{
+ 	background: #000 url(images/list2.png) no-repeat;
+	background-position: 5px;	
+}
+.secondary_menu ul li a#abtnList3:hover,
+.secondary_menu ul li a#abtnList3.active{
+ 	background: #363636 url(images/list2.png) no-repeat;
+ 	background-position: 5px;
+}
+
+.mplabel {font-family: open-sans; font-size: 14px;}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Options Settings
+/*-----------------------------------------------------------------------------------*/
+
+.app_options {
+	float: right;
+	margin-top: 8px;
+	width: 35px;
+	height: 28px;
+	/*cursor: pointer;*/
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Exit button Settings
+/*-----------------------------------------------------------------------------------*/
+
+.exit_icon {
+	float: right;
+	margin-top: 8px;
+	margin-left: 20px;
+	width: 28px;
+	height: 28px;
+	/*cursor: pointer;*/
+}
+
+.fpicon {
+	max-width: 100px;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Options Content Settings
+/*-----------------------------------------------------------------------------------*/
+
+.options {
+	width: 100%;
+	float: left;
+	margin:0px;
+	background-color: #353535;
+	color: #ffffff;
+	display: none;
+}
+
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Filter Categories Settings
+/*-----------------------------------------------------------------------------------*/
+
+.filtercategories {
+	width: 100%;
+	float: left;
+	margin:0px;
+	background-color: #353535;
+	color: #ffffff;
+	display: none;
+}
+
+input#search_box {
+	font-size: 1.3em;
+}
+
+#music_select, #era_select, #cuisine_select, #hotel_select
+{
+	width: 80%;
+	padding: 3px;
+	font-size: 1.2em;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Inputs Settings
+/*-----------------------------------------------------------------------------------*/
+
+input {
+	width: 100%;
+	max-width: 265px;
+	display: block;
+	margin: 20px auto;
+	border: none !important;
+	height: 37px;
+	padding: 5px 15px;
+	background: #fff;
+	color: #6d6d6d;
+	-webkit-border-radius: 6px !important;
+	border-radius: 6px !important;
+}
+
+input:focus {
+	outline: 0 !important;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Typography Settings
+/*-----------------------------------------------------------------------------------*/
+
+h1,h2,h3,h4,h5,h6,small {
+	color: #2f2f2f;
+	font-weight: normal;
+	line-height: 1.2;
+}
+
+h1 {
+	font-size: 24px;
+}
+
+h2 {
+	font-size: 20px;
+}
+
+h3 {
+	font-size: 18px;
+}
+
+h4 {
+	font-size: 16px;
+}
+
+h5 {
+	font-size: 14px;
+}
+
+h6 {
+	font-size: 13px;
+}
+
+h7 {
+	font-size: 16px;
+	color:#ffffff;
+}
+
+small {
+	font-size: 11px;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Buttons Settings
+/*-----------------------------------------------------------------------------------*/
+
+.button a {
+	width: 100%;
+	max-width: 265px;
+	display: block;
+	margin: 20px auto;
+	color: #fff !important;
+	text-align: center;
+	font-size: 14px;
+	padding: 10px 20px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border: 1px solid;
+	border-radius: 6px;
+	text-shadow: 0px 0px 0px rgba(000, 000, 000, 0), 0px 0px 0px
+		rgba(255, 255, 255, 0);
+}
+
+.button.small a {
+	width: 100%;
+	max-width: 220px;
+	display: block;
+	margin: 20px auto;
+	color: #fff !important;
+	text-align: center;
+	font-size: 14px;
+	padding: 10px 10px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border: 1px solid;
+	border-radius: 6px;
+	text-shadow: 0px 0px 0px rgba(000, 000, 000, 0), 0px 0px 0px
+		rgba(255, 255, 255, 0);
+}
+
+
+.button.btn_over {
+	position: absolute;
+	left: 50%;
+	margin-left: -90px;
+	bottom: 5px;
+	z-index: 1000;
+}
+
+.button.btn_over a {
+	width: 200px;
+	max-width: 200px;
+}
+
+.button.blue a,.header {
+	background: -moz-linear-gradient(top, #5fc3f5 0%, #229ee6);
+	background: -webkit-gradient(linear, left top, left bottom, from(#5fc3f5),
+		to(#229ee6));
+	border-color: #4cade6;
+	-moz-box-shadow: 0px 3px 0px rgba(26, 135, 199, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(26, 135, 199, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(26, 135, 199, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+
+.button.blue a:hover {
+	background: -moz-linear-gradient(top, #f49426 0%, #b56911);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f49426),
+		to(#b56911));
+	border-color: #b56911;
+	-moz-box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(181, 105, 17, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+
+	background: -webkit-gradient(linear, left top, left bottom, from(#f49426),
+ to(#b56911));
+}
+
+.button.grey a {
+	background: -moz-linear-gradient(top, #918F87 0%, #6B6963);
+	background: -webkit-gradient(linear, left top, left bottom, from(#918F87),
+		to(#6B6963));
+	border-color: #454440;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+
+.main_menu {
+	background: -moz-linear-gradient(top, #e8e8e8 0%, #cacaca);
+	background: -webkit-gradient(linear, left top, left bottom, from(#e8e8e8),
+		to(#cacaca));
+	border-color: #c2c2c2;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+
+.button.dark_grey a,.main_menu ul li a.active {
+	background: -moz-linear-gradient(top, #494949 0%, #1e1e1e);
+	background: -webkit-gradient(linear, left top, left bottom, from(#494949),
+		to(#1e1e1e));
+	border-color: #1e1e1e;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+/*
+.secondary_menu {
+	background: -moz-linear-gradient(top, #e8e8e8 0%, #cacaca);
+	background: -webkit-gradient(linear, left top, left bottom, from(#e8e8e8),
+		to(#cacaca));
+	border-color: #c2c2c2;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}*/
+
+.button.dark_grey a,.secondary_menu ul li a.active {
+	background: -moz-linear-gradient(top, #494949 0%, #1e1e1e);
+	background: -webkit-gradient(linear, left top, left bottom, from(#494949),
+		to(#1e1e1e));
+	border-color: #1e1e1e;
+	-moz-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px
+		1px rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(138, 138, 138, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+
+.button.orange a {
+	background: -moz-linear-gradient(top, #ffa200 0%, #ff8c00);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffa200),
+		to(#ff8c00));
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border-color: #ff6f00;
+	-moz-box-shadow: 0px 3px 0px rgba(214, 93, 0, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: 0px 3px 0px rgba(214, 93, 0, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+	box-shadow: 0px 3px 0px rgba(214, 93, 0, 1), inset 0px 0px 1px
+		rgba(255, 255, 255, 0.5);
+}
+
+.buttons .button {
+	float: left;
+	margin: 0px 20px 0px 0px;
+	width: 100%
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Devider Settings
+/*-----------------------------------------------------------------------------------*/
+
+.devider {
+	width: 100%;
+	max-width: 300px;
+	margin: 20px auto;
+	display: block;
+	height: 2px;
+	background-color: #D6D6D6;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Slogan Settings
+/*-----------------------------------------------------------------------------------*/
+
+.icon_logo_big {
+	width: 200px;
+	height: 200px;
+	display: block;
+	margin: 10% auto 10% auto;
+}
+
+.icon_logo {
+	width: 90px;
+	height: 90px;
+	display: block;
+	margin: 10% auto 10% auto;
+}
+
+.slogan {
+	margin: 20px 0px;
+	text-align: center;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Places page Settings
+/*-----------------------------------------------------------------------------------*/
+
+.main_content2 {
+	width: 100%;
+	z-index: 100;
+	float: left;
+	position: relative;
+	
+}
+
+#placesContent {
+	background: transparent;
+	/*max-width: 60%;*/
+}
+/*
+#checkbox {
+	background: transparent;
+}*/
+
+#placesPageHeader {
+	margin: 10px auto 20px auto;
+	min-height: 20px;
+	background-color: #F8F8F8;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+	opacity: 0.9;
+}
+
+/*
+#placesPageHeader p {
+	margin: 30px 40px;
+	font-weight: bold;
+	color: #000000;
+}*/
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Offers page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#offersPageHeader{
+	text-align: center;
+	margin: 100px auto 20px auto;
+	min-height: 20px;
+	max-height: 30px;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+	opacity: 0.9;
+/*	max-width: 70%;*/
+}
+
+.offersUl{
+	border:2px solid; 
+  	border-radius:25px;
+}
+
+.offersCategory2{
+	border-bottom: 2px solid;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 8px;
+	text-align: center;
+	font-weight: bold;
+	font-size: small;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Offers Category page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#offersCategoryPageHeader{
+	text-align: center;
+	margin-top: 100px;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Itinerary page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#itinerarypageHeader {
+	margin: 30px auto 20px auto;
+	min-height: 20px;
+	background-color: #F8F8F8;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+	opacity: 0.9;
+}
+
+#itinerarypageHeader p {
+	margin: 30px 40px;
+	font-weight: bold;
+	color: #000000;
+}
+
+#itineraryPagePhoto img{
+	max-width: 100%;
+	padding: 10%;
+	/*padding-left: 10%;
+	margin-top: 15px;
+	background-image: url('images/kos_itinerary.jpg');*/
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Home Page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#explore{
+	text-align: center;
+	padding-top: 5%;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	OrderPlaces page Settings
+/*-----------------------------------------------------------------------------------*/
+
+#orderplacesHeader {
+	margin: 70px auto 20px auto;
+	min-height: 20px;
+	background-color: #F8F8F8;
+	border: 2px;
+	box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+	opacity: 0.9;
+	/*
+	margin: 0px auto 0px auto;
+	min-height: 20px;*/
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Map Preview Settings
+/*-----------------------------------------------------------------------------------*/
+#map {
+	position: relative;
+	overflow: hidden;
+	/*	width:100%;
+	height:350px;*/
+}
+
+a.boxclose{
+    float:right;
+    margin-top:50px;
+    margin-right:50px;
+    color: #fff;
+    border: 1px solid #AEAEAE;
+    border-radius: 30px;
+    background: #605F61;
+    font-size: 31px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;       
+}
+
+.boxclose:before {
+    content: "×";
+}
+
+.boxclose h1{
+    border-bottom: 1px dashed #7F7F7F;
+    margin:-20px -20px 0px -20px;
+    padding:10px;
+    background-color:#FFEFEF;
+    color:#EF7777;
+    -moz-border-radius:20px 20px 0px 0px;
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -khtml-border-top-left-radius: 20px;
+    -khtml-border-top-right-radius: 20px;
+}
+
+.markers_icons {
+	width: 110px;
+	display: block;
+	margin: 0px auto;
+}
+
+.pointtitle {
+	font-size: 16px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.button_list {
+	border: 1px solid #ccc !important;
+	background: #fff !important;
+	border-radius: 6px !important;
+	height: 100px;
+}
+
+.geolocation-button {
+	/*	background-image:url('images/geolocation-icon.png');*/
+	margin-left: 2px;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Scrollbar Options
+/*-----------------------------------------------------------------------------------*/
+
+#scrollbar1 {
+	width: 520px;
+	clear: both;
+	margin: 20px 0 10px;
+}
+
+#scrollbar1 .viewport {
+	width: 500px;
+	height: 200px;
+	overflow: hidden;
+	position: relative;
+}
+
+#scrollbar1 .overview {
+	list-style: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#scrollbar1 .thumb .end,#scrollbar1 .thumb {
+	background-color: #003D5D;
+}
+
+#scrollbar1 .scrollbar {
+	position: relative;
+	float: right;
+	width: 15px;
+}
+
+#scrollbar1 .track {
+	background-color: #D8EEFD;
+	height: 100%;
+	width: 13px;
+	position: relative;
+	padding: 0 1px;
+}
+
+#scrollbar1 .thumb {
+	height: 20px;
+	width: 13px;
+	cursor: pointer;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+}
+
+#scrollbar1 .thumb .end {
+	overflow: hidden;
+	height: 5px;
+	width: 13px;
+}
+
+#scrollbar1 .disable {
+	display: none;
+}
+
+.noSelect {
+	user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}
+
+.placesInfo {
+	width: 100%;
+	background-color: #353535;
+	color: #ffffff;
+	display: none;
+}
+
+.msg {text-align:center;}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	Loader
+/*-----------------------------------------------------------------------------------*/
+
+.loading_gif {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom:0px;
+	right:0px;
+	z-index: 9999;
+	width: 100%;
+	height: 100%;
+	background-color:rgba(0,0,0,0.8);
+}
+
+.loader {
+	width: 120px;
+	height: 50px;
+	line-height: 50px;
+	top:50%;
+	left:50%;
+	margin-top: -25px;
+	margin-left: -60px;
+	text-align:center;
+	font-size:12px;
+	background-color: #FFFFFF;
+	position: absolute;
+	color: #777777;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border: 4px solid rgba(0, 0, 0, 0.3);
+}
+
+.loader  span{
+	-moz-animation-duration: 0.7s;
+	-webkit-animation-duration: 0.7s;
+	-moz-animation-name: slidein;
+	-webkit-animation-name: slidein;
+	-moz-animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-webkit-animation-direction: alternate;
+}
+
+@-moz-keyframes slidein {
+  from {
+    opacity:1;
+  }
+  to {
+   opacity:0;
+  }
+}
+
+@-webkit-keyframes slidein {
+  from {
+    opacity:1;
+  }
+  to {
+   opacity:0;
+  }
+}
+
+#hotel_select img{
+	width: 50px;
+	heigth: 10px;
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	Fildset
+/*-----------------------------------------------------------------------------------*/
+.ui-mobile fieldset {
+	min-width: 0;
+
+}
+/*-----------------------------------------------------------------------------------*/
+/*	Slider
+/*-----------------------------------------------------------------------------------*/
+
+div.ui-slider {
+	margin: .5em auto !important;
+}
+/*-----------------------------------------------------------------------------------*/
+/*	Button With Icon
+/*-----------------------------------------------------------------------------------*/
+.ui-btn-icon-right .ui-btn-inner {
+	text-align: left;
+}
+.ui-btn {
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+.ui-btn-inner h6 {
+	padding-left: 25px;
+}
+
+#filteredPlaces {
+	padding-top: 60px;
+}
+.ui-br {
+	border: none !important;
+}
+
+@media only screen and (min-width: 480px) {
+	.container {
+		max-width: 70%;
+		margin: 0px auto;
+	}
+	.header .container {
+		max-width: 100%;
+	}
+	.container1, .container2, .container3, .container4, .container5, .container6, .container7, .container8 {
+		width: 50%;
+		margin: 0px auto;
+		text-align: center;
+	}
+}
+
+#secondpage .main_content {
+	width: 100%;
+	z-index: 100;
+	float: left;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+/*
+#secondpage{
+	background: url('images/mainpage_bg.jpg') no-repeat fixed center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}*/

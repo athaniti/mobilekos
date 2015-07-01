@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Kos Mobile</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="css/Control.Loading.css">
+<link href="jquery.mobile/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="jquery.mobile/custom_theme.css" />
+<script src="jquery.mobile/jquery-1.9.1min.js"></script>
+<script src="jquery.mobile/jquery.mobile-1.3.2.min.js"></script>
+<script>L_DISABLE_3D = true;</script>
+<script src="dist/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/leaflet051.css">
+<script src="js/cordova.js"></script>
+<script src="js/common.js"></script>
+<script src="js/json2.js"></script>
+<script src="js/main.js"></script>
+<script src="js/KML.js"></script>
+<script src="js/SP.RequestExecutor.js"></script>
+<!-- script src="js/GPX.js"></script>
+<script src="js/Control.Loading.js"></script>
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/version.js"></script>-->
+<script src="js/resources.default.js"> </script>
+<script src="js/resources.gr.js"> </script> 
+<script src="js/resources.en.js"> </script>
+<script type="text/css">
+	html {width:95%, height:100%}
+	body {width:95%, height:100%}
+</script>
+<script type="text/javascript">
+
+// <![CDATA[
+ document.addEventListener("deviceready", onDeviceReady, false);
+// ]]></script>
+
+</head>
+
+<!--body onload="onDeviceReady();"-->
+<body> 
+<form action="#" method="get">
+
+<div data-role="page" id="firstpage">
+	<div class="main_content">
+		<div class="container">
+			<div class="icon_logo_big" align="center">
+				<img src="images/kos_mobile.png" alt="logo">
+				<br>
+				<br>
+				<h5><img src="images/ajax-loader.gif" alt="loader" width="50px"/></h5>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="secondpage">
+	<div class="main_content">
+		<div class="container">
+			<div class="icon_logo_big">
+				<img src="images/kos_mobile.png" alt="logo">
+			</div>
+			<div class="devider"></div>
+			<div class="slogan">
+				<h1>Select Language</h1>
+				<h6>Επιλογή Γλώσσας</h6>
+			</div>
+			<div class="flags">
+				<a class="flag_01" onClick="switchToEmailPage('GR')">&nbsp;</a>
+				<a class="flag_02" onClick="switchToEmailPage('EN')">&nbsp;</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="homepage">
+	<div class="header"></div>
+	<div class="options">
+		 <div class="container8"></div>
+	</div>
+	<div class="main_content">
+		<div class="container">
+			<div id="explore"></div>
+		</div>
+	</div>
+</div>
+
+
+<div data-role="page" id="mainpage">
+	<div class="header"></div>
+	<div class="options">
+		 <div class="container1"></div>
+	</div>
+   	<div class="main_menu">
+		<ul>
+			<!-- li class="home"><a href="#" id="abtnHome" onClick = "onClickbtnFilterPlaces();"><span id="btnPlaces"></span></a></li> -->
+			<li><a href="#" id="abtnPlaces" onClick = "onClickbtnPlaces();"><span id="btnPlaces"></span></a></li>
+			<li><a href="#" id="abtnTour" onClick = "onClickbtnTour();"><span id="btnTour"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="loading_gif">
+			<div class="loader"><span>Please Wait...</span></div>
+		</div>
+		<div class="secondary_menu">
+			<ul>
+				<li><a href="#" id="abtnList" onClick = "orderPlaces(0);"><span id="btnList"></span></a></li>
+				<li><a href="#" id="abtnMap" onClick = "onClickbtnPlaces();"><span id="btnMap"></span></a></li>
+				<li><a href="#" id="abtnFilter" onClick = "showFilterCategories();"><span id="btnFilter"></span></a></li>
+			</ul>
+		</div>
+		<div id="map"></div>
+		<div class="button blue btn_over">
+			<a href="#" id="abtnFilterPlaces" onClick ="onClickbtnFilterPlaces();">
+			<span  id="btnFilterPlaces"></span></a>
+		</div>
+		<div class="button blue btn_over">
+			<a href="#" id="abtnFilterTour" onClick="loadItineraries();">
+			<span  id="btnFilterTour"></span></a>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="placespage">
+	<div class="header">
+	</div> 
+	<div class="options">
+		 <div class="container2">
+		</div>
+	</div>
+   	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces2" onClick = "onClickbtnPlaces2();"><span id="btnPlaces2"></span></a></li>
+			<li><a href="#" id="abtnTour2" onClick = "switchToMainPage2();"><span id="btnTour2"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition2" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition2"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content2" style="padding-top:10px;">
+		<div class="loading_gif">
+			<div class="loader"><span>Please Wait...</span></div>
+		</div>
+		<div class="container">	
+			<div id="placesPageHeader" style="text-align:center"></div>
+			<div id="placesContent"></div>
+			<div class="buttons" style="align:center">
+				<div class="button blue small">
+					<a href="#" data-inline="true" onClick = "submitSelectedPlaces();">
+						<span id="btnPBack"> </span>
+					</a>
+				</div>
+				<div class="button grey small">
+					<a href="#" data-inline="true" onClick = "ClearAll();">
+						<span id="btnClearAll"> </span>
+					</a>
+				</div>
+			</div>
+		</div>
+    </div>
+   	<div class="filtercategories" style="display:none; z-index:9999;">
+	 	<div class="container">
+			<div class="button blue small">
+				<a href="#" onClick = "reloadPlacesPage();"><span id="btnSaveChanges"> </span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="itinerarypage" >
+	<div class="header"></div>
+	<div class="options">
+		 <div class="container3"></div>
+	</div>
+   	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces3" onClick = "onClickbtnPlaces2();"><span id="btnPlaces3"></span></a></li>
+			<li><a href="#" id="abtnTour3" onClick = "onClickbtnTour();"><span id="btnTour3"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition3" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition3"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="container">
+			
+			<div id="itinerarypageHeader" style="text-align:center;"></div>
+	 		<div id="availableFiles"></div>
+			<div class="button blue">
+				<a href="#" id="abtnLoadfromportal" onClick="loadItinerariesfromPortal()"><span  id="btnLoadfromportal"></span></a>
+			</div>
+			
+			<div class="button small blue">
+				<a href="#" onClick = "switchToMainPage();"><span id="btnLocalBack"> </span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="eachitinerarypage">
+	<div class="header">
+	</div>
+	<div class="options">
+		 <div class="container4"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces4" onClick = "onClickbtnPlaces2();"><span id="btnPlaces4"></span></a></li>
+			<li><a href="#" id="abtnTour4" onClick = "onClickbtnTour();"><span id="btnTour4"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition4" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition4"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content" style="padding-top:20px;">
+		<div class="container">
+  			<div align="center" style="margin-bottom:20px;">
+  				<fieldset id="availableDays" data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" ></fieldset>
+  			</div>
+	  		<div id="availablePois"></div>
+	  		<div id="divItineraryInfo" style="text-align:center"></div>
+			<div class="button blue">
+				<a href="#" onClick = "showKmlFile();"><span id="btnLoad"> </span></a>
+			</div>		
+ 			<div class="button small blue">
+				<a href="#" onClick = "loadItineraries();"><span id="btnEachItineraryBack"> </span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="itineraryportalpage" >
+	<div class="header">
+	</div>
+	<div class="options">
+		 <div class="container5"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces5" onClick = "onClickbtnPlaces2();"><span id="btnPlaces5"></span></a></li>
+			<li><a href="#" id="abtnTour5" onClick = "onClickbtnTour();"><span id="btnTour5"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition5" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition5"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="container">
+	 		<span id="lblnotavailablefiles"></span>
+	 		<div data-role="fieldcontain">
+				<input type="text"  value="" name="emailaccountitinerary" id="emailaccountitinerary" placeholder="email account" />
+			</div>
+			<div class="loading_gif">
+				<div class="loader"><span>Please Wait...</span></div>
+			</div>
+			<div class="button blue small">
+				<a href="#" id="abtnLoad" onClick="loadFromPortal($('#emailaccountitinerary').val())"><span  id="btnLoadItinerary"></span></a>
+			</div>
+			<div id="portalItineraries"></div>
+			<div class="button blue small">
+				<a href="#" onClick = "loadItineraries();">
+					<span id="btnPortalBack"> </span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="orderplaces" >
+	<div class="header">
+	</div>
+	<div class="options"> 
+		 <div class="container6"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces6" onClick = "onClickbtnPlaces2();"><span id="btnPlaces6"></span></a></li>
+			<li><a href="#" id="abtnTour6" onClick = "switchToMainPage2();"><span id="btnTour6"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition6" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition6"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="secondary_menu">
+			<ul>
+				<li><a href="#" id="abtnList2" onClick = ""><span id="btnList2"></span></a></li>
+				<li><a href="#" id="abtnMap2" onClick = "showOrderedPlacesOnMap();"><span id="btnMap2"></span></a></li>
+				<li><a href="#" id="abtnFilter2" onClick = "showFilterCategories(2);"><span id="btnFilter2"></span></a></li>
+			</ul>
+		</div>
+		<div class="container">
+			<div class="loading_gif">
+				<div class="loader"><span>Please Wait...</span></div>
+			</div>
+			<div id="orderplacesHeader" style="text-align:center"></div>
+	 		<!-- label for="slider-fill" id="lblslider"></label-->
+			<input type="range" name="slider-fill" id="slider-fill" value="40" min="0" max="40" data-highlight="true" />
+			<div class="button blue small">
+				<a href="#" onClick = "readSlider();">
+					<span id="btnRefresh"> </span>
+				</a>
+			</div>
+			<div id="showingInfo" style="text-align:center"></div>
+			<div id="orderedPlaces"></div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="filterplaces">
+	<div class="header">
+	</div>
+	<div class="options"> 
+		 <div class="container7"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces7" onClick = "onClickbtnPlaces2();"><span id="btnPlaces7"></span></a></li>
+			<li><a href="#" id="abtnTour7" onClick = "onClickbtnTour();"><span id="btnTour7"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition7" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition7"></span></a></li>
+		</ul>
+	</div>
+	<div class="main_content">
+		<div class="secondary_menu">
+			<ul>
+				<li><a href="#" id="abtnList3" onClick = "orderPlaces(0);"><span id="btnList3"></span></a></li>
+				<li><a href="#" id="abtnMap3" onClick = "showOrderedPlacesOnMap();"><span id="btnMap3"></span></a></li>
+				<li><a href="#" id="abtnFilter3" onClick = ""><span id="btnFilter3"></span></a></li>
+			</ul>
+		</div>
+		<div class="container">
+			
+			<!-- div class="button blue small">
+				<a href="#" onClick = "readSlider();">
+					<span id="btnRefresh"> </span>
+				</a>
+			</div> -->
+			
+			<div id="filteredPlaces"></div>
+			<div id="hotelContent"></div>
+			<div id="restaurantContent"></div>
+			<div id="archaiologicalContent"></div>
+			<div id="musicContent"></div>
+		</div>
+	</div>
+</div>
+
+<div data-role="page" id="details" >
+	<div data-role="header" id="detailsheader"></div> 
+	<div data-role="content" id="detailscontent"></div> 
+	<div data-role="footer" id="detailsfooter"></div> 
+</div>
+
+<div data-role="page" id="offerspage" >
+	<div class="header"></div>
+	<div class="options"> 
+		 <div class="container9"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces9" onClick = "onClickbtnPlaces2();"><span id="btnPlaces9"></span></a></li>
+			<li><a href="#" id="abtnTour9" onClick = "onClickbtnTour();"><span id="btnTour9"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition9" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition9"></span></a></li>
+		</ul>
+	</div>
+	<div class="container">
+		<div id="offersPageHeader"></div>
+		<div id="offersContent"></div>
+	</div>
+</div>
+
+<div data-role="page" id="offerscategory" >
+	<div class="header"></div>
+	<div class="options"> 
+		 <div class="container10"></div>
+	</div>
+	<div class="main_menu">
+		<ul>
+			<li><a href="#" id="abtnPlaces10" onClick = "onClickbtnPlaces2();"><span id="btnPlaces10"></span></a></li>
+			<li><a href="#" id="abtnTour10" onClick = "onClickbtnTour();"><span id="btnTour10"></span></a></li>
+			<li><a href="#" id="abtnCurrentPosition10" onClick = "onClickbtnCurrent();"><span id="btnCurrentPosition10"></span></a></li>
+		</ul>
+	</div>
+	<div class="container">
+		<div id="offersCategoryPageHeader"></div>
+		<div id="offersCategoryContent"></div>
+	</div>
+</div>
+
+
+</form>
+</body>
+</html>
