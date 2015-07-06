@@ -107,7 +107,7 @@ var MarkerSights = new LeafIcon({iconUrl: 'dist/images/list2.png'}),
 
 function onDeviceReady() {
 	db = window.openDatabase("KosMobile", "1.0", "Kos Db", 6000000);
-//	db.transaction(populateDB, errorCB, successCB);
+	//db.transaction(populateDB, errorCB, successCB);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("searchbutton", onSearchKeyDown, false);
 //	document.addEventListener("abtnList", orderPlaces, false);
@@ -221,30 +221,29 @@ function populateDB(tx)
 {
 	//console.log("IN POPULATE DB");
 	db.transaction(function (tx) {
-		tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
-		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
-		tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
-		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
-		tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
-		tx.executeSql('DROP TABLE IF EXISTS POIEN');
-		tx.executeSql('DROP TABLE IF EXISTS POIGR');
-		tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
-		tx.executeSql('DROP TABLE IF EXISTS TEMP');
-		tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
-		tx.executeSql('DROP TABLE IF EXISTS OFFERSEN');
-		tx.executeSql('DROP TABLE IF EXISTS OFFERSGR');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, coordinates, duration, isActive, completed)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id, name, catid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id, name, catid)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSEN (id unique, title, category, description, from, till, )');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSGR (id unique, title, category, description, from, till, )');
-		populateDatabases();
+	    tx.executeSql('DROP TABLE IF EXISTS ITINERARIES');
+	    tx.executeSql('DROP TABLE IF EXISTS SETTINGS');
+	    tx.executeSql('DROP TABLE IF EXISTS CATEGORIESEN');
+	    tx.executeSql('DROP TABLE IF EXISTS CATEGORIESGR');
+	    tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESEN');
+	    tx.executeSql('DROP TABLE IF EXISTS SUBCATEGORIESGR');
+	    tx.executeSql('DROP TABLE IF EXISTS POIEN');
+	    tx.executeSql('DROP TABLE IF EXISTS POIGR');
+	    tx.executeSql('DROP TABLE IF EXISTS TIMESTAMP');
+	    tx.executeSql('DROP TABLE IF EXISTS OFFERSEN');
+	    tx.executeSql('DROP TABLE IF EXISTS OFFERSGR');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS ITINERARIES (id, title, user, day, pointcode, pointname, coordinates, duration, isActive, completed)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS SETTINGS (id unique, data)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESEN (id unique, name, guid)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIESGR (id unique, name, guid)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESEN (id, name, catid)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS SUBCATEGORIESGR (id, name, catid)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS POIEN (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS POIGR (siteid, name, descr, category, subcategory, long, lat, website, address, place, phone, email, ssubcat, image)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS TIMESTAMP (id unique, timestamp)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSEN (id unique, title, category, description, datefrom, till)');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS OFFERSGR (id unique, title, category, description, datefrom, till)');
+	    populateDatabases();
 	});
 }
 
@@ -365,7 +364,7 @@ function createPoiArraysGr(){
 }
 
 function errorCB(err) {
-    //console.log("Error processing SQL: "+err.code);
+    console.log("Error processing SQL: "+err.code);
 }
 
 function successCB() {
@@ -540,6 +539,7 @@ function createItDb(){
 
 
 function populateDatabases(){
+	//alert("in populateDatabases");
 	////console.log("in populateDatabases");
 	loadXmlCat(1);
 //	popCategoriesEnDb();
@@ -4198,31 +4198,22 @@ function switchToOffersCategoryPage(k){
 		}
 //		offersUrl = "_vti_bin/listdata.svc/%CE%A0%CF%81%CE%BF%CF%83%CF%86%CE%BF%CF%81%CE%AD%CF%82?$filter=AccommodationId%20gt%200";
 		var username='sofia', pass='password!';
-		var baseOfferUrl = 'http://kos.gr/_vti_bin/listdata.svc/%CE%A0%CF%81%CE%BF%CF%83%CF%86%CE%BF%CF%81%CE%AD%CF%82?$filter='+offersUrl;
+		var baseOfferUrl = 'http://kos.gr/_vti_bin/listdata.svc/%CE%A0%CF%81%CE%BF%CF%83%CF%86%CE%BF%CF%81%CE%AD%CF%82';
+		//console.log(baseOfferUrl);
+		
+		
+		
 		$.ajax({
-			url: 'http://www.kos.gr/_vti_bin/authentication.asmx',
-			dataType: 'xml',
-			contentType: 'text/xml; charset=\"utf-8\"',
-			type: 'POST',
-			data: '<?xml version="1.0" encoding="utf-8"?>\n<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><Login xmlns="http://schemas.microsoft.com/sharepoint/soap/"><username>' 
-					+ username + '</username><password>' + pass + '</password></Login></soap12:Body></soap12:Envelope>',
-			complete: function(xhr, status) {
-				if (status !== 'success') {
-					return console.warn("failed to get cookie");
-				}
-				var header = "Cookie";
-				if (!xhr.getResponseHeader(header)) { header = "Set-Cookie"; }
-				document.cookie = xhr.getResponseHeader(header);
-				$.ajax({
 					headers: {
 						"ACCEPT": "application/json;odata=verbose"
 					},
+					async: true,
 //					url: baseOfferUrl,
-//					crossDomain: true,
+					crossDomain: true,
 					url: baseOfferUrl,
 					type: "GET",
 					dataType: 'json',
-					data: "",
+					data: "filter="+offersUrl,
 					contentType: "application/json;odata=verbose",
 //					cache: false,
 					success: function (data){
@@ -4235,17 +4226,15 @@ function switchToOffersCategoryPage(k){
 					},
 					error: function (error){
 						console.log(baseOfferUrl);
-						console.log('failed to connect to server '+error);
+						console.log('Error: '+error);
 						console.log(JSON.stringify(error, null, 4));
 					},
 				});
-			}
-		});
 	}
 }
 
 function showOffersResults(data){
-	alert(data);
+	//alert(data);
 	$(data).find("Title").each(function (){
 		console.log($(this).text());
 		offersTitle.push($(this).text());
